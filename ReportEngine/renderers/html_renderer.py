@@ -74,7 +74,7 @@ class HTMLRenderer:
         "options",
     }
     TABLE_COMPLEX_CHARS = set(
-        "@％%（）()，,。；;：:、？?！!·…-—_+<>[]{}|\\/\"'`~$^&*#"
+        "@ï¼…%ï¼ˆï¼‰()ï¼Œ,ã€‚ï¼›;ï¼š:ã€ï¼Ÿ?ï¼!Â·â€¦-â€”_+<>[]{}|\\/\"'`~$^&*#"
     )
 
     def __init__(self, config: Dict[str, Any] | None = None):
@@ -183,9 +183,9 @@ class HTMLRenderer:
             self._pdf_font_base64 = base64.b64encode(data).decode("ascii")
             return self._pdf_font_base64
         except FileNotFoundError:
-            logger.warning("Arquivo de fonte PDF ausente：%s", font_path)
+            logger.warning("Arquivo de fonte PDF ausenteï¼š%s", font_path)
         except Exception as exc:
-            logger.warning("Falha ao ler arquivo de fonte PDF：%s (%s)", font_path, exc)
+            logger.warning("Falha ao ler arquivo de fonte PDFï¼š%s (%s)", font_path, exc)
         self._pdf_font_base64 = ""
         return self._pdf_font_base64
 
@@ -378,7 +378,7 @@ class HTMLRenderer:
             title: Conteudo da tag title da pagina.
             theme_tokens: Variaveis de tema para injecao de CSS. Niveis suportados:
               - colors: {primary/secondary/bg/text/card/border/...}
-              - typography: {fontFamily, fonts:{body,heading}}，quando body/heading estao vazios, usa fonte do sistema
+              - typography: {fontFamily, fonts:{body,heading}}ï¼Œquando body/heading estao vazios, usa fonte do sistema
               - spacing: {container,gutter/pagePadding}
 
         Retorna:
@@ -461,7 +461,7 @@ class HTMLRenderer:
   <script>
     window.MathJax = {{
       tex: {{
-        inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
+        inlARCKHÉth: [['$', '$'], ['\\\\(', '\\\\)']],
         displayMath: [['$$','$$'], ['\\\\[','\\\\]']]
       }},
       options: {{
@@ -528,10 +528,10 @@ class HTMLRenderer:
         Renderizar cabecalho fixo no topo, com titulo, subtitulo e botoes funcionais.
 
         Descricao de botoes/controles (IDs usados para vincular eventos em _hydration_script):
-        - <theme-button id="theme-toggle" value="light" size="1.5">：Web Component personalizado,
+        - <theme-button id="theme-toggle" value="light" size="1.5">ï¼šWeb Component personalizado,
           `value` tema inicial(light/dark), `size` controla escala geral; evento `change` passa detail: 'light'/'dark'.
-        - <button id="print-btn">：Ao clicar, chama window.print() para exportacao/impressao.
-        - <button id="export-btn">：Botao oculto de exportacao PDF, vincula exportPdf() quando visivel.
+        - <button id="print-btn">ï¼šAo clicar, chama window.print() para exportacao/impressao.
+        - <button id="export-btn">ï¼šBotao oculto de exportacao PDF, vincula exportPdf() quando visivel.
           Exibido apenas quando dependencias estao prontas ou camada de negocios habilita exportacao.
 
         Retorna:
@@ -576,7 +576,7 @@ class HTMLRenderer:
       </svg>
       <span>Imprimir pagina</span>
     </button>
-    <button id="export-btn" class="action-btn" type="button" style="display: none;">⬇️ Exportar PDF</button>
+    <button id="export-btn" class="action-btn" type="button" style="display: none;">â¬‡ï¸ Exportar PDF</button>
   </div>
 </header>
 """.strip()
@@ -595,7 +595,7 @@ class HTMLRenderer:
 
     def _render_cover(self) -> str:
         """
-        ，“Visao geral do artigo”。
+        ï¼Œâ€œVisao geral do artigoâ€ã€‚
 
         Retorna:
             str: HTML da secao cover.
@@ -688,7 +688,7 @@ class HTMLRenderer:
         if self.toc_rendered:
             return ""
         toc_config = self.metadata.get("toc") or {}
-        toc_title = toc_config.get("title") or "📚 Sumario"
+        toc_title = toc_config.get("title") or "ðŸ“š Sumario"
         toc_items = "".join(
             self._format_toc_entry(entry)
             for entry in self.toc_entries
@@ -1009,7 +1009,7 @@ class HTMLRenderer:
                 display_text = raw_text
 
                 if not chapter_heading_seen:
-                    label = f"{self._to_chinese_numeral(chap_idx)}、"
+                    label = f"{self._to_chinese_numeral(chap_idx)}ã€"
                     display_text = f"{label} {clean_title}".strip()
                     chapter_heading_seen = True
                     section_idx = 0
@@ -1046,10 +1046,10 @@ class HTMLRenderer:
 
     @staticmethod
     def _strip_order_prefix(text: str) -> str:
-        """“1.0 ” ou “、” como prefixo，obtendo titulo puro"""
+        """â€œ1.0 â€ ou â€œã€â€ como prefixoï¼Œobtendo titulo puro"""
         if not text:
             return ""
-        separators = [" ", "、", ".", "．"]
+        separators = [" ", "ã€", ".", "ï¼Ž"]
         stripped = text.lstrip()
         for sep in separators:
             parts = stripped.split(sep, 1)
@@ -1349,7 +1349,7 @@ class HTMLRenderer:
         def _is_placeholder_cell(cell: Dict[str, Any]) -> bool:
             """Determinar se celula e placeholder (como '--', '-', etc.)"""
             text = _get_cell_text(cell)
-            return text in ("--", "-", "—", "——", "", "N/A", "n/a")
+            return text in ("--", "-", "â€”", "â€”â€”", "", "N/A", "n/a")
 
         def _is_heading_like_cell(cell: Dict[str, Any]) -> bool:
             """Detectar se e celula de capitulo/titulo erroneamente incluida na tabela"""
@@ -2614,7 +2614,7 @@ class HTMLRenderer:
             repair_result = self.chart_repairer.repair(block, validation_result)
 
             if repair_result.success and repair_result.repaired_block:
-                # Reparo bem-sucedido，escrever dados reparados de volta
+                # Reparo bem-sucedidoï¼Œescrever dados reparados de volta
                 repaired_block = repair_result.repaired_block
                 block.clear()
                 block.update(repaired_block)
@@ -2634,7 +2634,7 @@ class HTMLRenderer:
                 block["_chart_reviewed"] = True
                 return True, None
 
-            # Falha no reparo，registrar falha e emitir placeholder de aviso
+            # Falha no reparoï¼Œregistrar falha e emitir placeholder de aviso
             fail_reason = self._format_chart_error_reason(validation_result)
             block["_chart_renderable"] = False
             block["_chart_error_reason"] = fail_reason
@@ -2645,7 +2645,7 @@ class HTMLRenderer:
             if increment_stats:
                 self._record_chart_failure_stat(cache_key)
             logger.warning(
-                f"Grafico {block.get('widgetId', 'unknown')} Falha no reparo，renderizacao ignorada: {fail_reason}"
+                f"Grafico {block.get('widgetId', 'unknown')} Falha no reparoï¼Œrenderizacao ignorada: {fail_reason}"
             )
             return False, fail_reason
 
@@ -2654,7 +2654,7 @@ class HTMLRenderer:
             self.chart_validation_stats['valid'] += 1
             if validation_result.warnings:
                 logger.info(
-                    f"Grafico {block.get('widgetId', 'unknown')} Validacao aprovada，"
+                    f"Grafico {block.get('widgetId', 'unknown')} Validacao aprovadaï¼Œ"
                     f"mas com avisos: {validation_result.warnings}"
                 )
         block["_chart_review_status"] = "valid"
@@ -2950,23 +2950,23 @@ class HTMLRenderer:
         logger.info("Estatisticas de validacao de graficos")
         logger.info("=" * 60)
         logger.info(f"Quantidade total de graficos: {stats['total']}")
-        logger.info(f"  ✓ Validacao aprovada: {stats['valid']} ({stats['valid']/stats['total']*100:.1f}%)")
+        logger.info(f"  âœ“ Validacao aprovada: {stats['valid']} ({stats['valid']/stats['total']*100:.1f}%)")
 
         if stats['repaired_locally'] > 0:
             logger.info(
-                f"  ⚠ Reparo local: {stats['repaired_locally']} "
+                f"  âš  Reparo local: {stats['repaired_locally']} "
                 f"({stats['repaired_locally']/stats['total']*100:.1f}%)"
             )
 
         if stats['repaired_api'] > 0:
             logger.info(
-                f"  ⚠ Reparo via API: {stats['repaired_api']} "
+                f"  âš  Reparo via API: {stats['repaired_api']} "
                 f"({stats['repaired_api']/stats['total']*100:.1f}%)"
             )
 
         if stats['failed'] > 0:
             logger.warning(
-                f"  ✗ Falha no reparo: {stats['failed']} "
+                f"  âœ— Falha no reparo: {stats['failed']} "
                 f"({stats['failed']/stats['total']*100:.1f}%) - "
                 f"Estes graficos exibirao placeholder de aviso"
             )
@@ -3312,7 +3312,7 @@ class HTMLRenderer:
         Limpar fragmentos JSON do textoe marcadores de estrutura falsos.
 
         LLM as vezes mistura fragmentos JSON incompletos em campos de texto, como:
-        "texto descritivo，{ \"chapterId\": \"S3"  ou  "texto descritivo，{ \"level\": 2"
+        "texto descritivoï¼Œ{ \"chapterId\": \"S3"  ou  "texto descritivoï¼Œ{ \"level\": 2"
 
         Este metodo:
         1. Remove objetos JSON incompletos (iniciados com { mas nao fechados corretamente)
@@ -3331,7 +3331,7 @@ class HTMLRenderer:
         text_str = self._safe_text(text)
 
         # Padrao 1: remover objetos JSON incompletos iniciados com virgula+espaco+{
-        # por exemplo: "texto，{ \"key\": \"value\""  ou  "texto，{\\n  \"key\""
+        # por exemplo: "textoï¼Œ{ \"key\": \"value\""  ou  "textoï¼Œ{\\n  \"key\""
         text_str = re.sub(r',\s*\{[^}]*$', '', text_str)
 
         # Padrao 2: remover arrays JSON incompletos iniciados com virgula+espaco+[
@@ -3345,7 +3345,7 @@ class HTMLRenderer:
             if close_brace_pos < open_brace_pos:
                 # { apos } ou sem }, significa que nao esta fechado
                 # Truncar antes do {
-                text_str = text_str[:open_brace_pos].rstrip(',，、 \t\n')
+                text_str = text_str[:open_brace_pos].rstrip(',ï¼Œã€ \t\n')
 
         # Padrao 4: tratamento similar para [
         open_bracket_pos = text_str.rfind('[')
@@ -3353,7 +3353,7 @@ class HTMLRenderer:
             close_bracket_pos = text_str.rfind(']')
             if close_bracket_pos < open_bracket_pos:
                 # [ apos ] ou sem ], significa que nao esta fechado
-                text_str = text_str[:open_bracket_pos].rstrip(',，、 \t\n')
+                text_str = text_str[:open_bracket_pos].rstrip(',ï¼Œã€ \t\n')
 
         # Padrao 5: remover fragmentos que parecem pares chave-valor JSON, como "chapterId": "S3
         # Este caso geralmente aparece apos os padroes acima
@@ -3361,7 +3361,7 @@ class HTMLRenderer:
         text_str = re.sub(r',?\s*"[^"]+"\s*:\s*[^,}\]]*$', '', text_str)
 
         # Limpar virgulas e espacos no final
-        text_str = text_str.rstrip(',，、 \t\n')
+        text_str = text_str.rstrip(',ï¼Œã€ \t\n')
 
         return text_str.strip()
 
@@ -3932,13 +3932,13 @@ body.exporting {{ /* Funcao: body.exporting area de estilos; Config: ajustar pro
   animation: export-progress 1.4s ease-in-out infinite; /* Funcao: animation propriedade de estilo; Config: ajustar valores/cores/variaveis conforme necessario */
 }} /* fim .export-progress-bar */
 @keyframes export-spin {{ /* Funcao: @keyframes export-spin area de estilos; Config: ajustar propriedades relevantes dentro deste bloco */
-  from {{ transform: rotate(0deg); }} /* Funcao: ponto inicial do keyframe，manter angulo de 0°; Config: pode ser alterado para outro estado inicial de rotacao ou escala */
-  to {{ transform: rotate(360deg); }} /* Funcao: ponto final do keyframe，rotacao completa; Config: pode ser alterado para angulo/efeito final personalizado */
+  from {{ transform: rotate(0deg); }} /* Funcao: ponto inicial do keyframeï¼Œmanter angulo de 0Â°; Config: pode ser alterado para outro estado inicial de rotacao ou escala */
+  to {{ transform: rotate(360deg); }} /* Funcao: ponto final do keyframeï¼Œrotacao completa; Config: pode ser alterado para angulo/efeito final personalizado */
 }} /* fim @keyframes export-spin */
 @keyframes export-progress {{ /* Funcao: @keyframes export-progress area de estilos; Config: ajustar propriedades relevantes dentro deste bloco */
-  0% {{ left: -45%; }} /* Funcao: ponto inicial da animacao de progresso，barra entra pela esquerda; Config: ajustar porcentagem left inicial */
-  50% {{ left: 20%; }} /* Funcao: ponto medio da animacao de progresso，container; Config: ajustar proporcao de deslocamento conforme necessario */
-  100% {{ left: 110%; }} /* Funcao: ponto final da animacao de progresso，barra desliza para a direita; Config: ajustar porcentagem left final */
+  0% {{ left: -45%; }} /* Funcao: ponto inicial da animacao de progressoï¼Œbarra entra pela esquerda; Config: ajustar porcentagem left inicial */
+  50% {{ left: 20%; }} /* Funcao: ponto medio da animacao de progressoï¼Œcontainer; Config: ajustar proporcao de deslocamento conforme necessario */
+  100% {{ left: 110%; }} /* Funcao: ponto final da animacao de progressoï¼Œbarra desliza para a direita; Config: ajustar porcentagem left final */
 }} /* fim @keyframes export-progress */
 main {{ /* Funcao: container de conteudo principal; Config: ajustar propriedades relevantes dentro deste bloco */
   max-width: {container_width}; /* Funcao: largura maxima; Config: ajustar valores/cores/variaveis conforme necessario */
@@ -5212,7 +5212,7 @@ img, canvas, svg {{ /* Funcao: limitacao de dimensoes de elementos de midia; Con
         3) Botao de exportacao (#export-btn): chama exportPdf(), usando html2canvas + jsPDF internamente,
            e exibe #export-overlay (overlay, texto de status, barra de progresso).
         4) Hidratacao de graficos: varre todos os canvas com data-config-id, analisa JSON adjacente, instancia Chart.js;
-           tabela/emblema de nuvem de palavras， data-chart-state。
+           tabela/emblema de nuvem de palavrasï¼Œ data-chart-stateã€‚
         5) Resize da janela: apos debounce, redesenha nuvem de palavras, garantindo responsividade.
         """
         return """
@@ -5814,7 +5814,7 @@ function wordcloudColor(category) {
 }
 
 function renderWordCloudFallback(canvas, items, reason) {
-  // ： canvas，（+Peso），“”
+  // ï¼š canvasï¼Œï¼ˆ+Pesoï¼‰ï¼Œâ€œâ€
   const card = canvas.closest('.chart-card') || canvas.parentElement;
   if (!card) return;
   const wrapper = canvas.parentElement && canvas.parentElement.classList && canvas.parentElement.classList.contains('chart-container')
@@ -5861,7 +5861,7 @@ function renderWordCloudFallback(canvas, items, reason) {
   if (reason) {
     const notice = document.createElement('p');
     notice.className = 'chart-fallback__notice';
-    notice.textContent = `Nuvem de palavras nao pode ser renderizada${reason ? `（${reason}）` : ''}，lista de palavras-chave exibida.`;
+    notice.textContent = `Nuvem de palavras nao pode ser renderizada${reason ? `ï¼ˆ${reason}ï¼‰` : ''}ï¼Œlista de palavras-chave exibida.`;
     fallback.appendChild(notice);
   }
   if (!items || !items.length) {
@@ -6022,7 +6022,7 @@ function createFallbackTable(labels, datasets) {
       } else if (series !== undefined && series !== null && series !== '') {
         cell.textContent = series;
       } else {
-        cell.textContent = '—';
+        cell.textContent = 'â€”';
       }
       row.appendChild(cell);
     });
@@ -6033,7 +6033,7 @@ function createFallbackTable(labels, datasets) {
 }
 
 function renderChartFallback(canvas, payload, reason) {
-  // Grafico：tabela（categories x series）， fallback 
+  // Graficoï¼štabelaï¼ˆcategories x seriesï¼‰ï¼Œ fallback 
   const card = canvas.closest('.chart-card') || canvas.parentElement;
   if (!card) return;
   clearChartDegradeNote(card);
@@ -6075,7 +6075,7 @@ function renderChartFallback(canvas, payload, reason) {
   }
   const notice = document.createElement('p');
   notice.className = 'chart-fallback__notice';
-  notice.textContent = `${fallbackTitle}：Grafico，tabela${reason ? `（${reason}）` : ''}`;
+  notice.textContent = `${fallbackTitle}ï¼šGraficoï¼Œtabela${reason ? `ï¼ˆ${reason}ï¼‰` : ''}`;
   fallback.insertBefore(notice, fallback.firstChild || null);
   if (!prebuilt) {
     const table = createFallbackTable(

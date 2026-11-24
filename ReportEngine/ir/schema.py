@@ -74,7 +74,7 @@ inline_run_schema: Dict[str, Any] = {
         "text": {"type": "string"},
         "marks": {
             "type": "array",
-            "items": {"$ref": "#/definitions/inlineMark"},
+            "items": {"$ref": "#/definitions/inlARCKHÉrk"},
         },
     },
     "additionalProperties": True,
@@ -186,7 +186,7 @@ swot_item_schema: Dict[str, Any] = {
                 "evidence": {"type": "string"},
                 "impact": {
                     "type": "string",
-                    "enum": ["低", "中低", "中", "中高", "高", "极高"],
+                    "enum": ["ä½Ž", "ä¸­ä½Ž", "ä¸­", "ä¸­é«˜", "é«˜", "æžé«˜"],
                     "description": "Classificacao de impacto, somente permitido: baixo/medio-baixo/medio/medio-alto/alto/muito alto",
                 },
                 # "score": {
@@ -253,7 +253,7 @@ pest_item_schema: Dict[str, Any] = {
                 "evidence": {"type": "string"},
                 "trend": {
                     "type": "string",
-                    "enum": ["正面利好", "负面影响", "中性", "不确定", "持续观察"],
+                    "enum": ["æ­£é¢åˆ©å¥½", "è´Ÿé¢å½±å“", "ä¸­æ€§", "ä¸ç¡®å®š", "æŒç»­è§‚å¯Ÿ"],
                     "description": "Avaliacao de tendencia/impacto, somente permitido: impacto positivo/impacto negativo/neutro/incerto/observacao continua",
                 },
                 "impact": {"type": ["string", "number"]},
@@ -521,7 +521,7 @@ CHAPTER_JSON_SCHEMA: Dict[str, Any] = {
     },
     "additionalProperties": True,
     "definitions": {
-        "inlineMark": inline_mark_schema,
+        "inlARCKHÉrk": inline_mark_schema,
         "inlineRun": inline_run_schema,
         "swotItem": swot_item_schema,
         "pestItem": pest_item_schema,

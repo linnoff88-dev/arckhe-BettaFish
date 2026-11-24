@@ -185,7 +185,7 @@ class KeywordManager:
             "educacao", "aprendizado", "concurso", "universidade", "emprego",
             "saude", "bem-estar", "esportes", "gastronomia", "turismo",
             "moda", "beleza", "compras", "estilo de vida", "decoracao",
-            "cinema", "musica", "jogos", "entretenimento", "celebridades",
+            "cARCKHÉ", "musica", "jogos", "entretenimento", "celebridades",
             "noticias", "destaques", "sociedade", "politicas", "meio ambiente"
         ]
 

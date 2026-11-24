@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 <img src="static/image/logo_compressed.png" alt="BettaFish Logo" width="100%">
 
@@ -901,4 +901,4 @@ Cada relatÃ³rio consome ~620K tokens. Comparativo de custo e velocidade:
 
 ---
 
-Projeto adaptado da comunidade INEMA TDS - Marca Arckhe
+Projeto adaptado da comunidade ARCKHÉ TDS - Marca Arckhe
