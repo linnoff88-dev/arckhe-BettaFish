@@ -33,8 +33,8 @@ from .tools import (
 from .utils import format_search_results_for_prompt
 from .utils.config import Settings, settings
 
-ENABLE_CLUSTERING: bool = True  # Habilitar amostragem por clusterização
-MAX_CLUSTERED_RESULTS: int = 50  # Número máximo de resultados após clusterização
+ENABLE_CLUSTERING: bool = True  # Habilitar amostragem por clusterizaçêo
+MAX_CLUSTERED_RESULTS: int = 50  # Número máximo de resultados após clusterizaçêo
 RESULTS_PER_CLUSTER: int = 5  # Número de resultados por cluster
 
 class DeepSearchAgent:
@@ -45,7 +45,7 @@ class DeepSearchAgent:
         Inicializar o Deep Search Agent
 
         Args:
-            config: Objeto de configuração opcional (usa settings global se não fornecido)
+            config: Objeto de configuraçêo opcional (usa settings global se nêo fornecido)
         """
         self.config = config or settings
 
@@ -55,7 +55,7 @@ class DeepSearchAgent:
         # Inicializar conjunto de ferramentas de busca
         self.search_agency = MediaCrawlerDB()
 
-        # Inicializar modelo de clusterização (carregamento sob demanda)
+        # Inicializar modelo de clusterizaçêo (carregamento sob demanda)
         self._clustering_model = None
 
         # Inicializar analisador de sentimentos
@@ -92,9 +92,9 @@ class DeepSearchAgent:
         self.report_formatting_node = ReportFormattingNode(self.llm_client)
 
     def _get_clustering_model(self):
-        """Carregamento sob demanda do modelo de clusterização"""
+        """Carregamento sob demanda do modelo de clusterizaçêo"""
         if self._clustering_model is None:
-            logger.info("  Carregando modelo de clusterização (paraphrase-multilingual-MiniLM-L12-v2)...")
+            logger.info("  Carregando modelo de clusterizaçêo (paraphrase-multilingual-MiniLM-L12-v2)...")
             self._clustering_model = SentenceTransformer(
                 "paraphrase-multilingual-MiniLM-L12-v2"
             )
@@ -156,7 +156,7 @@ class DeepSearchAgent:
             # Calcular número de clusters
             n_clusters = min(max(2, max_results // results_per_cluster), len(results))
 
-            # Clusterização KMeans
+            # Clusterizaçêo KMeans
             kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
             labels = kmeans.fit_predict(embeddings)
 
@@ -178,17 +178,17 @@ class DeepSearchAgent:
                     break
 
             logger.info(
-                f"  Clusterização concluída: {len(results)} itens -> {n_clusters} temas -> {len(sampled_results)} resultados representativos"
+                f"  Clusterizaçêo concluída: {len(results)} itens -> {n_clusters} temas -> {len(sampled_results)} resultados representativos"
             )
             return sampled_results
 
         except Exception as e:
-            logger.warning(f"  Clusterização falhou, retornando os primeiros {max_results} itens: {str(e)}")
+            logger.warning(f"  Clusterizaçêo falhou, retornando os primeiros {max_results} itens: {str(e)}")
             return results[:max_results]
 
     def execute_search_tool(self, tool_name: str, query: str, **kwargs) -> DBResponse:
         """
-        Executar a ferramenta de consulta ao banco de dados especificada (integra middleware de otimização de palavras-chave e análise de sentimentos)
+        Executar a ferramenta de consulta ao banco de dados especificada (integra middleware de otimizaçêo de palavras-chave e análise de sentimentos)
 
         Args:
             tool_name: Nome da ferramenta, valores possíveis:
@@ -201,14 +201,14 @@ class DeepSearchAgent:
                 - "search_daily_news": Buscar notícias coletadas de fontes RSS
             query: Palavras-chave de busca/tópico
             **kwargs: Parâmetros adicionais (como start_date, end_date, platform, limit, enable_sentiment etc.)
-                     enable_sentiment: Se deve realizar análise de sentimentos automaticamente nos resultados de busca (padrão True)
+                     enable_sentiment: Se deve realizar análise de sentimentos automaticamente nos resultados de busca (padrêo True)
 
         Returns:
             Objeto DBResponse (pode incluir resultados de análise de sentimentos)
         """
         logger.info(f"  → Executando ferramenta de consulta ao banco de dados: {tool_name}")
 
-        # Para busca de conteúdo em alta, não é necessária otimização de palavras-chave (pois não precisa do parâmetro query)
+        # Para busca de conteúdo em alta, nêo é necessária otimizaçêo de palavras-chave (pois nêo precisa do parâmetro query)
         if tool_name == "search_hot_content":
             time_period = kwargs.get("time_period", "week")
             limit = kwargs.get("limit", 100)
@@ -240,12 +240,12 @@ class DeepSearchAgent:
                     "texts": texts if isinstance(texts, list) else [texts],
                     **kwargs,
                 },
-                results=[],  # Análise de sentimentos não retorna resultados de busca
+                results=[],  # Análise de sentimentos nêo retorna resultados de busca
                 results_count=0,
                 metadata=sentiment_result,
             )
 
-        # Para ferramentas que precisam de termos de busca, usar middleware de otimização de palavras-chave
+        # Para ferramentas que precisam de termos de busca, usar middleware de otimizaçêo de palavras-chave
         optimized_response = keyword_optimizer.optimize_keywords(
             original_query=query, context=f"Consultando com a ferramenta {tool_name}"
         )
@@ -262,7 +262,7 @@ class DeepSearchAgent:
 
             try:
                 if tool_name == "search_topic_globally":
-                    # Usar valor padrão do arquivo de configuração, ignorando o parâmetro limit_per_table fornecido pelo agent
+                    # Usar valor padrêo do arquivo de configuraçêo, ignorando o parâmetro limit_per_table fornecido pelo agent
                     limit_per_table = (
                         self.config.DEFAULT_SEARCH_TOPIC_GLOBALLY_LIMIT_PER_TABLE
                     )
@@ -272,7 +272,7 @@ class DeepSearchAgent:
                 elif tool_name == "search_topic_by_date":
                     start_date = kwargs.get("start_date")
                     end_date = kwargs.get("end_date")
-                    # Usar valor padrão do arquivo de configuração, ignorando o parâmetro limit_per_table fornecido pelo agent
+                    # Usar valor padrêo do arquivo de configuraçêo, ignorando o parâmetro limit_per_table fornecido pelo agent
                     limit_per_table = (
                         self.config.DEFAULT_SEARCH_TOPIC_BY_DATE_LIMIT_PER_TABLE
                     )
@@ -287,7 +287,7 @@ class DeepSearchAgent:
                         limit_per_table=limit_per_table,
                     )
                 elif tool_name == "get_comments_for_topic":
-                    # Usar valor padrão do arquivo de configuração, distribuir por número de palavras-chave, mas garantir valor mínimo
+                    # Usar valor padrêo do arquivo de configuraçêo, distribuir por número de palavras-chave, mas garantir valor mínimo
                     limit = self.config.DEFAULT_GET_COMMENTS_FOR_TOPIC_LIMIT // len(
                         optimized_response.optimized_keywords
                     )
@@ -299,7 +299,7 @@ class DeepSearchAgent:
                     platform = kwargs.get("platform")
                     start_date = kwargs.get("start_date")
                     end_date = kwargs.get("end_date")
-                    # Usar valor padrão do arquivo de configuração, distribuir por número de palavras-chave, mas garantir valor mínimo
+                    # Usar valor padrêo do arquivo de configuraçêo, distribuir por número de palavras-chave, mas garantir valor mínimo
                     limit = self.config.DEFAULT_SEARCH_TOPIC_ON_PLATFORM_LIMIT // len(
                         optimized_response.optimized_keywords
                     )
@@ -314,7 +314,7 @@ class DeepSearchAgent:
                         limit=limit,
                     )
                 elif tool_name == "search_daily_news":
-                    # Usar valor padrão do arquivo de configuração, distribuir por número de palavras-chave, mas garantir valor mínimo
+                    # Usar valor padrêo do arquivo de configuraçêo, distribuir por número de palavras-chave, mas garantir valor mínimo
                     limit = self.config.DEFAULT_SEARCH_DAILY_NEWS_LIMIT // len(
                         optimized_response.optimized_keywords
                     )
@@ -323,7 +323,7 @@ class DeepSearchAgent:
                         topic=keyword, limit=limit
                     )
                 else:
-                    logger.info(f"    Ferramenta de busca desconhecida: {tool_name}, usando busca global padrão")
+                    logger.info(f"    Ferramenta de busca desconhecida: {tool_name}, usando busca global padrêo")
                     response = self.search_agency.search_topic_globally(
                         topic=keyword,
                         limit_per_table=self.config.DEFAULT_SEARCH_TOPIC_GLOBALLY_LIMIT_PER_TABLE,
@@ -343,7 +343,7 @@ class DeepSearchAgent:
 
         # Deduplicar e integrar resultados
         unique_results = self._deduplicate_results(all_results)
-        logger.info(f"  Total encontrado: {total_count} resultados, após deduplicação: {len(unique_results)}")
+        logger.info(f"  Total encontrado: {total_count} resultados, após deduplicaçêo: {len(unique_results)}")
 
         if ENABLE_CLUSTERING:
             unique_results = self._cluster_and_sample_results(
@@ -387,7 +387,7 @@ class DeepSearchAgent:
         unique_results = []
 
         for result in results:
-            # Usar URL ou conteúdo como identificador de deduplicação
+            # Usar URL ou conteúdo como identificador de deduplicaçêo
             identifier = result.url if result.url else result.title_or_content[:100]
             if identifier not in seen:
                 seen.add(identifier)
@@ -406,14 +406,14 @@ class DeepSearchAgent:
             Dicionário com resultados da análise de sentimentos, ou None em caso de falha
         """
         try:
-            # Inicializar analisador de sentimentos (se ainda não inicializado e não desabilitado)
+            # Inicializar analisador de sentimentos (se ainda nêo inicializado e nêo desabilitado)
             if (
                 not self.sentiment_analyzer.is_initialized
                 and not self.sentiment_analyzer.is_disabled
             ):
                 logger.info("    Inicializando modelo de análise de sentimentos...")
                 if not self.sentiment_analyzer.initialize():
-                    logger.info("     Falha na inicialização do modelo de análise de sentimentos, texto original será repassado diretamente")
+                    logger.info("     Falha na inicializaçêo do modelo de análise de sentimentos, texto original será repassado diretamente")
             elif self.sentiment_analyzer.is_disabled:
                 logger.info("     Análise de sentimentos desabilitada, texto original será repassado diretamente")
 
@@ -455,14 +455,14 @@ class DeepSearchAgent:
         logger.info(f"  → Executando análise de sentimentos independente")
 
         try:
-            # Inicializar analisador de sentimentos (se ainda não inicializado e não desabilitado)
+            # Inicializar analisador de sentimentos (se ainda nêo inicializado e nêo desabilitado)
             if (
                 not self.sentiment_analyzer.is_initialized
                 and not self.sentiment_analyzer.is_disabled
             ):
                 logger.info("    Inicializando modelo de análise de sentimentos...")
                 if not self.sentiment_analyzer.initialize():
-                    logger.info("     Falha na inicialização do modelo de análise de sentimentos, texto original será repassado diretamente")
+                    logger.info("     Falha na inicializaçêo do modelo de análise de sentimentos, texto original será repassado diretamente")
             elif self.sentiment_analyzer.is_disabled:
                 logger.warning("     Análise de sentimentos desabilitada, texto original será repassado diretamente")
 
@@ -583,7 +583,7 @@ class DeepSearchAgent:
             # Busca e resumo iniciais
             self._initial_search_and_summary(i)
 
-            # Loop de reflexão
+            # Loop de reflexêo
             self._reflection_loop(i)
 
             # Marcar parágrafo como concluído
@@ -599,13 +599,13 @@ class DeepSearchAgent:
         # Preparar entrada de busca
         search_input = {"title": paragraph.title, "content": paragraph.content}
 
-        # Gerar consulta de busca e seleção de ferramenta
+        # Gerar consulta de busca e seleçêo de ferramenta
         logger.info("  - Gerando consulta de busca...")
         search_output = self.first_search_node.run(search_input)
         search_query = search_output["search_query"]
         search_tool = search_output.get(
             "search_tool", "search_topic_globally"
-        )  # Ferramenta padrão
+        )  # Ferramenta padrêo
         reasoning = search_output["reasoning"]
 
         logger.info(f"  - Consulta de busca: {search_query}")
@@ -653,7 +653,7 @@ class DeepSearchAgent:
                 )
                 search_tool = "search_topic_globally"
 
-        # Processar parâmetros de limite, usando valores padrão do arquivo de configuração em vez dos parâmetros fornecidos pelo agent
+        # Processar parâmetros de limite, usando valores padrêo do arquivo de configuraçêo em vez dos parâmetros fornecidos pelo agent
         if search_tool == "search_hot_content":
             time_period = search_output.get("time_period", "week")
             limit = self.config.DEFAULT_SEARCH_HOT_CONTENT_LIMIT
@@ -686,7 +686,7 @@ class DeepSearchAgent:
         # Converter para formato compatível
         search_results = []
         if search_response and search_response.results:
-            # Usar configuração para controlar o número de resultados passados ao LLM, 0 significa sem limite
+            # Usar configuraçêo para controlar o número de resultados passados ao LLM, 0 significa sem limite
             if self.config.MAX_SEARCH_RESULTS_FOR_LLM > 0:
                 max_results = min(
                     len(search_response.results), self.config.MAX_SEARCH_RESULTS_FOR_LLM
@@ -746,32 +746,32 @@ class DeepSearchAgent:
         logger.info("  - Resumo inicial concluído")
 
     def _reflection_loop(self, paragraph_index: int):
-        """Executar loop de reflexão"""
+        """Executar loop de reflexêo"""
         paragraph = self.state.paragraphs[paragraph_index]
 
         for reflection_i in range(self.config.MAX_REFLECTIONS):
-            logger.info(f"  - Reflexão {reflection_i + 1}/{self.config.MAX_REFLECTIONS}...")
+            logger.info(f"  - Reflexêo {reflection_i + 1}/{self.config.MAX_REFLECTIONS}...")
 
-            # Preparar entrada de reflexão
+            # Preparar entrada de reflexêo
             reflection_input = {
                 "title": paragraph.title,
                 "content": paragraph.content,
                 "paragraph_latest_state": paragraph.research.latest_summary,
             }
 
-            # Gerar consulta de busca por reflexão
+            # Gerar consulta de busca por reflexêo
             reflection_output = self.reflection_node.run(reflection_input)
             search_query = reflection_output["search_query"]
             search_tool = reflection_output.get(
                 "search_tool", "search_topic_globally"
-            )  # Ferramenta padrão
+            )  # Ferramenta padrêo
             reasoning = reflection_output["reasoning"]
 
-            logger.info(f"    Consulta de reflexão: {search_query}")
+            logger.info(f"    Consulta de reflexêo: {search_query}")
             logger.info(f"    Ferramenta selecionada: {search_tool}")
-            logger.info(f"    Raciocínio da reflexão: {reasoning}")
+            logger.info(f"    Raciocínio da reflexêo: {reasoning}")
 
-            # Executar busca de reflexão
+            # Executar busca de reflexêo
             # Processar parâmetros especiais
             search_kwargs = {}
 
@@ -817,12 +817,12 @@ class DeepSearchAgent:
             # Processar parâmetros de limite
             if search_tool == "search_hot_content":
                 time_period = reflection_output.get("time_period", "week")
-                # Usar valor padrão do arquivo de configuração, não permitir que o agent controle o parâmetro limit
+                # Usar valor padrêo do arquivo de configuraçêo, nêo permitir que o agent controle o parâmetro limit
                 limit = self.config.DEFAULT_SEARCH_HOT_CONTENT_LIMIT
                 search_kwargs["time_period"] = time_period
                 search_kwargs["limit"] = limit
             elif search_tool in ["search_topic_globally", "search_topic_by_date"]:
-                # Usar valor padrão do arquivo de configuração, não permitir que o agent controle o parâmetro limit_per_table
+                # Usar valor padrêo do arquivo de configuraçêo, nêo permitir que o agent controle o parâmetro limit_per_table
                 if search_tool == "search_topic_globally":
                     limit_per_table = (
                         self.config.DEFAULT_SEARCH_TOPIC_GLOBALLY_LIMIT_PER_TABLE
@@ -833,7 +833,7 @@ class DeepSearchAgent:
                     )
                 search_kwargs["limit_per_table"] = limit_per_table
             elif search_tool in ["get_comments_for_topic", "search_topic_on_platform"]:
-                # Usar valor padrão do arquivo de configuração, não permitir que o agent controle o parâmetro limit
+                # Usar valor padrêo do arquivo de configuraçêo, nêo permitir que o agent controle o parâmetro limit
                 if search_tool == "get_comments_for_topic":
                     limit = self.config.DEFAULT_GET_COMMENTS_FOR_TOPIC_LIMIT
                 else:  # search_topic_on_platform
@@ -850,7 +850,7 @@ class DeepSearchAgent:
             # Converter para formato compatível
             search_results = []
             if search_response and search_response.results:
-                # Usar configuração para controlar o número de resultados passados ao LLM, 0 significa sem limite
+                # Usar configuraçêo para controlar o número de resultados passados ao LLM, 0 significa sem limite
                 if self.config.MAX_SEARCH_RESULTS_FOR_LLM > 0:
                     max_results = min(
                         len(search_response.results),
@@ -877,7 +877,7 @@ class DeepSearchAgent:
                     )
 
             if search_results:
-                _message = f"    Encontrados {len(search_results)} resultados de busca por reflexão"
+                _message = f"    Encontrados {len(search_results)} resultados de busca por reflexêo"
                 for j, result in enumerate(search_results, 1):
                     date_info = (
                         f" (publicado em: {result.get('published_date', 'N/A')})"
@@ -887,12 +887,12 @@ class DeepSearchAgent:
                     _message += f"\n      {j}. {result['title'][:50]}...{date_info}"
                 logger.info(_message)
             else:
-                logger.info("    Nenhum resultado de busca por reflexão encontrado")
+                logger.info("    Nenhum resultado de busca por reflexêo encontrado")
 
             # Atualizar histórico de busca
             paragraph.research.add_search_results(search_query, search_results)
 
-            # Gerar resumo de reflexão
+            # Gerar resumo de reflexêo
             reflection_summary_input = {
                 "title": paragraph.title,
                 "content": paragraph.content,
@@ -908,7 +908,7 @@ class DeepSearchAgent:
                 reflection_summary_input, self.state, paragraph_index
             )
 
-            logger.info(f"    Reflexão {reflection_i + 1} concluída")
+            logger.info(f"    Reflexêo {reflection_i + 1} concluída")
 
     def _generate_final_report(self) -> str:
         """Gerar relatório final"""
@@ -928,7 +928,7 @@ class DeepSearchAgent:
         try:
             final_report = self.report_formatting_node.run(report_data)
         except Exception as e:
-            logger.exception(f"Formatação LLM falhou, usando método alternativo: {str(e)}")
+            logger.exception(f"Formataçêo LLM falhou, usando método alternativo: {str(e)}")
             final_report = self.report_formatting_node.format_report_manually(
                 report_data, self.state.report_title
             )
@@ -937,7 +937,7 @@ class DeepSearchAgent:
         self.state.final_report = final_report
         self.state.mark_completed()
 
-        logger.info("Geração do relatório final concluída")
+        logger.info("Geraçêo do relatório final concluída")
         return final_report
 
     def _save_report(self, report_content: str):
@@ -958,7 +958,7 @@ class DeepSearchAgent:
 
         logger.info(f"Relatório salvo em: {filepath}")
 
-        # Salvar estado (se a configuração permitir)
+        # Salvar estado (se a configuraçêo permitir)
         if self.config.SAVE_INTERMEDIATE_STATES:
             state_filename = f"state_{query_safe}_{timestamp}.json"
             state_filepath = os.path.join(self.config.OUTPUT_DIR, state_filename)
@@ -982,13 +982,13 @@ class DeepSearchAgent:
 
 def create_agent(config_file: Optional[str] = None) -> DeepSearchAgent:
     """
-    Função utilitária para criar instância do Deep Search Agent
+    Funçêo utilitária para criar instância do Deep Search Agent
 
     Args:
-        config_file: Caminho do arquivo de configuração
+        config_file: Caminho do arquivo de configuraçêo
 
     Returns:
         Instância de DeepSearchAgent
     """
-    config = Settings()  # Inicializar com configuração vazia, usando variáveis de ambiente
+    config = Settings()  # Inicializar com configuraçêo vazia, usando variáveis de ambiente
     return DeepSearchAgent(config)

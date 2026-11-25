@@ -13,14 +13,14 @@ class RedditCrawler(WesternPlatformCrawler):
 
     def __init__(self):
         # TODO: Implementar com PRAW
-        logger.info("RedditCrawler inicializado (stub - aguardando implementação)")
+        logger.info("RedditCrawler inicializado (stub - aguardando implementaçêo)")
 
     def search(self, keywords: List[str], max_results: int = 100) -> List[CrawledContent]:
-        logger.warning("RedditCrawler.search() ainda não implementado")
+        logger.warning("RedditCrawler.search() ainda nêo implementado")
         return []
 
     def get_comments(self, content_id: str, max_comments: int = 100) -> List[CrawledComment]:
-        logger.warning("RedditCrawler.get_comments() ainda não implementado")
+        logger.warning("RedditCrawler.get_comments() ainda nêo implementado")
         return []
 
     def is_configured(self) -> bool:

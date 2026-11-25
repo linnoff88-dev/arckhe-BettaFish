@@ -127,13 +127,13 @@ class LLMClient:
                     if delta and delta.content:
                         yield delta.content
         except Exception as e:
-            logger.error(f"Falha na requisição em streaming: {str(e)}")
+            logger.error(f"Falha na requisiçêo em streaming: {str(e)}")
             raise e
 
     @with_retry(LLM_RETRY_CONFIG)
     def stream_invoke_to_string(self, system_prompt: str, user_prompt: str, **kwargs) -> str:
         """
-        Chamada em streaming ao LLM com concatenação segura em string completa (evita truncamento de caracteres UTF-8 multibyte)
+        Chamada em streaming ao LLM com concatenaçêo segura em string completa (evita truncamento de caracteres UTF-8 multibyte)
 
         Args:
             system_prompt: Prompt do sistema

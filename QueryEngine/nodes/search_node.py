@@ -1,6 +1,6 @@
 """
-Implementação dos nós de busca
-Responsável por gerar consultas de busca e consultas de reflexão
+Implementaçêo dos nós de busca
+Responsável por gerar consultas de busca e consultas de reflexêo
 """
 
 import json
@@ -93,7 +93,7 @@ class FirstSearchNode(BaseNode):
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
 
-            # Registrar saída limpa para depuração
+            # Registrar saída limpa para depuraçêo
             logger.info(f"Saída após limpeza: {cleaned_output}")
 
             # Analisar JSON
@@ -102,7 +102,7 @@ class FirstSearchNode(BaseNode):
                 logger.info("Análise JSON bem-sucedida")
             except JSONDecodeError as e:
                 logger.error(f"Falha na análise JSON: {str(e)}")
-                # Usar método de extração mais robusto
+                # Usar método de extraçêo mais robusto
                 result = extract_clean_response(cleaned_output)
                 if "error" in result:
                     logger.error("Falha na análise JSON, tentando reparar...")
@@ -114,10 +114,10 @@ class FirstSearchNode(BaseNode):
                             logger.info("Reparo do JSON bem-sucedido")
                         except JSONDecodeError:
                             logger.error("Falha no reparo do JSON")
-                            # Retornar consulta padrão
+                            # Retornar consulta padrêo
                             return self._get_default_search_query()
                     else:
-                        logger.error("Não foi possível reparar o JSON, usando consulta padrão")
+                        logger.error("Nêo foi possível reparar o JSON, usando consulta padrêo")
                         return self._get_default_search_query()
 
             # Validar e limpar resultado
@@ -125,7 +125,7 @@ class FirstSearchNode(BaseNode):
             reasoning = result.get("reasoning", "")
 
             if not search_query:
-                logger.warning("Consulta de busca não encontrada, usando consulta padrão")
+                logger.warning("Consulta de busca nêo encontrada, usando consulta padrêo")
                 return self._get_default_search_query()
 
             return {
@@ -135,19 +135,19 @@ class FirstSearchNode(BaseNode):
 
         except Exception as e:
             self.log_error(f"Falha ao processar saída: {str(e)}")
-            # Retornar consulta padrão
+            # Retornar consulta padrêo
             return self._get_default_search_query()
 
     def _get_default_search_query(self) -> Dict[str, str]:
         """
-        Obter consulta de busca padrão
+        Obter consulta de busca padrêo
 
         Returns:
-            Dicionário de consulta de busca padrão
+            Dicionário de consulta de busca padrêo
         """
         return {
             "search_query": "pesquisa sobre tema relacionado",
-            "reasoning": "Devido a falha na análise, usando consulta de busca padrão"
+            "reasoning": "Devido a falha na análise, usando consulta de busca padrêo"
         }
 
 
@@ -156,7 +156,7 @@ class ReflectionNode(BaseNode):
 
     def __init__(self, llm_client):
         """
-        Inicializar nó de reflexão
+        Inicializar nó de reflexêo
 
         Args:
             llm_client: Cliente LLM
@@ -198,7 +198,7 @@ class ReflectionNode(BaseNode):
             else:
                 message = json.dumps(input_data, ensure_ascii=False)
 
-            logger.info("Realizando reflexão e gerando nova consulta de busca")
+            logger.info("Realizando reflexêo e gerando nova consulta de busca")
 
             # Chamar LLM
             response = self.llm_client.stream_invoke_to_string(SYSTEM_PROMPT_REFLECTION, message)
@@ -206,11 +206,11 @@ class ReflectionNode(BaseNode):
             # Processar resposta
             processed_response = self.process_output(response)
 
-            logger.info(f"Consulta de busca gerada por reflexão: {processed_response.get('search_query', 'N/A')}")
+            logger.info(f"Consulta de busca gerada por reflexêo: {processed_response.get('search_query', 'N/A')}")
             return processed_response
 
         except Exception as e:
-            logger.exception(f"Falha ao gerar consulta de busca por reflexão: {str(e)}")
+            logger.exception(f"Falha ao gerar consulta de busca por reflexêo: {str(e)}")
             raise e
 
     def process_output(self, output: str) -> Dict[str, str]:
@@ -228,7 +228,7 @@ class ReflectionNode(BaseNode):
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
 
-            # Registrar saída limpa para depuração
+            # Registrar saída limpa para depuraçêo
             logger.info(f"Saída após limpeza: {cleaned_output}")
 
             # Analisar JSON
@@ -237,7 +237,7 @@ class ReflectionNode(BaseNode):
                 logger.info("Análise JSON bem-sucedida")
             except JSONDecodeError as e:
                 logger.error(f"Falha na análise JSON: {str(e)}")
-                # Usar método de extração mais robusto
+                # Usar método de extraçêo mais robusto
                 result = extract_clean_response(cleaned_output)
                 if "error" in result:
                     logger.error("Falha na análise JSON, tentando reparar...")
@@ -249,10 +249,10 @@ class ReflectionNode(BaseNode):
                             logger.info("Reparo do JSON bem-sucedido")
                         except JSONDecodeError:
                             logger.error("Falha no reparo do JSON")
-                            # Retornar consulta padrão
+                            # Retornar consulta padrêo
                             return self._get_default_reflection_query()
                     else:
-                        logger.error("Não foi possível reparar o JSON, usando consulta padrão")
+                        logger.error("Nêo foi possível reparar o JSON, usando consulta padrêo")
                         return self._get_default_reflection_query()
 
             # Validar e limpar resultado
@@ -260,7 +260,7 @@ class ReflectionNode(BaseNode):
             reasoning = result.get("reasoning", "")
 
             if not search_query:
-                logger.warning("Consulta de busca não encontrada, usando consulta padrão")
+                logger.warning("Consulta de busca nêo encontrada, usando consulta padrêo")
                 return self._get_default_reflection_query()
 
             return {
@@ -270,17 +270,17 @@ class ReflectionNode(BaseNode):
 
         except Exception as e:
             logger.exception(f"Falha ao processar saída: {str(e)}")
-            # Retornar consulta padrão
+            # Retornar consulta padrêo
             return self._get_default_reflection_query()
 
     def _get_default_reflection_query(self) -> Dict[str, str]:
         """
-        Obter consulta de busca de reflexão padrão
+        Obter consulta de busca de reflexêo padrêo
 
         Returns:
-            Dicionário de consulta de busca de reflexão padrão
+            Dicionário de consulta de busca de reflexêo padrêo
         """
         return {
             "search_query": "informações complementares de pesquisa profunda",
-            "reasoning": "Devido a falha na análise, usando consulta de busca de reflexão padrão"
+            "reasoning": "Devido a falha na análise, usando consulta de busca de reflexêo padrêo"
         }

@@ -1,6 +1,6 @@
 # Testes de Parsing de Logs do ForumEngine
 
-Este conjunto de testes é utilizado para testar a funcionalidade de parsing de logs em `ForumEngine/monitor.py`, verificando sua correção em diferentes formatos de log.
+Este conjunto de testes é utilizado para testar a funcionalidade de parsing de logs em `ForumEngine/monitor.py`, verificando sua correçêo em diferentes formatos de log.
 
 ## Dados de Teste
 
@@ -12,7 +12,7 @@ Este conjunto de testes é utilizado para testar a funcionalidade de parsing de 
 - `OLD_FORMAT_FIRST_SUMMARY`: Log contendo FirstSummaryNode
 - `OLD_FORMAT_REFLECTION_SUMMARY`: Log contendo ReflectionSummaryNode
 
-### Formato novo (formato padrão loguru)
+### Formato novo (formato padrêo loguru)
 - `NEW_FORMAT_SINGLE_LINE_JSON`: JSON em linha única
 - `NEW_FORMAT_MULTILINE_JSON`: JSON em múltiplas linhas
 - `NEW_FORMAT_FIRST_SUMMARY`: Log contendo FirstSummaryNode
@@ -28,7 +28,7 @@ Este conjunto de testes é utilizado para testar a funcionalidade de parsing de 
 ### Usando pytest (recomendado)
 
 ```bash
-# Instalar pytest (se ainda não estiver instalado)
+# Instalar pytest (se ainda nêo estiver instalado)
 pip install pytest
 
 # Executar todos os testes
@@ -38,7 +38,7 @@ pytest tests/test_monitor.py -v
 pytest tests/test_monitor.py::TestLogMonitor::test_extract_json_content_new_format_multiline -v
 ```
 
-### Execução direta
+### Execuçêo direta
 
 ```bash
 python tests/test_monitor.py
@@ -59,11 +59,11 @@ Os testes cobrem as seguintes funções:
 
 ## Problemas Esperados
 
-O código atual pode não processar corretamente o formato novo do loguru; os principais problemas são:
+O código atual pode nêo processar corretamente o formato novo do loguru; os principais problemas sêo:
 
-1. **Remoção de timestamp**: A regex `r'^\[\d{2}:\d{2}:\d{2}\]\s*'` em `extract_json_content()` só consegue corresponder ao formato `[HH:MM:SS]`, não conseguindo corresponder ao formato do loguru `YYYY-MM-DD HH:mm:ss.SSS`
+1. **Remoçêo de timestamp**: A regex `r'^\[\d{2}:\d{2}:\d{2}\]\s*'` em `extract_json_content()` só consegue corresponder ao formato `[HH:MM:SS]`, nêo conseguindo corresponder ao formato do loguru `YYYY-MM-DD HH:mm:ss.SSS`
 
 2. **Correspondência de timestamp**: A regex `r'\[\d{2}:\d{2}:\d{2}\]\s*(.+)'` em `extract_node_content()` também só consegue corresponder ao formato antigo
 
-Esses testes ajudarão a identificar esses problemas e guiar as correções de código subsequentes.
+Esses testes ajudarêo a identificar esses problemas e guiar as correções de código subsequentes.
 

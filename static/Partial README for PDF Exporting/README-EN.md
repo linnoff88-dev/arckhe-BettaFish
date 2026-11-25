@@ -1,19 +1,19 @@
->  **Nota**: Se você precisa utilizar a funcionalidade de exportação PDF, instale as dependências do sistema seguindo os passos abaixo. Se não precisar da exportação PDF, pode pular esta etapa; as demais funcionalidades do sistema não serão afetadas.
+>  **Nota**: Se você precisa utilizar a funcionalidade de exportaçêo PDF, instale as dependências do sistema seguindo os passos abaixo. Se nêo precisar da exportaçêo PDF, pode pular esta etapa; as demais funcionalidades do sistema nêo serêo afetadas.
 
 <details>
-<summary><b> Passos de Instalação para Windows</b></summary>
+<summary><b> Passos de Instalaçêo para Windows</b></summary>
 
 ```powershell
 # 1. Baixe e instale o GTK3 Runtime (execute na máquina host)
 # Acesse: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases
 # Baixe o arquivo .exe mais recente e instale
-# É fortemente recomendado instalar no caminho padrão, pois isso pode ajudar a evitar diversos erros imprevistos.
+# É fortemente recomendado instalar no caminho padrêo, pois isso pode ajudar a evitar diversos erros imprevistos.
 
-# 2. Adicione o diretório bin da instalação GTK ao PATH (abra um novo terminal depois)
-# Exemplo de caminho padrão (substitua pelo seu caminho de instalação personalizado, se diferente)
+# 2. Adicione o diretório bin da instalaçêo GTK ao PATH (abra um novo terminal depois)
+# Exemplo de caminho padrêo (substitua pelo seu caminho de instalaçêo personalizado, se diferente)
 set PATH=C:\Program Files\GTK3-Runtime Win64\bin;%PATH%
 
-# Opcional: persistir a configuração
+# Opcional: persistir a configuraçêo
 setx PATH "C:\Program Files\GTK3-Runtime Win64\bin;%PATH%"
 
 # Se instalado em um caminho personalizado, substitua pelo caminho real, ou defina GTK_BIN_PATH=<seu-caminho-bin> e reabra o terminal
@@ -26,7 +26,7 @@ python -m ReportEngine.utils.dependency_check
 </details>
 
 <details>
-<summary><b> Passos de Instalação para macOS</b></summary>
+<summary><b> Passos de Instalaçêo para macOS</b></summary>
 
 ```bash
 # 1. Instale as dependências do sistema (execute na máquina host)
@@ -51,7 +51,7 @@ python -m ReportEngine.utils.dependency_check
 </details>
 
 <details>
-<summary><b> Passos de Instalação para Ubuntu/Debian</b></summary>
+<summary><b> Passos de Instalaçêo para Ubuntu/Debian</b></summary>
 
 ```bash
 # 1. Instale as dependências do sistema (execute na máquina host)
@@ -62,7 +62,7 @@ sudo apt-get install -y \
   libffi-dev \
   libcairo2
 
-# Priorizar o nome de pacote mais recente; fazer fallback se o repositório não o fornecer
+# Priorizar o nome de pacote mais recente; fazer fallback se o repositório nêo o fornecer
 if sudo apt-cache show libgdk-pixbuf-2.0-0 >/dev/null 2>&1; then
   sudo apt-get install -y libgdk-pixbuf-2.0-0
 else
@@ -73,7 +73,7 @@ fi
 </details>
 
 <details>
-<summary><b> Passos de Instalação para CentOS/RHEL</b></summary>
+<summary><b> Passos de Instalaçêo para CentOS/RHEL</b></summary>
 
 ```bash
 # 1. Instale as dependências do sistema (execute na máquina host)
@@ -83,4 +83,4 @@ sudo yum install -y pango gdk-pixbuf2 libffi-devel cairo
 </details>
 
 
->  **Dica**: Se estiver utilizando deploy com Docker, não é necessário instalar essas dependências manualmente; a imagem Docker já contém todas as dependências de sistema necessárias.
+>  **Dica**: Se estiver utilizando deploy com Docker, nêo é necessário instalar essas dependências manualmente; a imagem Docker já contém todas as dependências de sistema necessárias.

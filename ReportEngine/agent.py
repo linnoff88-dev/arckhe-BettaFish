@@ -300,7 +300,7 @@ class ReportAgent:
                 buffering=1,        # Buffer de linha, gravar cada linha imediatamente
                 serialize=False,    # Formato de texto simples, nao serializar como JSON
                 encoding="utf-8",   # Codificacao UTF-8 explicita
-                mode="a",           # Modo de adição
+                mode="a",           # Modo de adiçêo
                 filter=_exclude_other_engines # Filtrar logs dos quatro Engines, manter demais informacoes
             )
             logger.debug(f"Handler de log adicionado (ID: {handler_id}): {self.config.LOG_FILE}")

@@ -2,8 +2,8 @@
 Ferramentas genéricas de banco de dados (assíncrono)
 
 Este módulo fornece encapsulamento de acesso ao banco de dados baseado no motor assíncrono do SQLAlchemy 2.x, com suporte a MySQL e PostgreSQL.
-Localização das definições de modelos de dados:
-- Nenhuma (este módulo fornece apenas ferramentas de conexão e consulta, não define modelos de dados)
+Localizaçêo das definições de modelos de dados:
+- Nenhuma (este módulo fornece apenas ferramentas de conexêo e consulta, nêo define modelos de dados)
 """
 
 from __future__ import annotations
@@ -42,7 +42,7 @@ def _build_database_url() -> str:
         # PostgreSQL usa driver asyncpg
         return f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db_name}"
 
-    # MySQL padrão usa driver aiomysql
+    # MySQL padrêo usa driver aiomysql
     return f"mysql+aiomysql://{user}:{password}@{host}:{port}/{db_name}"
 
 

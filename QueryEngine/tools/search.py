@@ -1,20 +1,20 @@
 """
-Conjunto de ferramentas de busca de opinião pública projetado para AI Agent (Tavily)
+Conjunto de ferramentas de busca de opiniêo pública projetado para AI Agent (Tavily)
 
-Versão: 1.5
-Última atualização: 2025-08-22
+Versêo: 1.5
+Última atualizaçêo: 2025-08-22
 
 Este script decompõe as funcionalidades complexas de busca do Tavily em uma série de ferramentas independentes
 com objetivos claros e parâmetros mínimos, projetadas especificamente para chamadas por AI Agent.
-O Agent só precisa selecionar a ferramenta adequada conforme a intenção da tarefa,
-sem necessidade de compreender combinações complexas de parâmetros. Todas as ferramentas buscam "notícias" por padrão (topic='news').
+O Agent só precisa selecionar a ferramenta adequada conforme a intençêo da tarefa,
+sem necessidade de compreender combinações complexas de parâmetros. Todas as ferramentas buscam "notícias" por padrêo (topic='news').
 
 Novidades:
-- Adicionada ferramenta `basic_search_news` para executar buscas de notícias padrão e genéricas.
-- Cada resultado de busca agora inclui `published_date` (data de publicação da notícia).
+- Adicionada ferramenta `basic_search_news` para executar buscas de notícias padrêo e genéricas.
+- Cada resultado de busca agora inclui `published_date` (data de publicaçêo da notícia).
 
 Ferramentas principais:
-- basic_search_news: (Nova) Executa busca de notícias padrão e rápida.
+- basic_search_news: (Nova) Executa busca de notícias padrêo e rápida.
 - deep_search_news: Realiza a análise mais abrangente e profunda de um tema.
 - search_news_last_24_hours: Obtém as atualizações mais recentes das últimas 24 horas.
 - search_news_last_week: Obtém as principais reportagens da última semana.
@@ -40,15 +40,15 @@ from dataclasses import dataclass, field
 try:
     from tavily import TavilyClient
 except ImportError:
-    raise ImportError("Biblioteca Tavily não instalada. Execute `pip install tavily-python` para instalar.")
+    raise ImportError("Biblioteca Tavily nêo instalada. Execute `pip install tavily-python` para instalar.")
 
-# --- 1. Definição de estruturas de dados ---
+# --- 1. Definiçêo de estruturas de dados ---
 
 @dataclass
 class SearchResult:
     """
     Classe de dados para resultados de busca na web
-    Contém o atributo published_date para armazenar a data de publicação da notícia
+    Contém o atributo published_date para armazenar a data de publicaçêo da notícia
     """
     title: str
     url: str
@@ -77,7 +77,7 @@ class TavilyResponse:
 
 class TavilyNewsAgency:
     """
-    Um cliente contendo múltiplas ferramentas especializadas de busca de notícias e opinião pública.
+    Um cliente contendo múltiplas ferramentas especializadas de busca de notícias e opiniêo pública.
     Cada método público é projetado como uma ferramenta a ser chamada independentemente pelo AI Agent.
     """
 
@@ -85,12 +85,12 @@ class TavilyNewsAgency:
         """
         Inicializar o cliente.
         Args:
-            api_key: Chave da API Tavily; se não fornecida, será lida da variável de ambiente TAVILY_API_KEY.
+            api_key: Chave da API Tavily; se nêo fornecida, será lida da variável de ambiente TAVILY_API_KEY.
         """
         if api_key is None:
             api_key = os.getenv("TAVILY_API_KEY")
             if not api_key:
-                raise ValueError("Chave da API Tavily não encontrada! Configure a variável de ambiente TAVILY_API_KEY ou forneça na inicialização")
+                raise ValueError("Chave da API Tavily nêo encontrada! Configure a variável de ambiente TAVILY_API_KEY ou forneça na inicializaçêo")
         self._client = TavilyClient(api_key=api_key)
 
     @with_graceful_retry(SEARCH_API_RETRY_CONFIG, default_return=TavilyResponse(query="Falha na busca"))
@@ -127,8 +127,8 @@ class TavilyNewsAgency:
 
     def basic_search_news(self, query: str, max_results: int = 7) -> TavilyResponse:
         """
-        [Ferramenta] Busca básica de notícias: executa uma busca de notícias padrão e rápida.
-        Esta é a ferramenta de busca genérica mais utilizada, adequada quando não se tem certeza de qual tipo específico de busca é necessário.
+        [Ferramenta] Busca básica de notícias: executa uma busca de notícias padrêo e rápida.
+        Esta é a ferramenta de busca genérica mais utilizada, adequada quando nêo se tem certeza de qual tipo específico de busca é necessário.
         O Agent pode fornecer a consulta de busca (query) e opcionalmente o número máximo de resultados (max_results).
         """
         print(f"--- FERRAMENTA: Busca básica de notícias (query: {query}) ---")
@@ -162,7 +162,7 @@ class TavilyNewsAgency:
     def search_news_last_week(self, query: str) -> TavilyResponse:
         """
         [Ferramenta] Busca de notícias da semana: obtém as principais reportagens da última semana sobre um tema.
-        Adequada para realizar resumos semanais de opinião pública ou revisões.
+        Adequada para realizar resumos semanais de opiniêo pública ou revisões.
         O Agent só precisa fornecer a consulta de busca (query).
         """
         print(f"--- FERRAMENTA: Busca de notícias da semana (query: {query}) ---")
@@ -194,9 +194,9 @@ class TavilyNewsAgency:
 # --- 3. Testes e exemplos de uso ---
 
 def print_response_summary(response: TavilyResponse):
-    """Função de impressão simplificada para exibir resultados de teste, agora exibindo a data de publicação"""
+    """Funçêo de impressêo simplificada para exibir resultados de teste, agora exibindo a data de publicaçêo"""
     if not response or not response.query:
-        print("Não foi possível obter uma resposta válida.")
+        print("Nêo foi possível obter uma resposta válida.")
         return
 
     print(f"\nConsulta: '{response.query}' | Tempo: {response.response_time}s")
@@ -221,32 +221,32 @@ if __name__ == "__main__":
         response1 = agency.basic_search_news(query="últimos resultados das Olimpíadas", max_results=5)
         print_response_summary(response1)
 
-        # Cenário 2: Agent precisa compreender completamente o contexto da "competição global de tecnologia de chips"
-        response2 = agency.deep_search_news(query="competição global de tecnologia de chips")
+        # Cenário 2: Agent precisa compreender completamente o contexto da "competiçêo global de tecnologia de chips"
+        response2 = agency.deep_search_news(query="competiçêo global de tecnologia de chips")
         print_response_summary(response2)
 
         # Cenário 3: Agent precisa acompanhar as últimas notícias da "conferência GTC"
         response3 = agency.search_news_last_24_hours(query="Nvidia conferência GTC últimos lançamentos")
         print_response_summary(response3)
 
-        # Cenário 4: Agent precisa encontrar material para um relatório semanal sobre "direção autônoma"
-        response4 = agency.search_news_last_week(query="comercialização de direção autônoma")
+        # Cenário 4: Agent precisa encontrar material para um relatório semanal sobre "direçêo autônoma"
+        response4 = agency.search_news_last_week(query="comercializaçêo de direçêo autônoma")
         print_response_summary(response4)
 
         # Cenário 5: Agent precisa buscar imagens de notícias do "Telescópio Espacial Webb"
         response5 = agency.search_images_for_news(query="últimas descobertas do Telescópio Espacial Webb")
         print_response_summary(response5)
 
-        # Cenário 6: Agent precisa pesquisar notícias sobre "regulamentação de inteligência artificial" no primeiro trimestre de 2025
+        # Cenário 6: Agent precisa pesquisar notícias sobre "regulamentaçêo de inteligência artificial" no primeiro trimestre de 2025
         response6 = agency.search_news_by_date(
-            query="regulamentação de inteligência artificial",
+            query="regulamentaçêo de inteligência artificial",
             start_date="2025-01-01",
             end_date="2025-03-31"
         )
         print_response_summary(response6)
 
     except ValueError as e:
-        print(f"Falha na inicialização: {e}")
+        print(f"Falha na inicializaçêo: {e}")
         print("Certifique-se de que a variável de ambiente TAVILY_API_KEY está configurada corretamente.")
     except Exception as e:
         print(f"Erro desconhecido durante os testes: {e}")

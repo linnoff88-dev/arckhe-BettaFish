@@ -13,7 +13,7 @@ Este módulo utiliza um modelo de análise de sentimento multilíngue do Hugging
   - 日本語 (Japonês)
   - 한국어 (Coreano)
   - Français (Francês)
-  - Deutsch (Alemão)
+  - Deutsch (Alemêo)
   - Русский (Russo)
   - العربية (Árabe)
   - हिन्दी (Hindi)
@@ -21,7 +21,7 @@ Este módulo utiliza um modelo de análise de sentimento multilíngue do Hugging
   - Italiano (Italiano)
   - Etc...
 
-- **Categorias de saída**: Classificação de sentimento em 5 níveis
+- **Categorias de saída**: Classificaçêo de sentimento em 5 níveis
   - Muito Negativo (Very Negative)
   - Negativo (Negative)
   - Neutro (Neutral)
@@ -30,12 +30,12 @@ Este módulo utiliza um modelo de análise de sentimento multilíngue do Hugging
 
 ## Início Rápido
 
-1. Certifique-se de que as dependências estão instaladas:
+1. Certifique-se de que as dependências estêo instaladas:
 ```bash
 pip install transformers torch
 ```
 
-2. Execute o programa de predição:
+2. Execute o programa de prediçêo:
 ```bash
 python predict.py
 ```
@@ -43,7 +43,7 @@ python predict.py
 3. Insira texto em qualquer idioma para análise:
 ```
 Digite o texto: I love this product!
-Resultado da predição: Muito Positivo (confiança: 0.9456)
+Resultado da prediçêo: Muito Positivo (confiança: 0.9456)
 ```
 
 4. Veja exemplos multilíngues:
@@ -62,7 +62,7 @@ model_name = "tabularisai/multilingual-sentiment-analysis"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
-# Predição
+# Prediçêo
 texts = [
     "今天心情很好",  # Chinês
     "I love this!",  # Inglês
@@ -79,35 +79,35 @@ for text in texts:
 
 ## Funcionalidades em Destaque
 
-- **Suporte multilíngue**: Reconhece automaticamente 22 idiomas sem necessidade de especificação
-- **Classificação detalhada em 5 níveis**: Análise de sentimento mais refinada que a classificação binária tradicional
-- **Alta precisão**: Arquitetura avançada baseada em DistilBERT
+- **Suporte multilíngue**: Reconhece automaticamente 22 idiomas sem necessidade de especificaçêo
+- **Classificaçêo detalhada em 5 níveis**: Análise de sentimento mais refinada que a classificaçêo binária tradicional
+- **Alta precisêo**: Arquitetura avançada baseada em DistilBERT
 - **Cache local**: Após o primeiro download, salva localmente para acelerar o uso subsequente
 
-## Cenários de Aplicação
+## Cenários de Aplicaçêo
 
 - Monitoramento de mídias sociais internacionais
 - Análise de feedback de clientes multilíngue
-- Classificação de sentimento de avaliações de produtos globais
+- Classificaçêo de sentimento de avaliações de produtos globais
 - Rastreamento de sentimento de marca entre idiomas
-- Otimização de atendimento ao cliente multilíngue
+- Otimizaçêo de atendimento ao cliente multilíngue
 - Pesquisa de mercado internacional
 
 ## Armazenamento do Modelo
 
-- Na primeira execução, o modelo será baixado automaticamente para a pasta `model` no diretório atual
-- Execuções subsequentes carregarão diretamente do local, sem necessidade de novo download
-- O tamanho do modelo é de aproximadamente 135MB; o primeiro download requer conexão com a internet
+- Na primeira execuçêo, o modelo será baixado automaticamente para a pasta `model` no diretório atual
+- Execuções subsequentes carregarêo diretamente do local, sem necessidade de novo download
+- O tamanho do modelo é de aproximadamente 135MB; o primeiro download requer conexêo com a internet
 
-## Descrição dos Arquivos
+## Descriçêo dos Arquivos
 
-- `predict.py`: Programa principal de predição, usando chamada direta ao modelo
+- `predict.py`: Programa principal de prediçêo, usando chamada direta ao modelo
 - `README.md`: Instruções de uso
 
 ## Observações
 
-- Na primeira execução, o modelo será baixado automaticamente, sendo necessária conexão com a internet
+- Na primeira execuçêo, o modelo será baixado automaticamente, sendo necessária conexêo com a internet
 - O modelo será salvo no diretório atual para facilitar o uso posterior
-- Suporta aceleração por GPU, detectando automaticamente dispositivos disponíveis
+- Suporta aceleraçêo por GPU, detectando automaticamente dispositivos disponíveis
 - Para limpar os arquivos do modelo, basta excluir a pasta `model`
-- Este modelo foi treinado com dados sintéticos; recomenda-se validação em aplicações reais
+- Este modelo foi treinado com dados sintéticos; recomenda-se validaçêo em aplicações reais

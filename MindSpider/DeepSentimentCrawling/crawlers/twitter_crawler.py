@@ -13,14 +13,14 @@ class TwitterCrawler(WesternPlatformCrawler):
 
     def __init__(self):
         # TODO: Implementar com apify-client
-        logger.info("TwitterCrawler inicializado (stub - aguardando implementação)")
+        logger.info("TwitterCrawler inicializado (stub - aguardando implementaçêo)")
 
     def search(self, keywords: List[str], max_results: int = 100) -> List[CrawledContent]:
-        logger.warning("TwitterCrawler.search() ainda não implementado")
+        logger.warning("TwitterCrawler.search() ainda nêo implementado")
         return []
 
     def get_comments(self, content_id: str, max_comments: int = 100) -> List[CrawledComment]:
-        logger.warning("TwitterCrawler.get_comments() ainda não implementado")
+        logger.warning("TwitterCrawler.get_comments() ainda nêo implementado")
         return []
 
     def is_configured(self) -> bool:

@@ -1,6 +1,6 @@
 """
-Middleware de otimização de palavras-chave
-Usa Qwen AI para otimizar os termos de busca gerados pelo Agent em palavras-chave mais adequadas para consulta ao banco de dados de opinião pública
+Middleware de otimizaçêo de palavras-chave
+Usa Qwen AI para otimizar os termos de busca gerados pelo Agent em palavras-chave mais adequadas para consulta ao banco de dados de opiniêo pública
 """
 
 from openai import OpenAI
@@ -26,7 +26,7 @@ from retry_helper import with_graceful_retry, SEARCH_API_RETRY_CONFIG
 
 @dataclass
 class KeywordOptimizationResponse:
-    """Resposta de otimização de palavras-chave"""
+    """Resposta de otimizaçêo de palavras-chave"""
     original_query: str
     optimized_keywords: List[str]
     reasoning: str
@@ -36,7 +36,7 @@ class KeywordOptimizationResponse:
 class KeywordOptimizer:
     """
     Otimizador de palavras-chave
-    Usa o modelo Qwen3 da SiliconFlow para otimizar os termos de busca gerados pelo Agent em palavras-chave mais próximas da opinião pública real
+    Usa o modelo Qwen3 da SiliconFlow para otimizar os termos de busca gerados pelo Agent em palavras-chave mais próximas da opiniêo pública real
     """
 
     def __init__(self, api_key: str = None, base_url: str = None, model_name: str = None):
@@ -44,13 +44,13 @@ class KeywordOptimizer:
         Inicializar o otimizador de palavras-chave
 
         Args:
-            api_key: Chave API da SiliconFlow, se não fornecida será lida do arquivo de configuração
-            base_url: Endereço base da interface, padrão usa o endereço SiliconFlow fornecido na configuração
+            api_key: Chave API da SiliconFlow, se nêo fornecida será lida do arquivo de configuraçêo
+            base_url: Endereço base da interface, padrêo usa o endereço SiliconFlow fornecido na configuraçêo
         """
         self.api_key = api_key or settings.KEYWORD_OPTIMIZER_API_KEY
 
         if not self.api_key:
-            raise ValueError("Chave API da SiliconFlow não encontrada, configure KEYWORD_OPTIMIZER_API_KEY em config.py")
+            raise ValueError("Chave API da SiliconFlow nêo encontrada, configure KEYWORD_OPTIMIZER_API_KEY em config.py")
 
         self.base_url = base_url or settings.KEYWORD_OPTIMIZER_BASE_URL
 
@@ -66,15 +66,15 @@ class KeywordOptimizer:
 
         Args:
             original_query: Consulta de busca original gerada pelo Agent
-            context: Informações de contexto adicionais (como título do parágrafo, descrição do conteúdo etc.)
+            context: Informações de contexto adicionais (como título do parágrafo, descriçêo do conteúdo etc.)
 
         Returns:
             KeywordOptimizationResponse: Lista de palavras-chave otimizadas
         """
-        logger.info(f"Middleware de otimização de palavras-chave: Processando consulta '{original_query}'")
+        logger.info(f"Middleware de otimizaçêo de palavras-chave: Processando consulta '{original_query}'")
 
         try:
-            # Construir prompt de otimização
+            # Construir prompt de otimizaçêo
             system_prompt = self._build_system_prompt()
             user_prompt = self._build_user_prompt(original_query, context)
 
@@ -91,7 +91,7 @@ class KeywordOptimizer:
                         keywords = parsed.get("keywords", [])
                         reasoning = parsed.get("reasoning", "")
                     else:
-                        # Se não estiver em formato JSON, tentar extrair palavras-chave do texto
+                        # Se nêo estiver em formato JSON, tentar extrair palavras-chave do texto
                         keywords = self._extract_keywords_from_text(content)
                         reasoning = content
 
@@ -99,7 +99,7 @@ class KeywordOptimizer:
                     validated_keywords = self._validate_keywords(keywords)
 
                     logger.info(
-                        f"Otimização bem-sucedida: {len(validated_keywords)} palavras-chave" +
+                        f"Otimizaçêo bem-sucedida: {len(validated_keywords)} palavras-chave" +
                         ("" if not validated_keywords else "\n" +
                          "\n".join([f"   {i}. '{k}'" for i, k in enumerate(validated_keywords, 1)]))
                     )
@@ -120,7 +120,7 @@ class KeywordOptimizer:
                     return KeywordOptimizationResponse(
                         original_query=original_query,
                         optimized_keywords=fallback_keywords,
-                        reasoning="Falha ao analisar resposta da API, usando extração alternativa de palavras-chave",
+                        reasoning="Falha ao analisar resposta da API, usando extraçêo alternativa de palavras-chave",
                         success=True
                     )
             else:
@@ -130,34 +130,34 @@ class KeywordOptimizer:
                 return KeywordOptimizationResponse(
                     original_query=original_query,
                     optimized_keywords=fallback_keywords,
-                    reasoning="Falha na chamada da API, usando extração alternativa de palavras-chave",
+                    reasoning="Falha na chamada da API, usando extraçêo alternativa de palavras-chave",
                     success=True,
                     error_message=response['error']
                 )
 
         except Exception as e:
-            logger.error(f"Falha na otimização de palavras-chave: {str(e)}")
+            logger.error(f"Falha na otimizaçêo de palavras-chave: {str(e)}")
             # Plano alternativo final
             fallback_keywords = self._fallback_keyword_extraction(original_query)
             return KeywordOptimizationResponse(
                 original_query=original_query,
                 optimized_keywords=fallback_keywords,
-                reasoning="Erro do sistema, usando extração alternativa de palavras-chave",
+                reasoning="Erro do sistema, usando extraçêo alternativa de palavras-chave",
                 success=False,
                 error_message=str(e)
             )
 
     def _build_system_prompt(self) -> str:
         """Construir prompt de sistema"""
-        return """Você é um especialista profissional em mineração de dados de opinião pública. Sua tarefa é otimizar a consulta de busca fornecida pelo usuário em palavras-chave mais adequadas para busca em bancos de dados de opinião pública de mídias sociais.
+        return """Você é um especialista profissional em mineraçêo de dados de opiniêo pública. Sua tarefa é otimizar a consulta de busca fornecida pelo usuário em palavras-chave mais adequadas para busca em bancos de dados de opiniêo pública de mídias sociais.
 
 **Princípios centrais**:
 1. **Próximo da linguagem dos internautas**: Usar vocabulário que usuários comuns usariam nas mídias sociais
-2. **Evitar terminologia profissional**: Não usar termos oficiais como "opinião pública", "propagação", "tendência", "perspectiva"
+2. **Evitar terminologia profissional**: Nêo usar termos oficiais como "opiniêo pública", "propagaçêo", "tendência", "perspectiva"
 3. **Simples e específico**: Cada palavra-chave deve ser muito concisa e clara, facilitando a correspondência no banco de dados
-4. **Rico em emoções**: Incluir vocabulário de expressão emocional comumente usado por internautas
+4. **Rico em emoções**: Incluir vocabulário de expressêo emocional comumente usado por internautas
 5. **Controle de quantidade**: Fornecer no mínimo 10 e no máximo 20 palavras-chave
-6. **Evitar repetições**: Não se desviar do tema da consulta inicial
+6. **Evitar repetições**: Nêo se desviar do tema da consulta inicial
 
 **Aviso importante**: Cada palavra-chave deve ser um termo independente e indivisível, proibido incluir espaços dentro do termo. Por exemplo, usar "turma do Lei Jun polêmica" em vez do incorreto "turma do Lei Jun polêmica".
 
@@ -170,16 +170,16 @@ Retorne o resultado em formato JSON:
 }
 
 **Exemplo**:
-Entrada: "gestão de opinião pública da Universidade de Wuhan perspectivas futuras tendências de desenvolvimento"
+Entrada: "gestêo de opiniêo pública da Universidade de Wuhan perspectivas futuras tendências de desenvolvimento"
 Saída:
 {
-    "keywords": ["Wuda", "Universidade de Wuhan", "gestão escolar", "educação na Wuda"],
-    "reasoning": "Escolhidos 'Wuda' e 'Universidade de Wuhan' como termos centrais, pois são os nomes mais usados pelos internautas; 'gestão escolar' é mais próximo do cotidiano que 'gestão de opinião pública'; evitados termos profissionais como 'perspectivas futuras' e 'tendências de desenvolvimento' que internautas raramente usam"
+    "keywords": ["Wuda", "Universidade de Wuhan", "gestêo escolar", "educaçêo na Wuda"],
+    "reasoning": "Escolhidos 'Wuda' e 'Universidade de Wuhan' como termos centrais, pois sêo os nomes mais usados pelos internautas; 'gestêo escolar' é mais próximo do cotidiano que 'gestêo de opiniêo pública'; evitados termos profissionais como 'perspectivas futuras' e 'tendências de desenvolvimento' que internautas raramente usam"
 }"""
 
     def _build_user_prompt(self, original_query: str, context: str) -> str:
         """Construir prompt do usuário"""
-        prompt = f"Otimize a seguinte consulta de busca em palavras-chave adequadas para consulta ao banco de dados de opinião pública:\n\nConsulta original: {original_query}"
+        prompt = f"Otimize a seguinte consulta de busca em palavras-chave adequadas para consulta ao banco de dados de opiniêo pública:\n\nConsulta original: {original_query}"
 
         if context:
             prompt += f"\n\nInformações de contexto: {context}"
@@ -188,7 +188,7 @@ Saída:
 
         return prompt
 
-    @with_graceful_retry(SEARCH_API_RETRY_CONFIG, default_return={"success": False, "error": "Serviço de otimização de palavras-chave temporariamente indisponível"})
+    @with_graceful_retry(SEARCH_API_RETRY_CONFIG, default_return={"success": False, "error": "Serviço de otimizaçêo de palavras-chave temporariamente indisponível"})
     def _call_qwen_api(self, system_prompt: str, user_prompt: str) -> Dict[str, Any]:
         """Chamar API Qwen"""
         try:
@@ -207,11 +207,11 @@ Saída:
             else:
                 return {"success": False, "error": "Formato de retorno da API anormal"}
         except Exception as e:
-            return {"success": False, "error": f"Exceção na chamada da API: {str(e)}"}
+            return {"success": False, "error": f"Exceçêo na chamada da API: {str(e)}"}
 
     def _extract_keywords_from_text(self, text: str) -> List[str]:
         """Extrair palavras-chave do texto (usado quando a análise JSON falha)"""
-        # Lógica simples de extração de palavras-chave
+        # Lógica simples de extraçêo de palavras-chave
         lines = text.split('\n')
         keywords = []
 
@@ -230,7 +230,7 @@ Saída:
                     else:
                         keywords.append(potential_keywords)
 
-        # Se não encontrar, tentar outros métodos
+        # Se nêo encontrar, tentar outros métodos
         if not keywords:
             # Buscar conteúdo entre aspas
             import re
@@ -260,7 +260,7 @@ Saída:
             if isinstance(keyword, str):
                 keyword = keyword.strip().strip('"\'""''')
 
-                # Validação básica
+                # Validaçêo básica
                 if (keyword and
                     len(keyword) <= 20 and
                     len(keyword) >= 1 and
@@ -270,14 +270,14 @@ Saída:
         return validated[:20]  # Máximo 20 palavras-chave
 
     def _fallback_keyword_extraction(self, original_query: str) -> List[str]:
-        """Plano alternativo de extração de palavras-chave"""
-        # Lógica simples de extração de palavras-chave
+        """Plano alternativo de extraçêo de palavras-chave"""
+        # Lógica simples de extraçêo de palavras-chave
         # Remover palavras comuns inúteis
         stop_words = {'、'}
 
         # Dividir a consulta
         import re
-        # Dividir por espaços e pontuação
+        # Dividir por espaços e pontuaçêo
         tokens = re.split(r'[\s，。！？；：、]+', original_query)
 
         keywords = []
@@ -286,7 +286,7 @@ Saída:
             if token and token not in stop_words and len(token) >= 2:
                 keywords.append(token)
 
-        # Se não houver palavras-chave válidas, usar a primeira palavra da consulta original
+        # Se nêo houver palavras-chave válidas, usar a primeira palavra da consulta original
         if not keywords:
             first_word = original_query.split()[0] if original_query.split() else original_query
             keywords = [first_word] if first_word else ["热门"]

@@ -23,11 +23,11 @@ try:
 except ImportError as e:
     raise ImportError(f"Falha ao importar módulo: {e}")
 
-# Nomes das fontes de notícias organizados por região
+# Nomes das fontes de notícias organizados por regiêo
 SOURCE_NAMES = {
     # Brasil (fontes primárias)
     "g1": "G1 (Globo)",
-    "folha": "Folha de São Paulo",
+    "folha": "Folha de Sêo Paulo",
     "uol": "UOL Notícias",
     "estadao": "O Estado de S. Paulo",
     "r7": "R7 Notícias",
@@ -56,7 +56,7 @@ SOURCE_NAMES = {
     "github-trending": "GitHub Trending",
 }
 
-# Mapeamento de cada fonte para sua região
+# Mapeamento de cada fonte para sua regiêo
 SOURCE_REGIONS = {
     "g1": "brasil",
     "folha": "brasil",
@@ -84,7 +84,7 @@ SOURCE_REGIONS = {
     "github-trending": "global",
 }
 
-# Rótulos legíveis para cada região
+# Rótulos legíveis para cada regiêo
 REGION_LABELS = {
     "brasil": "Brasil",
     "usa": "Estados Unidos",
@@ -153,19 +153,19 @@ class NewsCollector:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         self.close()
 
-    # ==================== Consultas de região ====================
+    # ==================== Consultas de regiêo ====================
 
     @staticmethod
     def get_sources_by_region(region: str) -> List[str]:
         """
-        Retorna os IDs das fontes de uma determinada região.
+        Retorna os IDs das fontes de uma determinada regiêo.
 
         Args:
-            region: Identificador da região (ex: 'brasil', 'usa', 'europa',
+            region: Identificador da regiêo (ex: 'brasil', 'usa', 'europa',
                     'america_do_sul', 'global')
 
         Returns:
-            Lista de IDs de fontes pertencentes à região
+            Lista de IDs de fontes pertencentes à regiêo
         """
         return [
             source_id
@@ -205,7 +205,7 @@ class NewsCollector:
             return {
                 "source": source,
                 "status": "error",
-                "error": f"URL de feed RSS não definida para a fonte: {source}",
+                "error": f"URL de feed RSS nêo definida para a fonte: {source}",
                 "timestamp": datetime.now().isoformat(),
             }
 
@@ -266,8 +266,8 @@ class NewsCollector:
         """
         Faz o parsing de um feed RSS/XML e extrai os itens de notícia.
 
-        Suporta feeds RSS 2.0 e Atom. Extrai título, link, descrição e
-        data de publicação de cada item.
+        Suporta feeds RSS 2.0 e Atom. Extrai título, link, descriçêo e
+        data de publicaçêo de cada item.
 
         Args:
             xml_text: Conteúdo XML do feed como string
@@ -355,7 +355,7 @@ class NewsCollector:
             tag: Nome da tag filha
 
         Returns:
-            Texto do elemento ou None se não encontrado
+            Texto do elemento ou None se nêo encontrado
         """
         elem = parent.find(tag)
         if elem is not None and elem.text:
@@ -608,7 +608,7 @@ class NewsCollector:
         Args:
             item: Dicionário com os dados brutos da notícia
             source: Identificador da fonte
-            rank: Posição/ranking da notícia na fonte
+            rank: Posiçêo/ranking da notícia na fonte
 
         Returns:
             Dicionário processado ou None em caso de erro
@@ -689,7 +689,7 @@ async def main():
         regioes = collector.get_available_regions()
         logger.info(f"Regiões disponíveis: {regioes}")
 
-        # Exibe as fontes da região Brasil
+        # Exibe as fontes da regiêo Brasil
         fontes_brasil = collector.get_sources_by_region("brasil")
         logger.info(f"Fontes do Brasil: {fontes_brasil}")
 

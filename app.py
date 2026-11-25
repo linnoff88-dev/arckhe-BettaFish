@@ -1,11 +1,11 @@
 """
-Aplicação principal Flask - Gerenciamento unificado dos três aplicativos Streamlit
+Aplicaçêo principal Flask - Gerenciamento unificado dos três aplicativos Streamlit
 """
 
 import os
 import sys
 
-# [Correção] Definir variáveis de ambiente o mais cedo possível para garantir que todos os módulos usem modo sem buffer
+# [Correçêo] Definir variáveis de ambiente o mais cedo possível para garantir que todos os módulos usem modo sem buffer
 os.environ['PYTHONIOENCODING'] = 'utf-8'
 os.environ['PYTHONUTF8'] = '1'
 os.environ['PYTHONUNBUFFERED'] = '1'  # Desabilitar buffer de saída do Python para garantir logs em tempo real
@@ -37,22 +37,22 @@ app.config['SECRET_KEY'] = 'Dedicated-to-creating-a-concise-and-versatile-public
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # O eventlet ocasionalmente lança ConnectionAbortedError quando o cliente desconecta ativamente.
-# Aqui fazemos um wrapper defensivo para evitar poluição desnecessária do log com stack traces
+# Aqui fazemos um wrapper defensivo para evitar poluiçêo desnecessária do log com stack traces
 # (ativado apenas quando o eventlet está disponível).
 def _patch_eventlet_disconnect_logging():
     try:
         import eventlet.wsgi  # type: ignore
-    except Exception as exc:  # pragma: no cover - efetivo apenas em produção
-        logger.debug(f"eventlet não disponível, ignorando patch de desconexão: {exc}")
+    except Exception as exc:  # pragma: no cover - efetivo apenas em produçêo
+        logger.debug(f"eventlet nêo disponível, ignorando patch de desconexêo: {exc}")
         return
 
     try:
         original_finish = eventlet.wsgi.HttpProtocol.finish  # type: ignore[attr-defined]
     except Exception as exc:  # pragma: no cover
-        logger.debug(f"eventlet sem HttpProtocol.finish, ignorando patch de desconexão: {exc}")
+        logger.debug(f"eventlet sem HttpProtocol.finish, ignorando patch de desconexêo: {exc}")
         return
 
-    def _safe_finish(self, *args, **kwargs):  # pragma: no cover - acionado apenas em tempo de execução
+    def _safe_finish(self, *args, **kwargs):  # pragma: no cover - acionado apenas em tempo de execuçêo
         try:
             return original_finish(self, *args, **kwargs)
         except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError) as exc:
@@ -60,13 +60,13 @@ def _patch_eventlet_disconnect_logging():
                 environ = getattr(self, 'environ', {}) or {}
                 method = environ.get('REQUEST_METHOD', '')
                 path = environ.get('PATH_INFO', '')
-                logger.warning(f"Cliente desconectou ativamente, ignorando exceção: {method} {path} ({exc})")
+                logger.warning(f"Cliente desconectou ativamente, ignorando exceçêo: {method} {path} ({exc})")
             except Exception:
-                logger.warning(f"Cliente desconectou ativamente, ignorando exceção: {exc}")
+                logger.warning(f"Cliente desconectou ativamente, ignorando exceçêo: {exc}")
             return
 
     eventlet.wsgi.HttpProtocol.finish = _safe_finish  # type: ignore[attr-defined]
-    logger.info("Proteção de segurança aplicada para interrupção de conexão do eventlet")
+    logger.info("Proteçêo de segurança aplicada para interrupçêo de conexêo do eventlet")
 
 _patch_eventlet_disconnect_logging()
 
@@ -75,7 +75,7 @@ if REPORT_ENGINE_AVAILABLE:
     app.register_blueprint(report_bp, url_prefix='/api/report')
     logger.info("Interface do ReportEngine registrada")
 else:
-    logger.info("ReportEngine não disponível, registro de interface ignorado")
+    logger.info("ReportEngine nêo disponível, registro de interface ignorado")
 
 # Criar diretório de logs
 LOG_DIR = Path('logs')
@@ -135,7 +135,7 @@ def _load_config_module():
 def read_config_values():
     """Return the current configuration values that are exposed to the frontend."""
     try:
-        # Recarregar configuração para obter a instância mais recente de Settings
+        # Recarregar configuraçêo para obter a instância mais recente de Settings
         from config import reload_settings, settings
         reload_settings()
 
@@ -150,7 +150,7 @@ def read_config_values():
                 values[key] = str(value)
         return values
     except Exception as exc:
-        logger.exception(f"Falha ao ler configuração: {exc}")
+        logger.exception(f"Falha ao ler configuraçêo: {exc}")
         return {}
 
 
@@ -179,7 +179,7 @@ def write_config_values(updates):
 
     # Ler conteúdo existente do arquivo .env
     env_lines = []
-    env_key_indices = {}  # Registrar a posição de índice de cada chave no arquivo
+    env_key_indices = {}  # Registrar a posiçêo de índice de cada chave no arquivo
     if env_file_path.exists():
         env_lines = env_file_path.read_text(encoding='utf-8').splitlines()
         # Extrair chaves existentes e seus índices
@@ -190,7 +190,7 @@ def write_config_values(updates):
                     key = line_stripped.split('=')[0].strip()
                     env_key_indices[key] = i
 
-    # Atualizar ou adicionar itens de configuração
+    # Atualizar ou adicionar itens de configuraçêo
     for key, raw_value in updates.items():
         # Formatar valor para arquivo .env (sem aspas, exceto para strings com espaços)
         if raw_value is None or raw_value == '':
@@ -208,7 +208,7 @@ def write_config_values(updates):
             else:
                 env_value = value_str
 
-        # Atualizar ou adicionar item de configuração
+        # Atualizar ou adicionar item de configuraçêo
         if key in env_key_indices:
             # Atualizar linha existente
             env_lines[env_key_indices[key]] = f'{key}={env_value}'
@@ -220,7 +220,7 @@ def write_config_values(updates):
     env_file_path.parent.mkdir(parents=True, exist_ok=True)
     env_file_path.write_text('\n'.join(env_lines) + '\n', encoding='utf-8')
 
-    # Recarregar módulo de configuração (isso relê o arquivo .env e cria nova instância de Settings)
+    # Recarregar módulo de configuraçêo (isso relê o arquivo .env e cria nova instância de Settings)
     _load_config_module()
 
 
@@ -275,13 +275,13 @@ def initialize_system_components():
     if spider.initialize_database():
         logger.info("Banco de dados inicializado com sucesso")
     else:
-        logger.error("Falha na inicialização do banco de dados")
+        logger.error("Falha na inicializaçêo do banco de dados")
 
     try:
         stop_forum_engine()
         logs.append("ForumEngine monitor parado para evitar conflito de arquivos")
     except Exception as exc:  # pragma: no cover - captura de segurança
-        message = f"Exceção ao parar ForumEngine: {exc}"
+        message = f"Exceçêo ao parar ForumEngine: {exc}"
         logs.append(message)
         logger.exception(message)
 
@@ -294,13 +294,13 @@ def initialize_system_components():
             logs.append(f"{app_name}: {message}")
             if success:
                 startup_success, startup_message = wait_for_app_startup(app_name, 30)
-                logs.append(f"{app_name} verificação de inicialização: {startup_message}")
+                logs.append(f"{app_name} verificaçêo de inicializaçêo: {startup_message}")
                 if not startup_success:
-                    errors.append(f"{app_name} falha na inicialização: {startup_message}")
+                    errors.append(f"{app_name} falha na inicializaçêo: {startup_message}")
             else:
-                errors.append(f"{app_name} falha na inicialização: {message}")
+                errors.append(f"{app_name} falha na inicializaçêo: {message}")
         else:
-            msg = f"Arquivo não encontrado: {script_path}"
+            msg = f"Arquivo nêo encontrado: {script_path}"
             logs.append(f"Erro: {msg}")
             errors.append(f"{app_name}: {msg}")
 
@@ -308,7 +308,7 @@ def initialize_system_components():
     try:
         start_forum_engine()
         processes['forum']['status'] = 'running'
-        logs.append("ForumEngine inicialização concluída")
+        logs.append("ForumEngine inicializaçêo concluída")
         forum_started = True
     except Exception as exc:  # pragma: no cover - captura de segurança
         error_msg = f"Falha ao iniciar ForumEngine: {exc}"
@@ -320,11 +320,11 @@ def initialize_system_components():
             if initialize_report_engine():
                 logs.append("ReportEngine inicializado com sucesso")
             else:
-                msg = "Falha na inicialização do ReportEngine"
+                msg = "Falha na inicializaçêo do ReportEngine"
                 logs.append(msg)
                 errors.append(msg)
         except Exception as exc:  # pragma: no cover
-            msg = f"Exceção na inicialização do ReportEngine: {exc}"
+            msg = f"Exceçêo na inicializaçêo do ReportEngine: {exc}"
             logs.append(msg)
             errors.append(msg)
 
@@ -345,16 +345,16 @@ def init_forum_log():
     """Inicializar arquivo forum.log"""
     try:
         forum_log_file = LOG_DIR / "forum.log"
-        # Verificar se o arquivo não existe para criá-lo com uma linha inicial; se existir, limpar e escrever linha inicial
+        # Verificar se o arquivo nêo existe para criá-lo com uma linha inicial; se existir, limpar e escrever linha inicial
         if not forum_log_file.exists():
             with open(forum_log_file, 'w', encoding='utf-8') as f:
                 start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                f.write(f"=== ForumEngine inicialização do sistema - {start_time} ===\n")
+                f.write(f"=== ForumEngine inicializaçêo do sistema - {start_time} ===\n")
             logger.info(f"ForumEngine: forum.log inicializado")
         else:
             with open(forum_log_file, 'w', encoding='utf-8') as f:
                 start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                f.write(f"=== ForumEngine inicialização do sistema - {start_time} ===\n")
+                f.write(f"=== ForumEngine inicializaçêo do sistema - {start_time} ===\n")
             logger.info(f"ForumEngine: forum.log inicializado")
     except Exception as e:
         logger.exception(f"ForumEngine: Falha ao inicializar forum.log: {e}")
@@ -427,7 +427,7 @@ def parse_forum_log_line(line):
     }
 
 # Listener de logs do Forum
-# Armazenar posição do histórico de logs enviado para cada cliente
+# Armazenar posiçêo do histórico de logs enviado para cada cliente
 forum_log_positions = {}
 
 def monitor_forum_log():
@@ -439,10 +439,10 @@ def monitor_forum_log():
     last_position = 0
     processed_lines = set()  # Para rastrear linhas já processadas e evitar duplicatas
 
-    # Se o arquivo existir, obter posição inicial mas não pular conteúdo
+    # Se o arquivo existir, obter posiçêo inicial mas nêo pular conteúdo
     if forum_log_file.exists():
         with open(forum_log_file, 'r', encoding='utf-8', errors='ignore') as f:
-            # Registrar tamanho do arquivo, mas não adicionar a processed_lines
+            # Registrar tamanho do arquivo, mas nêo adicionar a processed_lines
             # Assim o usuário pode obter histórico ao abrir a aba do fórum
             f.seek(0, 2)  # Mover para o final do arquivo
             last_position = f.tell()
@@ -501,7 +501,7 @@ processes = {
     'insight': {'process': None, 'port': 8501, 'status': 'stopped', 'output': [], 'log_file': None, 'healthcheck_started_at': None},
     'media': {'process': None, 'port': 8502, 'status': 'stopped', 'output': [], 'log_file': None, 'healthcheck_started_at': None},
     'query': {'process': None, 'port': 8503, 'status': 'stopped', 'output': [], 'log_file': None, 'healthcheck_started_at': None},
-    'forum': {'process': None, 'port': None, 'status': 'stopped', 'output': [], 'log_file': None}  # Marcado como running após inicialização
+    'forum': {'process': None, 'port': None, 'status': 'stopped', 'output': [], 'log_file': None}  # Marcado como running após inicializaçêo
 }
 
 STREAMLIT_SCRIPTS = {
@@ -585,7 +585,7 @@ def read_process_output(process, app_name):
                             })
                 break
 
-            # Usar leitura não-bloqueante
+            # Usar leitura nêo-bloqueante
             if sys.platform == 'win32':
                 # No Windows usar método diferente
                 output = process.stdout.readline()
@@ -604,7 +604,7 @@ def read_process_output(process, app_name):
                             'line': formatted_line
                         })
                 else:
-                    # Pausa breve quando não há saída
+                    # Pausa breve quando nêo há saída
                     time.sleep(0.1)
             else:
                 # Sistemas Unix usam select
@@ -633,22 +633,22 @@ def read_process_output(process, app_name):
             break
 
 def start_streamlit_app(app_name, script_path, port):
-    """Iniciar aplicação Streamlit"""
+    """Iniciar aplicaçêo Streamlit"""
     try:
         if processes[app_name]['process'] is not None:
-            return False, "Aplicação já está em execução"
+            return False, "Aplicaçêo já está em execuçêo"
 
         # Verificar se o arquivo existe
         if not os.path.exists(script_path):
-            return False, f"Arquivo não encontrado: {script_path}"
+            return False, f"Arquivo nêo encontrado: {script_path}"
 
         # Limpar arquivo de log anterior
         log_file_path = LOG_DIR / f"{app_name}.log"
         if log_file_path.exists():
             log_file_path.unlink()
 
-        # Criar log de inicialização
-        start_msg = f"[{datetime.now().strftime('%H:%M:%S')}] Iniciando aplicação {app_name}..."
+        # Criar log de inicializaçêo
+        start_msg = f"[{datetime.now().strftime('%H:%M:%S')}] Iniciando aplicaçêo {app_name}..."
         write_log_to_file(app_name, start_msg)
 
         cmd = [
@@ -662,7 +662,7 @@ def start_streamlit_app(app_name, script_path, port):
             '--server.enableCORS', 'false'
         ]
 
-        # Definir variáveis de ambiente para garantir codificação UTF-8 e reduzir buffer
+        # Definir variáveis de ambiente para garantir codificaçêo UTF-8 e reduzir buffer
         env = os.environ.copy()
         env.update({
             'PYTHONIOENCODING': 'utf-8',
@@ -682,7 +682,7 @@ def start_streamlit_app(app_name, script_path, port):
             universal_newlines=False,
             cwd=os.getcwd(),
             env=env,
-            encoding=None,  # Tratar codificação manualmente
+            encoding=None,  # Tratar codificaçêo manualmente
             creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0
         )
 
@@ -699,7 +699,7 @@ def start_streamlit_app(app_name, script_path, port):
         )
         output_thread.start()
 
-        return True, f"Aplicação {app_name} iniciando..."
+        return True, f"Aplicaçêo {app_name} iniciando..."
 
     except Exception as e:
         error_msg = f"Falha ao iniciar: {str(e)}"
@@ -707,12 +707,12 @@ def start_streamlit_app(app_name, script_path, port):
         return False, error_msg
 
 def stop_streamlit_app(app_name):
-    """Parar aplicação Streamlit"""
+    """Parar aplicaçêo Streamlit"""
     try:
         process = processes[app_name]['process']
         if process is None:
-            _log_shutdown_step(f"{app_name} não está em execução, ignorando parada")
-            return False, "Aplicação não está em execução"
+            _log_shutdown_step(f"{app_name} nêo está em execuçêo, ignorando parada")
+            return False, "Aplicaçêo nêo está em execuçêo"
 
         try:
             pid = process.pid
@@ -727,7 +727,7 @@ def stop_streamlit_app(app_name):
             process.wait(timeout=5)
             _log_shutdown_step(f"{app_name} encerrado, returncode={process.returncode}")
         except subprocess.TimeoutExpired:
-            _log_shutdown_step(f"{app_name} timeout na terminação, tentando forçar encerramento (pid={pid})")
+            _log_shutdown_step(f"{app_name} timeout na terminaçêo, tentando forçar encerramento (pid={pid})")
             process.kill()
             process.wait()
             _log_shutdown_step(f"{app_name} encerrado forçadamente, returncode={process.returncode}")
@@ -736,7 +736,7 @@ def stop_streamlit_app(app_name):
         processes[app_name]['status'] = 'stopped'
         processes[app_name]['healthcheck_started_at'] = None
 
-        return True, f"Aplicação {app_name} parada"
+        return True, f"Aplicaçêo {app_name} parada"
 
     except Exception as e:
         _log_shutdown_step(f"Falha ao parar {app_name}: {e}")
@@ -762,7 +762,7 @@ def _log_healthcheck_failure(app_name: str, exc: Exception):
     if _healthcheck_grace_active(app_name):
         logger.debug(f"Iniciando {app_name}, por favor aguarde")
         return
-    logger.warning(f"Falha na verificação de saúde de {app_name}: {exc}")
+    logger.warning(f"Falha na verificaçêo de saúde de {app_name}: {exc}")
 
 
 def check_app_status():
@@ -770,7 +770,7 @@ def check_app_status():
     for app_name, info in processes.items():
         if info['process'] is not None:
             if info['process'].poll() is None:
-                # Processo ainda em execução, verificar se a porta está acessível
+                # Processo ainda em execuçêo, verificar se a porta está acessível
                 try:
                     response = requests.get(
                         _build_healthcheck_url(info['port']),
@@ -791,7 +791,7 @@ def check_app_status():
                 info['healthcheck_started_at'] = None
 
 def wait_for_app_startup(app_name, max_wait_time=90):
-    """Aguardar conclusão da inicialização da aplicação"""
+    """Aguardar conclusêo da inicializaçêo da aplicaçêo"""
     import time
     start_time = time.time()
     while time.time() - start_time < max_wait_time:
@@ -800,7 +800,7 @@ def wait_for_app_startup(app_name, max_wait_time=90):
             return False, "Processo parado"
 
         if info['process'].poll() is not None:
-            return False, "Falha na inicialização do processo"
+            return False, "Falha na inicializaçêo do processo"
 
         try:
             response = requests.get(
@@ -810,13 +810,13 @@ def wait_for_app_startup(app_name, max_wait_time=90):
             )
             if response.status_code == 200:
                 info['status'] = 'running'
-                return True, "Inicialização bem-sucedida"
+                return True, "Inicializaçêo bem-sucedida"
         except Exception as exc:
             _log_healthcheck_failure(app_name, exc)
 
         time.sleep(1)
 
-    return False, "Timeout na inicialização"
+    return False, "Timeout na inicializaçêo"
 
 def cleanup_processes():
     """Limpar todos os processos"""
@@ -855,7 +855,7 @@ def cleanup_processes_concurrent(timeout: float = 6.0):
     threads.append(forum_thread)
     forum_thread.start()
 
-    # Aguardar conclusão de todas as threads, no máximo timeout segundos
+    # Aguardar conclusêo de todas as threads, no máximo timeout segundos
     end_time = time.time() + timeout
     for t in threads:
         remaining = end_time - time.time()
@@ -863,17 +863,17 @@ def cleanup_processes_concurrent(timeout: float = 6.0):
             break
         t.join(timeout=remaining)
 
-    # Segunda verificação: forçar encerramento de subprocessos ainda ativos
+    # Segunda verificaçêo: forçar encerramento de subprocessos ainda ativos
     for app_name in STREAMLIT_SCRIPTS:
         proc = processes[app_name]['process']
         if proc is not None and proc.poll() is None:
             try:
-                _log_shutdown_step(f"Processo {app_name} ainda ativo, acionando segunda terminação (pid={proc.pid})")
+                _log_shutdown_step(f"Processo {app_name} ainda ativo, acionando segunda terminaçêo (pid={proc.pid})")
                 proc.terminate()
                 proc.wait(timeout=1)
             except Exception:
                 try:
-                    _log_shutdown_step(f"Segunda terminação de {app_name} falhou, tentando kill (pid={proc.pid})")
+                    _log_shutdown_step(f"Segunda terminaçêo de {app_name} falhou, tentando kill (pid={proc.pid})")
                     proc.kill()
                     proc.wait(timeout=1)
                 except Exception:
@@ -883,31 +883,31 @@ def cleanup_processes_concurrent(timeout: float = 6.0):
                 processes[app_name]['status'] = 'stopped'
 
     processes['forum']['status'] = 'stopped'
-    _log_shutdown_step("Limpeza concorrente concluída, marcando sistema como não iniciado")
+    _log_shutdown_step("Limpeza concorrente concluída, marcando sistema como nêo iniciado")
     _set_system_state(started=False, starting=False)
 
 def _schedule_server_shutdown(delay_seconds: float = 0.1):
-    """Sair o mais rápido possível após a limpeza, evitando bloquear a requisição atual."""
+    """Sair o mais rápido possível após a limpeza, evitando bloquear a requisiçêo atual."""
     def _shutdown():
         time.sleep(delay_seconds)
         try:
             socketio.stop()
         except Exception as exc:  # pragma: no cover
-            logger.warning(f"Exceção ao parar SocketIO, continuando saída: {exc}")
+            logger.warning(f"Exceçêo ao parar SocketIO, continuando saída: {exc}")
         _log_shutdown_step("Comando de parada do SocketIO enviado, saindo do processo principal")
         os._exit(0)
 
     threading.Thread(target=_shutdown, daemon=True).start()
 
 def _start_async_shutdown(cleanup_timeout: float = 3.0):
-    """Acionar limpeza assíncrona e forçar saída, evitando bloqueio da requisição HTTP."""
+    """Acionar limpeza assíncrona e forçar saída, evitando bloqueio da requisiçêo HTTP."""
     _log_shutdown_step(f"Comando de desligamento recebido, iniciando limpeza assíncrona (timeout {cleanup_timeout}s)")
 
     def _force_exit():
         _log_shutdown_step("Timeout de desligamento, acionando saída forçada")
         os._exit(0)
 
-    # Proteção de timeout rígido, garante saída mesmo se a thread de limpeza falhar
+    # Proteçêo de timeout rígido, garante saída mesmo se a thread de limpeza falhar
     hard_timeout = cleanup_timeout + 2.0
     force_timer = threading.Timer(hard_timeout, _force_exit)
     force_timer.daemon = True
@@ -917,14 +917,14 @@ def _start_async_shutdown(cleanup_timeout: float = 3.0):
         try:
             cleanup_processes_concurrent(timeout=cleanup_timeout)
         except Exception as exc:  # pragma: no cover
-            logger.exception(f"Exceção na limpeza de desligamento: {exc}")
+            logger.exception(f"Exceçêo na limpeza de desligamento: {exc}")
         finally:
             _log_shutdown_step("Thread de limpeza concluída, agendando saída do processo principal")
             _schedule_server_shutdown(0.05)
 
     threading.Thread(target=_cleanup_and_exit, daemon=True).start()
 
-# Registrar função de limpeza
+# Registrar funçêo de limpeza
 atexit.register(cleanup_processes)
 
 @app.route('/')
@@ -947,9 +947,9 @@ def get_status():
 
 @app.route('/api/start/<app_name>')
 def start_app(app_name):
-    """Iniciar aplicação especificada"""
+    """Iniciar aplicaçêo especificada"""
     if app_name not in processes:
-        return jsonify({'success': False, 'message': 'Aplicação desconhecida'})
+        return jsonify({'success': False, 'message': 'Aplicaçêo desconhecida'})
 
     if app_name == 'forum':
         try:
@@ -962,7 +962,7 @@ def start_app(app_name):
 
     script_path = STREAMLIT_SCRIPTS.get(app_name)
     if not script_path:
-        return jsonify({'success': False, 'message': 'Esta aplicação não suporta operação de inicialização'})
+        return jsonify({'success': False, 'message': 'Esta aplicaçêo nêo suporta operaçêo de inicializaçêo'})
 
     success, message = start_streamlit_app(
         app_name,
@@ -971,18 +971,18 @@ def start_app(app_name):
     )
 
     if success:
-        # Aguardar inicialização da aplicação
+        # Aguardar inicializaçêo da aplicaçêo
         startup_success, startup_message = wait_for_app_startup(app_name, 15)
         if not startup_success:
-            message += f" mas a verificação de inicialização falhou: {startup_message}"
+            message += f" mas a verificaçêo de inicializaçêo falhou: {startup_message}"
 
     return jsonify({'success': success, 'message': message})
 
 @app.route('/api/stop/<app_name>')
 def stop_app(app_name):
-    """Parar aplicação especificada"""
+    """Parar aplicaçêo especificada"""
     if app_name not in processes:
-        return jsonify({'success': False, 'message': 'Aplicação desconhecida'})
+        return jsonify({'success': False, 'message': 'Aplicaçêo desconhecida'})
 
     if app_name == 'forum':
         try:
@@ -998,9 +998,9 @@ def stop_app(app_name):
 
 @app.route('/api/output/<app_name>')
 def get_output(app_name):
-    """Obter saída da aplicação"""
+    """Obter saída da aplicaçêo"""
     if app_name not in processes:
-        return jsonify({'success': False, 'message': 'Aplicação desconhecida'})
+        return jsonify({'success': False, 'message': 'Aplicaçêo desconhecida'})
 
     # Tratamento especial para Forum Engine
     if app_name == 'forum':
@@ -1026,7 +1026,7 @@ def get_output(app_name):
 def test_log(app_name):
     """Testar funcionalidade de escrita de log"""
     if app_name not in processes:
-        return jsonify({'success': False, 'message': 'Aplicação desconhecida'})
+        return jsonify({'success': False, 'message': 'Aplicaçêo desconhecida'})
 
     # Escrever mensagem de teste
     test_msg = f"[{datetime.now().strftime('%H:%M:%S')}] Mensagem de teste de log - {datetime.now()}"
@@ -1101,10 +1101,10 @@ def get_forum_log():
 
 @app.route('/api/forum/log/history', methods=['POST'])
 def get_forum_log_history():
-    """Obter histórico de logs do Forum (suporta início a partir de posição especificada)"""
+    """Obter histórico de logs do Forum (suporta início a partir de posiçêo especificada)"""
     try:
         data = request.get_json()
-        start_position = data.get('position', 0)  # Posição onde o cliente parou da última vez
+        start_position = data.get('position', 0)  # Posiçêo onde o cliente parou da última vez
         max_lines = data.get('max_lines', 1000)   # Número máximo de linhas a retornar
 
         forum_log_file = LOG_DIR / "forum.log"
@@ -1117,7 +1117,7 @@ def get_forum_log_history():
             })
 
         with open(forum_log_file, 'r', encoding='utf-8', errors='ignore') as f:
-            # Ler a partir da posição especificada
+            # Ler a partir da posiçêo especificada
             f.seek(start_position)
             lines = []
             line_count = 0
@@ -1133,7 +1133,7 @@ def get_forum_log_history():
                     lines.append(formatted_line)
                     line_count += 1
 
-            # Registrar posição atual
+            # Registrar posiçêo atual
             current_position = f.tell()
 
             # Verificar se há mais conteúdo
@@ -1157,26 +1157,26 @@ def search():
     query = data.get('query', '').strip()
 
     if not query:
-        return jsonify({'success': False, 'message': 'A consulta de busca não pode estar vazia'})
+        return jsonify({'success': False, 'message': 'A consulta de busca nêo pode estar vazia'})
 
     # O fórum do ForumEngine já está rodando em segundo plano e detectará automaticamente a atividade de busca
-    # logger.info("ForumEngine: Requisição de busca recebida, o fórum detectará automaticamente alterações no log")
+    # logger.info("ForumEngine: Requisiçêo de busca recebida, o fórum detectará automaticamente alterações no log")
 
-    # Verificar quais aplicações estão em execução
+    # Verificar quais aplicações estêo em execuçêo
     check_app_status()
     running_apps = [name for name, info in processes.items() if info['status'] == 'running']
 
     if not running_apps:
-        return jsonify({'success': False, 'message': 'Nenhuma aplicação em execução'})
+        return jsonify({'success': False, 'message': 'Nenhuma aplicaçêo em execuçêo'})
 
-    # Enviar requisição de busca para as aplicações em execução
+    # Enviar requisiçêo de busca para as aplicações em execuçêo
     results = {}
     api_ports = {'insight': 8501, 'media': 8502, 'query': 8503}
 
     for app_name in running_apps:
         try:
             api_port = api_ports[app_name]
-            # Chamar endpoint da API da aplicação Streamlit
+            # Chamar endpoint da API da aplicaçêo Streamlit
             response = requests.post(
                 f"http://localhost:{api_port}/api/search",
                 json={'query': query},
@@ -1206,8 +1206,8 @@ def get_config():
         config_values = read_config_values()
         return jsonify({'success': True, 'config': config_values})
     except Exception as exc:
-        logger.exception("Falha ao ler configuração")
-        return jsonify({'success': False, 'message': f'Falha ao ler configuração: {exc}'}), 500
+        logger.exception("Falha ao ler configuraçêo")
+        return jsonify({'success': False, 'message': f'Falha ao ler configuraçêo: {exc}'}), 500
 
 
 @app.route('/api/config', methods=['POST'])
@@ -1215,7 +1215,7 @@ def update_config():
     """Update configuration values and persist them to config.py."""
     payload = request.get_json(silent=True) or {}
     if not isinstance(payload, dict) or not payload:
-        return jsonify({'success': False, 'message': 'O corpo da requisição não pode estar vazio'}), 400
+        return jsonify({'success': False, 'message': 'O corpo da requisiçêo nêo pode estar vazio'}), 400
 
     updates = {}
     for key, value in payload.items():
@@ -1223,20 +1223,20 @@ def update_config():
             updates[key] = value if value is not None else ''
 
     if not updates:
-        return jsonify({'success': False, 'message': 'Nenhum item de configuração para atualizar'}), 400
+        return jsonify({'success': False, 'message': 'Nenhum item de configuraçêo para atualizar'}), 400
 
     try:
         write_config_values(updates)
         updated_config = read_config_values()
         return jsonify({'success': True, 'config': updated_config})
     except Exception as exc:
-        logger.exception("Falha ao atualizar configuração")
-        return jsonify({'success': False, 'message': f'Falha ao atualizar configuração: {exc}'}), 500
+        logger.exception("Falha ao atualizar configuraçêo")
+        return jsonify({'success': False, 'message': f'Falha ao atualizar configuraçêo: {exc}'}), 500
 
 
 @app.route('/api/system/status')
 def get_system_status():
-    """Retornar status de inicialização do sistema."""
+    """Retornar status de inicializaçêo do sistema."""
     state = _get_system_state()
     return jsonify({
         'success': True,
@@ -1247,7 +1247,7 @@ def get_system_status():
 
 @app.route('/api/system/start', methods=['POST'])
 def start_system():
-    """Iniciar o sistema completo após receber a requisição."""
+    """Iniciar o sistema completo após receber a requisiçêo."""
     allowed, message = _prepare_system_start()
     if not allowed:
         return jsonify({'success': False, 'message': message}), 400
@@ -1261,14 +1261,14 @@ def start_system():
         _set_system_state(started=False)
         return jsonify({
             'success': False,
-            'message': 'Falha na inicialização do sistema',
+            'message': 'Falha na inicializaçêo do sistema',
             'logs': logs,
             'errors': errors
         }), 500
     except Exception as exc:  # pragma: no cover - captura de segurança
-        logger.exception("Exceção durante a inicialização do sistema")
+        logger.exception("Exceçêo durante a inicializaçêo do sistema")
         _set_system_state(started=False)
-        return jsonify({'success': False, 'message': f'Exceção na inicialização do sistema: {exc}'}), 500
+        return jsonify({'success': False, 'message': f'Exceçêo na inicializaçêo do sistema: {exc}'}), 500
     finally:
         _set_system_state(starting=False)
 
@@ -1285,7 +1285,7 @@ def shutdown_system():
         if info.get('port')
     ]
 
-    # Quando já há uma requisição de desligamento em andamento, retornar subprocessos ativos para o frontend avaliar o progresso
+    # Quando já há uma requisiçêo de desligamento em andamento, retornar subprocessos ativos para o frontend avaliar o progresso
     if not _mark_shutdown_requested():
         running = _describe_running_children()
         detail = 'Comando de desligamento já enviado, por favor aguarde...'
@@ -1311,8 +1311,8 @@ def shutdown_system():
             message = f"{message} (portas: {', '.join(target_ports)})"
         return jsonify({'success': True, 'message': message, 'ports': target_ports})
     except Exception as exc:  # pragma: no cover - captura de segurança
-        logger.exception("Exceção durante o desligamento do sistema")
-        return jsonify({'success': False, 'message': f'Exceção no desligamento do sistema: {exc}'}), 500
+        logger.exception("Exceçêo durante o desligamento do sistema")
+        return jsonify({'success': False, 'message': f'Exceçêo no desligamento do sistema: {exc}'}), 500
 
 @app.route('/api/update-news', methods=['POST'])
 def update_news():
@@ -1398,12 +1398,12 @@ def view_report(filename):
 
 @socketio.on('connect')
 def handle_connect():
-    """Conexão do cliente"""
+    """Conexêo do cliente"""
     emit('status', 'Connected to Flask server')
 
 @socketio.on('request_status')
 def handle_status_request():
-    """Solicitar atualização de status"""
+    """Solicitar atualizaçêo de status"""
     check_app_status()
     emit('status_update', {
         app_name: {
@@ -1414,18 +1414,18 @@ def handle_status_request():
     })
 
 if __name__ == '__main__':
-    # Ler HOST e PORT do arquivo de configuração
+    # Ler HOST e PORT do arquivo de configuraçêo
     from config import settings
     HOST = settings.HOST
     PORT = settings.PORT
 
-    logger.info("Aguardando confirmação de configuração, o sistema iniciará os componentes após comando do frontend...")
+    logger.info("Aguardando confirmaçêo de configuraçêo, o sistema iniciará os componentes após comando do frontend...")
     logger.info(f"Servidor Flask iniciado, acesse: http://{HOST}:{PORT}")
 
     try:
         socketio.run(app, host=HOST, port=PORT, debug=False)
     except KeyboardInterrupt:
-        logger.info("\nEncerrando aplicação...")
+        logger.info("\nEncerrando aplicaçêo...")
         cleanup_processes()
 
 

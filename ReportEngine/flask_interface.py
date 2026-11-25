@@ -1114,7 +1114,7 @@ def clear_report_log():
         log_file = settings.LOG_FILE
 
         # [CORRECAO] 使用truncate而非重新打开，避免与logger的Arquivo句柄冲突
-        # Modo de adição打开，然后truncate，保持Arquivo句柄有效
+        # Modo de adiçêo打开，然后truncate，保持Arquivo句柄有效
         with open(log_file, 'r+', encoding='utf-8') as f:
             f.truncate(0)  # 清空Arquivo内容但不关闭Arquivo
             f.flush()      # Flush imediato

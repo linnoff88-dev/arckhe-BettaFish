@@ -60,7 +60,7 @@ class LLMClient:
     @with_retry(LLM_RETRY_CONFIG)
     def invoke(self, system_prompt: str, user_prompt: str, **kwargs) -> str:
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M")
-        time_prefix = f"A data e hora atuais são {current_time}"
+        time_prefix = f"A data e hora atuais sêo {current_time}"
         if user_prompt:
             user_prompt = f"{time_prefix}\n{user_prompt}"
         else:
@@ -99,7 +99,7 @@ class LLMClient:
             Blocos de texto da resposta (str)
         """
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M")
-        time_prefix = f"A data e hora atuais são {current_time}"
+        time_prefix = f"A data e hora atuais sêo {current_time}"
         if user_prompt:
             user_prompt = f"{time_prefix}\n{user_prompt}"
         else:
@@ -130,7 +130,7 @@ class LLMClient:
                     if delta and delta.content:
                         yield delta.content
         except Exception as e:
-            logger.error(f"Falha na requisição em streaming: {str(e)}")
+            logger.error(f"Falha na requisiçêo em streaming: {str(e)}")
             raise e
 
     @with_retry(LLM_RETRY_CONFIG)

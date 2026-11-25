@@ -2,7 +2,7 @@
 ORM models para plataformas ocidentais (Phase 4 - Western Social Media).
 
 Tabelas: reddit, youtube, twitter, instagram, tiktok (conteúdo + comentários).
-Segue o mesmo padrão de models_bigdata.py, usando o Base de models_sa.py.
+Segue o mesmo padrêo de models_bigdata.py, usando o Base de models_sa.py.
 """
 
 from sqlalchemy.orm import Mapped, mapped_column

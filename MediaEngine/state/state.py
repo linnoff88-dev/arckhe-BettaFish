@@ -1,6 +1,6 @@
 """
 Gerenciamento de estado do Deep Search Agent
-Define todas as estruturas de dados de estado e métodos de operação
+Define todas as estruturas de dados de estado e métodos de operaçêo
 """
 
 from dataclasses import dataclass, field
@@ -16,8 +16,8 @@ class Search:
     url: str = ""                      # Link do resultado de busca
     title: str = ""                    # Título do resultado de busca
     content: str = ""                  # Conteúdo retornado pela busca
-    score: Optional[float] = None      # Pontuação de relevância
-    paragraph_title: str = ""          # Título do parágrafo, para facilitar exibição de pertencimento
+    score: Optional[float] = None      # Pontuaçêo de relevância
+    paragraph_title: str = ""          # Título do parágrafo, para facilitar exibiçêo de pertencimento
     search_tool: str = ""              # Ferramenta de busca utilizada
     has_result: bool = True            # Se houve resultado retornado
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
@@ -57,7 +57,7 @@ class Research:
     """Estado do processo de pesquisa do parágrafo"""
     search_history: List[Search] = field(default_factory=list)     # Lista de registros de busca
     latest_summary: str = ""                                       # Resumo mais recente do parágrafo atual
-    reflection_iteration: int = 0                                  # Número de iterações de reflexão
+    reflection_iteration: int = 0                                  # Número de iterações de reflexêo
     is_completed: bool = False                                     # Se a pesquisa foi concluída
 
     def add_search(self, search: Search):
@@ -67,12 +67,12 @@ class Research:
     def add_search_results(self, query: str, results: List[Dict[str, Any]], search_tool: str = "", paragraph_title: str = ""):
         """Adicionar resultados de busca em lote"""
         if not results:
-            # Registrar uma busca "sem resultado", para facilitar exibição do histórico de buscas no frontend
+            # Registrar uma busca "sem resultado", para facilitar exibiçêo do histórico de buscas no frontend
             self.add_search(
                 Search(
                     query=query or "",
                     title="Nenhum resultado encontrado",
-                    content="Esta busca não retornou resultados ou a chamada falhou",
+                    content="Esta busca nêo retornou resultados ou a chamada falhou",
                     url="",
                     score=None,
                     paragraph_title=paragraph_title,

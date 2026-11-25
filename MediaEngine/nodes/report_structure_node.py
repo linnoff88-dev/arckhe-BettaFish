@@ -1,5 +1,5 @@
 """
-Nó de geração de estrutura do relatório
+Nó de geraçêo de estrutura do relatório
 Responsável por gerar a estrutura geral do relatório com base na consulta
 """
 
@@ -42,7 +42,7 @@ class ReportStructureNode(StateMutationNode):
         Chamar LLM para gerar estrutura do relatório
 
         Args:
-            input_data: Dados de entrada (não utilizado aqui, usa a query da inicialização)
+            input_data: Dados de entrada (nêo utilizado aqui, usa a query da inicializaçêo)
             **kwargs: Parâmetros adicionais
 
         Returns:
@@ -79,7 +79,7 @@ class ReportStructureNode(StateMutationNode):
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
 
-            # Registrar saída limpa para depuração
+            # Registrar saída limpa para depuraçêo
             logger.info(f"Saída limpa: {cleaned_output}")
 
             # Analisar JSON
@@ -88,7 +88,7 @@ class ReportStructureNode(StateMutationNode):
                 logger.info("Análise JSON bem-sucedida")
             except JSONDecodeError as e:
                 logger.error(f"Falha na análise JSON: {str(e)}")
-                # Usar método de extração mais robusto
+                # Usar método de extraçêo mais robusto
                 report_structure = extract_clean_response(cleaned_output)
                 if "error" in report_structure:
                     logger.error("Falha na análise JSON, tentando reparar...")
@@ -100,27 +100,27 @@ class ReportStructureNode(StateMutationNode):
                             logger.info("Reparo do JSON bem-sucedido")
                         except JSONDecodeError:
                             logger.error("Falha no reparo do JSON")
-                            # Retornar estrutura padrão
+                            # Retornar estrutura padrêo
                             return self._generate_default_structure()
                     else:
-                        logger.error("Impossível reparar JSON, usando estrutura padrão")
+                        logger.error("Impossível reparar JSON, usando estrutura padrêo")
                         return self._generate_default_structure()
 
             # Validar estrutura
             if not isinstance(report_structure, list):
-                logger.info("Estrutura do relatório não é uma lista, tentando converter...")
+                logger.info("Estrutura do relatório nêo é uma lista, tentando converter...")
                 if isinstance(report_structure, dict):
                     # Se for um único objeto, envolver em lista
                     report_structure = [report_structure]
                 else:
-                    logger.error("Formato de estrutura do relatório inválido, usando estrutura padrão")
+                    logger.error("Formato de estrutura do relatório inválido, usando estrutura padrêo")
                     return self._generate_default_structure()
 
             # Validar cada parágrafo
             validated_structure = []
             for i, paragraph in enumerate(report_structure):
                 if not isinstance(paragraph, dict):
-                    logger.warning(f"Parágrafo {i+1} não está em formato de dicionário, ignorando")
+                    logger.warning(f"Parágrafo {i+1} nêo está em formato de dicionário, ignorando")
                     continue
 
                 title = paragraph.get("title", f"Parágrafo {i+1}")
@@ -136,7 +136,7 @@ class ReportStructureNode(StateMutationNode):
                 })
 
             if not validated_structure:
-                logger.warning("Nenhuma estrutura de parágrafo válida, usando estrutura padrão")
+                logger.warning("Nenhuma estrutura de parágrafo válida, usando estrutura padrêo")
                 return self._generate_default_structure()
 
             logger.info(f"Validadas com sucesso {len(validated_structure)} estruturas de parágrafo")
@@ -148,16 +148,16 @@ class ReportStructureNode(StateMutationNode):
 
     def _generate_default_structure(self) -> List[Dict[str, str]]:
         """
-        Gerar estrutura padrão do relatório
+        Gerar estrutura padrêo do relatório
 
         Returns:
-            Lista de estrutura padrão do relatório
+            Lista de estrutura padrêo do relatório
         """
-        logger.info("Gerando estrutura padrão do relatório")
+        logger.info("Gerando estrutura padrêo do relatório")
         return [
             {
-                "title": "Visão geral da pesquisa",
-                "content": "Visão geral e análise do tema da consulta"
+                "title": "Visêo geral da pesquisa",
+                "content": "Visêo geral e análise do tema da consulta"
             },
             {
                 "title": "Análise aprofundada",
@@ -200,5 +200,5 @@ class ReportStructureNode(StateMutationNode):
             return state
 
         except Exception as e:
-            logger.exception(f"Falha na atualização do estado: {str(e)}")
+            logger.exception(f"Falha na atualizaçêo do estado: {str(e)}")
             raise e

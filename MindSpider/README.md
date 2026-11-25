@@ -1,30 +1,30 @@
-# MindSpider - Crawler com IA projetado para análise de opinião pública
+# MindSpider - Crawler com IA projetado para análise de opiniêo pública
 
 > Aviso Legal:
-> Todo o conteúdo deste repositório é destinado exclusivamente para fins de aprendizado e referência, sendo proibido o uso comercial. Nenhuma pessoa ou organização pode utilizar o conteúdo deste repositório para fins ilegais ou para violar os direitos legítimos de terceiros. As técnicas de web scraping abordadas neste repositório são exclusivamente para aprendizado e pesquisa, não devendo ser utilizadas para raspagem em larga escala em outras plataformas ou qualquer outro comportamento ilegal. Este repositório não assume nenhuma responsabilidade legal decorrente do uso de seu conteúdo. Ao utilizar o conteúdo deste repositório, você concorda com todos os termos e condições deste aviso legal.
+> Todo o conteúdo deste repositório é destinado exclusivamente para fins de aprendizado e referência, sendo proibido o uso comercial. Nenhuma pessoa ou organizaçêo pode utilizar o conteúdo deste repositório para fins ilegais ou para violar os direitos legítimos de terceiros. As técnicas de web scraping abordadas neste repositório sêo exclusivamente para aprendizado e pesquisa, nêo devendo ser utilizadas para raspagem em larga escala em outras plataformas ou qualquer outro comportamento ilegal. Este repositório nêo assume nenhuma responsabilidade legal decorrente do uso de seu conteúdo. Ao utilizar o conteúdo deste repositório, você concorda com todos os termos e condições deste aviso legal.
 
-## Visão Geral do Projeto
+## Visêo Geral do Projeto
 
-MindSpider é um sistema inteligente de crawler para análise de opinião pública baseado em tecnologia Agent. Através de IA, identifica automaticamente tópicos em alta e realiza coleta precisa de conteúdo em múltiplas plataformas de mídia social. O sistema utiliza design modular, permitindo um fluxo totalmente automatizado desde a descoberta de tópicos até a coleta de conteúdo.
+MindSpider é um sistema inteligente de crawler para análise de opiniêo pública baseado em tecnologia Agent. Através de IA, identifica automaticamente tópicos em alta e realiza coleta precisa de conteúdo em múltiplas plataformas de mídia social. O sistema utiliza design modular, permitindo um fluxo totalmente automatizado desde a descoberta de tópicos até a coleta de conteúdo.
 
 Este módulo foi inspirado e desenvolvido com base no conhecido projeto de crawler do GitHub [MediaCrawler](https://github.com/NanmiCoder/MediaCrawler)
 
 Coleta em duas etapas:
 
 - Módulo Um: O Search Agent identifica notícias em alta em **13** plataformas de mídia social e fóruns técnicos, incluindo Weibo, Zhihu, GitHub, Coolapk, entre outros, e mantém uma tabela de análise de tópicos diários.
-- Módulo Dois: O crawler multiplataforma realiza coleta aprofundada de feedback de opinião pública granular para cada tópico.
+- Módulo Dois: O crawler multiplataforma realiza coleta aprofundada de feedback de opiniêo pública granular para cada tópico.
 
 <div align="center">
 <img src="img\example.png" alt="banner" width="700">
 
-Exemplo de execução do MindSpider
+Exemplo de execuçêo do MindSpider
 </div>
 
 ### Arquitetura Técnica
 
-- **Linguagem de Programação**: Python 3.9+
-- **Framework de IA**: Deepseek por padrão, compatível com diversas APIs (extração e análise de tópicos)
-- **Framework de Crawler**: Playwright (automação de navegador)
+- **Linguagem de Programaçêo**: Python 3.9+
+- **Framework de IA**: Deepseek por padrêo, compatível com diversas APIs (extraçêo e análise de tópicos)
+- **Framework de Crawler**: Playwright (automaçêo de navegador)
 - **Banco de Dados**: MySQL / PostgreSQL (armazenamento persistente de dados)
 - **Processamento Concorrente**: AsyncIO (coleta assíncrona e concorrente)
 
@@ -32,7 +32,7 @@ Exemplo de execução do MindSpider
 
 ```
 MindSpider/
-├── BroadTopicExtraction/           # Módulo de extração de tópicos
+├── BroadTopicExtraction/           # Módulo de extraçêo de tópicos
 │   ├── database_manager.py         # Gerenciador de banco de dados
 │   ├── get_today_news.py          # Coletor de notícias
 │   ├── main.py                    # Ponto de entrada do módulo
@@ -45,8 +45,8 @@ MindSpider/
 │   └── MediaCrawler/             # Núcleo do crawler multiplataforma
 │       ├── base/                 # Classes base
 │       ├── cache/                # Sistema de cache
-│       ├── config/               # Arquivos de configuração
-│       ├── media_platform/       # Implementação por plataforma
+│       ├── config/               # Arquivos de configuraçêo
+│       ├── media_platform/       # Implementaçêo por plataforma
 │       │   ├── bilibili/        # Crawler do Bilibili
 │       │   ├── douyin/          # Crawler do Douyin
 │       │   ├── kuaishou/        # Crawler do Kuaishou
@@ -61,13 +61,13 @@ MindSpider/
 │
 ├── schema/                       # Esquema do banco de dados
 │   ├── db_manager.py            # Gerenciamento do banco de dados
-│   ├── init_database.py         # Script de inicialização
-│   └── mindspider_tables.sql    # Definição da estrutura das tabelas
+│   ├── init_database.py         # Script de inicializaçêo
+│   └── mindspider_tables.sql    # Definiçêo da estrutura das tabelas
 │
-├── config.py                    # Arquivo de configuração global
+├── config.py                    # Arquivo de configuraçêo global
 ├── main.py                      # Ponto de entrada do sistema
 ├── requirements.txt             # Lista de dependências
-└── README.md                    # Documentação do projeto
+└── README.md                    # Documentaçêo do projeto
 ```
 
 ## Fluxo de Trabalho do Sistema
@@ -76,11 +76,11 @@ MindSpider/
 
 ```mermaid
 flowchart TB
-    Start[Início] --> CheckConfig{Verificar Configuração}
-    CheckConfig -->|Configuração inválida| ConfigError[Erro de configuração<br/>Verifique as variáveis de ambiente no env]
-    CheckConfig -->|Configuração válida| InitDB[Inicializar banco de dados]
+    Start[Início] --> CheckConfig{Verificar Configuraçêo}
+    CheckConfig -->|Configuraçêo inválida| ConfigError[Erro de configuraçêo<br/>Verifique as variáveis de ambiente no env]
+    CheckConfig -->|Configuraçêo válida| InitDB[Inicializar banco de dados]
 
-    InitDB --> BroadTopic[BroadTopicExtraction<br/>Módulo de extração de tópicos]
+    InitDB --> BroadTopic[BroadTopicExtraction<br/>Módulo de extraçêo de tópicos]
 
     BroadTopic --> CollectNews[Coletar notícias em alta]
     CollectNews --> |Coleta multiplataforma| NewsSource{Fontes de notícias}
@@ -96,7 +96,7 @@ flowchart TB
     Toutiao --> SaveNews
     Other --> SaveNews
 
-    SaveNews --> ExtractTopic[Extração de tópicos com IA]
+    SaveNews --> ExtractTopic[Extraçêo de tópicos com IA]
     ExtractTopic --> |DeepSeek API| GenerateKeywords[Gerar lista de palavras-chave]
     GenerateKeywords --> GenerateSummary[Gerar resumo de notícias]
     GenerateSummary --> SaveTopics[Salvar dados de tópicos]
@@ -123,7 +123,7 @@ flowchart TB
     ZH --> Login
 
     Login -->|Sim| QRCode[Login por QR Code]
-    Login -->|Não| Search[Busca por palavras-chave]
+    Login -->|Nêo| Search[Busca por palavras-chave]
     QRCode --> Search
 
     Search --> CrawlContent[Coletar conteúdo]
@@ -132,7 +132,7 @@ flowchart TB
 
     SaveContent --> MoreKeywords{Há mais palavras-chave?}
     MoreKeywords -->|Sim| LoadKeywords
-    MoreKeywords -->|Não| GenerateReport[Gerar relatório de coleta]
+    MoreKeywords -->|Nêo| GenerateReport[Gerar relatório de coleta]
 
     GenerateReport --> End[Fim]
 
@@ -144,15 +144,15 @@ flowchart TB
     style ConfigError fill:#FF6347
 ```
 
-### Descrição do Fluxo de Trabalho
+### Descriçêo do Fluxo de Trabalho
 
-#### 1. BroadTopicExtraction (Módulo de Extração de Tópicos)
+#### 1. BroadTopicExtraction (Módulo de Extraçêo de Tópicos)
 
-Este módulo é responsável pela descoberta e extração automática de tópicos em alta diariamente:
+Este módulo é responsável pela descoberta e extraçêo automática de tópicos em alta diariamente:
 
 1. **Coleta de Notícias**: Coleta automática de notícias em alta de múltiplas plataformas principais (Weibo, Zhihu, Bilibili, etc.)
 2. **Análise com IA**: Utiliza a API do DeepSeek para análise inteligente das notícias
-3. **Extração de Tópicos**: Identifica automaticamente tópicos em alta e gera palavras-chave relacionadas
+3. **Extraçêo de Tópicos**: Identifica automaticamente tópicos em alta e gera palavras-chave relacionadas
 4. **Armazenamento de Dados**: Salva tópicos e palavras-chave no banco de dados MySQL
 
 #### 2. DeepSentimentCrawling (Módulo de Coleta Aprofundada)
@@ -161,7 +161,7 @@ Com base nas palavras-chave dos tópicos extraídos, realiza coleta aprofundada 
 
 1. **Carregamento de Palavras-chave**: Lê do banco de dados as palavras-chave extraídas no dia
 2. **Coleta por Plataforma**: Utiliza o Playwright para coleta automatizada em 7 grandes plataformas
-3. **Análise de Conteúdo**: Extrai postagens, comentários, dados de interação, etc.
+3. **Análise de Conteúdo**: Extrai postagens, comentários, dados de interaçêo, etc.
 4. **Análise de Sentimento**: Realiza análise de tendência de sentimento no conteúdo coletado
 5. **Persistência de Dados**: Armazena todos os dados de forma estruturada no banco de dados
 
@@ -171,15 +171,15 @@ Com base nas palavras-chave dos tópicos extraídos, realiza coleta aprofundada 
 
 1. **daily_news** - Tabela de notícias diárias
    - Armazena notícias em alta coletadas das plataformas
-   - Contém título, link, descrição, ranking e outras informações
+   - Contém título, link, descriçêo, ranking e outras informações
 
 2. **daily_topics** - Tabela de tópicos diários
    - Armazena tópicos e palavras-chave extraídos pela IA
-   - Contém nome do tópico, descrição, lista de palavras-chave, etc.
+   - Contém nome do tópico, descriçêo, lista de palavras-chave, etc.
 
-3. **topic_news_relation** - Tabela de relação entre tópicos e notícias
-   - Registra a relação de associação entre tópicos e notícias
-   - Contém pontuação de relevância
+3. **topic_news_relation** - Tabela de relaçêo entre tópicos e notícias
+   - Registra a relaçêo de associaçêo entre tópicos e notícias
+   - Contém pontuaçêo de relevância
 
 4. **crawling_tasks** - Tabela de tarefas de coleta
    - Gerencia as tarefas de coleta de cada plataforma
@@ -194,7 +194,7 @@ Com base nas palavras-chave dos tópicos extraídos, realiza coleta aprofundada 
    - tieba_note - Postagens do Tieba
    - zhihu_content - Conteúdo do Zhihu
 
-## Instalação e Implantação
+## Instalaçêo e Implantaçêo
 
 ### Requisitos do Ambiente
 
@@ -208,14 +208,14 @@ Com base nas palavras-chave dos tópicos extraídos, realiza coleta aprofundada 
 
 O MindSpider funciona como componente central do BettaFish. Clone o projeto principal BettaFish e obtenha simultaneamente o submódulo do crawler `MediaCrawler`.
 
-**Opção 1: Obter ao clonar (recomendado)**
+**Opçêo 1: Obter ao clonar (recomendado)**
 
 ```bash
 git clone --recurse-submodules https://github.com/666ghj/BettaFish.git
 cd BettaFish/MindSpider
 ```
 
-**Opção 2: Complementar após já ter clonado o projeto principal**
+**Opçêo 2: Complementar após já ter clonado o projeto principal**
 
 Se você já clonou o BettaFish, mas o diretório `MindSpider/DeepSentimentCrawling/MediaCrawler` está vazio, execute no **diretório raiz do projeto**:
 
@@ -223,26 +223,26 @@ Se você já clonou o BettaFish, mas o diretório `MindSpider/DeepSentimentCrawl
 git submodule update --init --recursive
 ```
 
-> **Nota**: As dependências Python do MediaCrawler serão automaticamente detectadas e instaladas no ambiente atual na primeira execução de `uv run main.py --deep-sentiment`.
+> **Nota**: As dependências Python do MediaCrawler serêo automaticamente detectadas e instaladas no ambiente atual na primeira execuçêo de `uv run main.py --deep-sentiment`.
 
 ### 2. Criar e ativar o ambiente
 
-#### Método de configuração com Conda
+#### Método de configuraçêo com Conda
 
-#### Método de configuração com Conda
+#### Método de configuraçêo com Conda
 
 ```bash
-# Criar ambiente conda chamado pytorch_python11 especificando a versão do Python
+# Criar ambiente conda chamado pytorch_python11 especificando a versêo do Python
 conda create -n pytorch_python11 python=3.11
 # Ativar o ambiente
 conda activate pytorch_python11
 ```
 
-#### Método de configuração com UV
+#### Método de configuraçêo com UV
 
 > [UV é uma ferramenta rápida e leve para gerenciamento de pacotes e ambientes Python, ideal para necessidades de baixa dependência e gerenciamento prático. Referência: https://github.com/astral-sh/uv]
 
-- Instalar o uv (caso ainda não esteja instalado)
+- Instalar o uv (caso ainda nêo esteja instalado)
 ```bash
 pip install uv
 ```
@@ -262,7 +262,7 @@ source .venv/bin/activate   # Linux/macOS
 pip install -r requirements.txt
 
 ou
-# Versão com uv, mais rápida
+# Versêo com uv, mais rápida
 uv pip install -r requirements.txt
 
 
@@ -275,7 +275,7 @@ playwright install
 Copie o arquivo .env.example para .env e coloque-o no diretório raiz do projeto. Edite o arquivo `.env` para configurar o banco de dados e a API:
 
 ```python
-# Configuração do banco de dados (exemplo MySQL)
+# Configuraçêo do banco de dados (exemplo MySQL)
 DB_DIALECT = "mysql"       # mysql ou postgresql
 DB_HOST = "your_database_host"
 DB_PORT = 3306
@@ -308,7 +308,7 @@ uv run main.py --status
 ### Fluxo Completo
 
 ```bash
-# 1. Executar extração de tópicos (obter notícias em alta e palavras-chave)
+# 1. Executar extraçêo de tópicos (obter notícias em alta e palavras-chave)
 python main.py --broad-topic
 # ou
 uv run main.py --broad-topic
@@ -343,9 +343,9 @@ python main.py --broad-topic --date 2024-01-15
 uv run main.py --broad-topic --date 2024-01-15
 ```
 
-## Configuração do Crawler (Importante)
+## Configuraçêo do Crawler (Importante)
 
-### Configuração de Login por Plataforma
+### Configuraçêo de Login por Plataforma
 
 **O primeiro uso de cada plataforma requer login, esta é a etapa mais importante:**
 
@@ -385,7 +385,7 @@ uv run main.py --deep-sentiment --platforms tieba --test
 uv run main.py --deep-sentiment --platforms zhihu --test
 ```
 
-### Solução de Problemas de Login
+### Soluçêo de Problemas de Login
 
 **Se o login falhar ou travar:**
 
@@ -394,7 +394,7 @@ uv run main.py --deep-sentiment --platforms zhihu --test
    ```python
    HEADLESS = False  # Altere para False para ver a interface do navegador
    ```
-3. **Verificação manual**: Algumas plataformas podem exigir resolução manual de captcha
+3. **Verificaçêo manual**: Algumas plataformas podem exigir resoluçêo manual de captcha
 4. **Refazer login**: Delete o diretório `DeepSentimentCrawling/MediaCrawler/browser_data/` e faça login novamente
 
 ### Outros Problemas
@@ -403,7 +403,7 @@ https://github.com/666ghj/BettaFish/issues/185
 
 ### Ajuste de Parâmetros de Coleta
 
-Antes do uso em produção, recomenda-se ajustar os parâmetros de coleta:
+Antes do uso em produçêo, recomenda-se ajustar os parâmetros de coleta:
 
 ```bash
 # Teste em pequena escala (recomendado testar assim primeiro)
@@ -419,7 +419,7 @@ uv run main.py --complete --max-keywords 20 --max-notes 30
 
 ### Funcionalidades Avançadas
 
-#### 1. Operação por data específica
+#### 1. Operaçêo por data específica
 ```bash
 # Extrair tópicos de uma data específica
 python main.py --broad-topic --date 2024-01-15
@@ -450,7 +450,7 @@ uv run main.py --deep-sentiment --max-keywords 30 --max-notes 20
 ```bash
 --status              # Verificar status do projeto
 --setup               # Inicializar projeto (obsoleto, agora inicializa automaticamente)
---broad-topic         # Extração de tópicos
+--broad-topic         # Extraçêo de tópicos
 --deep-sentiment      # Módulo de crawler
 --complete            # Fluxo completo
 --test                # Modo de teste (poucos dados)
@@ -471,8 +471,8 @@ uv run main.py --deep-sentiment --max-keywords 30 --max-notes 20
 
 ### 1. Falha no login do crawler
 ```bash
-# Problema: QR code não aparece ou login falha
-# Solução: Desativar modo headless e fazer login manualmente
+# Problema: QR code nêo aparece ou login falha
+# Soluçêo: Desativar modo headless e fazer login manualmente
 # Editar: DeepSentimentCrawling/MediaCrawler/config/base_config.py
 HEADLESS = False
 
@@ -482,17 +482,17 @@ python main.py --deep-sentiment --platforms xhs --test
 uv run main.py --deep-sentiment --platforms xhs --test
 ```
 
-### 2. Falha na conexão com o banco de dados
+### 2. Falha na conexêo com o banco de dados
 ```bash
-# Verificar configuração
+# Verificar configuraçêo
 python main.py --status
 # ou
 uv run main.py --status
 
-# Verificar se a configuração do banco de dados no config.py está correta
+# Verificar se a configuraçêo do banco de dados no config.py está correta
 ```
 
-### 3. Falha na instalação do playwright
+### 3. Falha na instalaçêo do playwright
 ```bash
 # Reinstalar
 pip install playwright
@@ -506,7 +506,7 @@ playwright install
 
 ### 4. Dados coletados vazios
 - Certifique-se de que o login na plataforma foi realizado com sucesso
-- Verifique se existem palavras-chave (execute primeiro a extração de tópicos)
+- Verifique se existem palavras-chave (execute primeiro a extraçêo de tópicos)
 - Valide usando o modo de teste: `--test`
 
 ### 5. Falha na chamada da API
@@ -540,9 +540,9 @@ async def get_new_platform_news(self) -> List[Dict]:
    - `client.py`: Cliente da API
    - `core.py`: Lógica principal do crawler
    - `login.py`: Lógica de login
-   - `field.py`: Definição dos campos de dados
+   - `field.py`: Definiçêo dos campos de dados
 
-### Extensão do Banco de Dados
+### Extensêo do Banco de Dados
 
 Para adicionar novas tabelas ou campos, atualize `schema/mindspider_tables.sql` e execute:
 
@@ -550,24 +550,24 @@ Para adicionar novas tabelas ou campos, atualize `schema/mindspider_tables.sql` 
 python schema/init_database.py
 ```
 
-## Sugestões de Otimização de Desempenho
+## Sugestões de Otimizaçêo de Desempenho
 
-1. **Otimização do Banco de Dados**
+1. **Otimizaçêo do Banco de Dados**
    - Limpe periodicamente dados históricos
    - Crie índices para campos de consulta frequente
    - Considere usar tabelas particionadas para gerenciar grandes volumes de dados
 
-2. **Otimização de Coleta**
+2. **Otimizaçêo de Coleta**
    - Configure intervalos de coleta adequados para evitar bloqueios
    - Use pool de proxies para maior estabilidade
    - Controle a concorrência para evitar esgotamento de recursos
 
-3. **Otimização do Sistema**
+3. **Otimizaçêo do Sistema**
    - Use Redis para cache de dados frequentes
    - Filas de tarefas assíncronas para operações demoradas
    - Monitore regularmente o uso de recursos do sistema
 
-## Documentação da API
+## Documentaçêo da API
 
 O sistema fornece uma API Python para desenvolvimento secundário:
 
@@ -575,7 +575,7 @@ O sistema fornece uma API Python para desenvolvimento secundário:
 from BroadTopicExtraction import BroadTopicExtraction
 from DeepSentimentCrawling import DeepSentimentCrawling
 
-# Extração de tópicos
+# Extraçêo de tópicos
 async def extract_topics():
     extractor = BroadTopicExtraction()
     result = await extractor.run_daily_extraction()
@@ -594,8 +594,8 @@ def crawl_content():
 
 ## Licença
 
-Este projeto é destinado exclusivamente para uso em aprendizado e pesquisa. Por favor, não o utilize para fins comerciais. Ao utilizar este projeto, respeite as leis e regulamentos aplicáveis, bem como os termos de serviço das plataformas.
+Este projeto é destinado exclusivamente para uso em aprendizado e pesquisa. Por favor, nêo o utilize para fins comerciais. Ao utilizar este projeto, respeite as leis e regulamentos aplicáveis, bem como os termos de serviço das plataformas.
 
 ---
 
-**MindSpider** - Deixe a IA impulsionar a percepção de opinião pública, um assistente poderoso para análise inteligente de conteúdo
+**MindSpider** - Deixe a IA impulsionar a percepçêo de opiniêo pública, um assistente poderoso para análise inteligente de conteúdo

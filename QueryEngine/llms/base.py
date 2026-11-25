@@ -127,7 +127,7 @@ class LLMClient:
                     if delta and delta.content:
                         yield delta.content
         except Exception as e:
-            logger.error(f"Falha na requisição streaming: {str(e)}")
+            logger.error(f"Falha na requisiçêo streaming: {str(e)}")
             raise e
 
     @with_retry(LLM_RETRY_CONFIG)

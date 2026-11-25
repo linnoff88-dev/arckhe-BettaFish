@@ -31,9 +31,9 @@ class DeepSearchAgent:
         Inicializa o Deep Search Agent
 
         Args:
-            config: Objeto de configuração; se não fornecido, será carregado automaticamente
+            config: Objeto de configuraçêo; se nêo fornecido, será carregado automaticamente
         """
-        # Carregar configuração
+        # Carregar configuraçêo
         from .utils.config import settings
         self.config = config or settings
 
@@ -135,7 +135,7 @@ class DeepSearchAgent:
                 raise ValueError("A ferramenta search_news_by_date requer os parâmetros start_date e end_date")
             return self.search_agency.search_news_by_date(query, start_date, end_date)
         else:
-            logger.warning(f"  ⚠️  Ferramenta de busca desconhecida: {tool_name}, usando busca básica padrão")
+            logger.warning(f"  ⚠️  Ferramenta de busca desconhecida: {tool_name}, usando busca básica padrêo")
             return self.search_agency.basic_search_news(query)
 
     def research(self, query: str, save_report: bool = True) -> str:
@@ -205,7 +205,7 @@ class DeepSearchAgent:
             # Busca e resumo iniciais
             self._initial_search_and_summary(i)
 
-            # Ciclo de reflexão
+            # Ciclo de reflexêo
             self._reflection_loop(i)
 
             # Marcar parágrafo como concluído
@@ -224,11 +224,11 @@ class DeepSearchAgent:
             "content": paragraph.content
         }
 
-        # Gerar consulta de busca e seleção de ferramenta
+        # Gerar consulta de busca e seleçêo de ferramenta
         logger.info("  - Gerando consulta de busca...")
         search_output = self.first_search_node.run(search_input)
         search_query = search_output["search_query"]
-        search_tool = search_output.get("search_tool", "basic_search_news")  # Ferramenta padrão
+        search_tool = search_output.get("search_tool", "basic_search_news")  # Ferramenta padrêo
         reasoning = search_output["reasoning"]
 
         logger.info(f"  - Consulta de busca: {search_query}")
@@ -305,30 +305,30 @@ class DeepSearchAgent:
         logger.info("  - Resumo inicial concluído")
 
     def _reflection_loop(self, paragraph_index: int):
-        """Executar ciclo de reflexão"""
+        """Executar ciclo de reflexêo"""
         paragraph = self.state.paragraphs[paragraph_index]
 
         for reflection_i in range(self.config.MAX_REFLECTIONS):
-            logger.info(f"  - Reflexão {reflection_i + 1}/{self.config.MAX_REFLECTIONS}...")
+            logger.info(f"  - Reflexêo {reflection_i + 1}/{self.config.MAX_REFLECTIONS}...")
 
-            # Preparar entrada de reflexão
+            # Preparar entrada de reflexêo
             reflection_input = {
                 "title": paragraph.title,
                 "content": paragraph.content,
                 "paragraph_latest_state": paragraph.research.latest_summary
             }
 
-            # Gerar consulta de busca por reflexão
+            # Gerar consulta de busca por reflexêo
             reflection_output = self.reflection_node.run(reflection_input)
             search_query = reflection_output["search_query"]
-            search_tool = reflection_output.get("search_tool", "basic_search_news")  # Ferramenta padrão
+            search_tool = reflection_output.get("search_tool", "basic_search_news")  # Ferramenta padrêo
             reasoning = reflection_output["reasoning"]
 
-            logger.info(f"    Consulta de reflexão: {search_query}")
+            logger.info(f"    Consulta de reflexêo: {search_query}")
             logger.info(f"    Ferramenta selecionada: {search_tool}")
-            logger.info(f"    Raciocínio da reflexão: {reasoning}")
+            logger.info(f"    Raciocínio da reflexêo: {reasoning}")
 
-            # Executar busca de reflexão
+            # Executar busca de reflexêo
             # Tratar parâmetros especiais de search_news_by_date
             search_kwargs = {}
             if search_tool == "search_news_by_date":
@@ -367,17 +367,17 @@ class DeepSearchAgent:
                     })
 
             if search_results:
-                logger.info(f"    Encontrados {len(search_results)} resultados de busca por reflexão")
+                logger.info(f"    Encontrados {len(search_results)} resultados de busca por reflexêo")
                 for j, result in enumerate(search_results, 1):
                     date_info = f" (Publicado em: {result.get('published_date', 'N/A')})" if result.get('published_date') else ""
                     logger.info(f"      {j}. {result['title'][:50]}...{date_info}")
             else:
-                logger.info("    Nenhum resultado de busca por reflexão encontrado")
+                logger.info("    Nenhum resultado de busca por reflexêo encontrado")
 
             # Atualizar histórico de busca
             paragraph.research.add_search_results(search_query, search_results)
 
-            # Gerar resumo de reflexão
+            # Gerar resumo de reflexêo
             reflection_summary_input = {
                 "title": paragraph.title,
                 "content": paragraph.content,
@@ -393,7 +393,7 @@ class DeepSearchAgent:
                 reflection_summary_input, self.state, paragraph_index
             )
 
-            logger.info(f"    Reflexão {reflection_i + 1} concluída")
+            logger.info(f"    Reflexêo {reflection_i + 1} concluída")
 
     def _generate_final_report(self) -> str:
         """Gerar relatório final"""
@@ -411,7 +411,7 @@ class DeepSearchAgent:
         try:
             final_report = self.report_formatting_node.run(report_data)
         except Exception as e:
-            logger.error(f"Falha na formatação pelo LLM, usando método alternativo: {str(e)}")
+            logger.error(f"Falha na formataçêo pelo LLM, usando método alternativo: {str(e)}")
             final_report = self.report_formatting_node.format_report_manually(
                 report_data, self.state.report_title
             )
@@ -420,7 +420,7 @@ class DeepSearchAgent:
         self.state.final_report = final_report
         self.state.mark_completed()
 
-        logger.info("Geração do relatório final concluída")
+        logger.info("Geraçêo do relatório final concluída")
         return final_report
 
     def _save_report(self, report_content: str):
@@ -439,7 +439,7 @@ class DeepSearchAgent:
 
         logger.info(f"Relatório salvo em: {filepath}")
 
-        # Salvar estado (se a configuração permitir)
+        # Salvar estado (se a configuraçêo permitir)
         if self.config.SAVE_INTERMEDIATE_STATES:
             state_filename = f"state_{query_safe}_{timestamp}.json"
             state_filepath = os.path.join(self.config.OUTPUT_DIR, state_filename)
@@ -463,7 +463,7 @@ class DeepSearchAgent:
 
 def create_agent() -> DeepSearchAgent:
     """
-    Função auxiliar para criar uma instância do Deep Search Agent
+    Funçêo auxiliar para criar uma instância do Deep Search Agent
 
     Returns:
         Instância de DeepSearchAgent

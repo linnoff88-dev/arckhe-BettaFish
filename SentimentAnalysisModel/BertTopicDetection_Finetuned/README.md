@@ -1,11 +1,11 @@
-## Classificação de Tópicos (Base BERT Chinês)
+## Classificaçêo de Tópicos (Base BERT Chinês)
 
-Este diretório fornece uma implementação de classificação de tópicos em chinês usando `google-bert/bert-base-chinese`:
+Este diretório fornece uma implementaçêo de classificaçêo de tópicos em chinês usando `google-bert/bert-base-chinese`:
 - Processamento automático com lógica de carregamento em três etapas: local/cache/remoto;
-- `train.py` para treinamento de fine-tuning; `predict.py` para predição individual ou interativa;
-- Todos os modelos e pesos são salvos de forma unificada no diretório `model/` deste diretório.
+- `train.py` para treinamento de fine-tuning; `predict.py` para prediçêo individual ou interativa;
+- Todos os modelos e pesos sêo salvos de forma unificada no diretório `model/` deste diretório.
 
-Cartão de referência do modelo: [google-bert/bert-base-chinese](https://huggingface.co/google-bert/bert-base-chinese)
+Cartêo de referência do modelo: [google-bert/bert-base-chinese](https://huggingface.co/google-bert/bert-base-chinese)
 
 ### Destaques do Dataset
 
@@ -13,9 +13,9 @@ Cartão de referência do modelo: [google-bert/bert-base-chinese](https://huggin
 - Cada pergunta corresponde a um "【Tópico】", cobrindo **aproximadamente 28 mil** temas diversos;
 - Filtrado a partir de **14 milhões** de perguntas e respostas originais, mantendo apenas respostas com pelo menos **3 curtidas ou mais**, garantindo qualidade e relevância do conteúdo;
 - Além da pergunta, tópico e uma ou mais respostas, cada resposta também inclui número de curtidas, ID da resposta e tags do respondente;
-- Após limpeza e deduplicação dos dados, dividido em três partes: o conjunto de treinamento tem aproximadamente **4,12 milhões** de exemplos, com conjuntos de validação/teste ajustáveis conforme necessário.
+- Após limpeza e deduplicaçêo dos dados, dividido em três partes: o conjunto de treinamento tem aproximadamente **4,12 milhões** de exemplos, com conjuntos de validaçêo/teste ajustáveis conforme necessário.
 
-> No treinamento real, utilize os CSVs em `dataset/` como referência; o script reconhece automaticamente nomes de colunas comuns ou permite especificação explícita via parâmetros de comando.
+> No treinamento real, utilize os CSVs em `dataset/` como referência; o script reconhece automaticamente nomes de colunas comuns ou permite especificaçêo explícita via parâmetros de comando.
 
 ### Estrutura de Diretórios
 
@@ -58,14 +58,14 @@ python train.py \
 ```
 
 Pontos importantes:
-- Na primeira execução, o script verifica `model/bert-base-chinese`; se não existir, tenta o cache local e, caso contrário, baixa e salva automaticamente;
-- O processo de treinamento avalia e salva por passos (por padrão a cada 1/4 de epoch), mantendo no máximo 5 checkpoints recentes (ajustável pela variável de ambiente `SAVE_TOTAL_LIMIT`);
-- Suporta early stopping (paciência padrão de 5 avaliações) e, quando a estratégia de avaliação/salvamento é consistente, reverte automaticamente para o melhor modelo;
-- O tokenizador, pesos e `label_map.json` são salvos em `model/bert-chinese-classifier/`.
+- Na primeira execuçêo, o script verifica `model/bert-base-chinese`; se nêo existir, tenta o cache local e, caso contrário, baixa e salva automaticamente;
+- O processo de treinamento avalia e salva por passos (por padrêo a cada 1/4 de epoch), mantendo no máximo 5 checkpoints recentes (ajustável pela variável de ambiente `SAVE_TOTAL_LIMIT`);
+- Suporta early stopping (paciência padrêo de 5 avaliações) e, quando a estratégia de avaliaçêo/salvamento é consistente, reverte automaticamente para o melhor modelo;
+- O tokenizador, pesos e `label_map.json` sêo salvos em `model/bert-chinese-classifier/`.
 
-### Modelos Base Chineses Opcionais (seleção interativa antes do treinamento)
+### Modelos Base Chineses Opcionais (seleçêo interativa antes do treinamento)
 
-Modelo base padrão: `google-bert/bert-base-chinese`. Ao iniciar o treinamento, se o terminal for interativo, o programa solicitará a seleção entre as seguintes opções (ou a inserção de qualquer ID de modelo do Hugging Face):
+Modelo base padrêo: `google-bert/bert-base-chinese`. Ao iniciar o treinamento, se o terminal for interativo, o programa solicitará a seleçêo entre as seguintes opções (ou a inserçêo de qualquer ID de modelo do Hugging Face):
 
 1) `google-bert/bert-base-chinese`
 2) `hfl/chinese-roberta-wwm-ext-large`
@@ -73,14 +73,14 @@ Modelo base padrão: `google-bert/bert-base-chinese`. Ao iniciar o treinamento, 
 4) `IDEA-CCNL/Erlangshen-DeBERTa-v2-710M-Chinese`
 5) `IDEA-CCNL/Erlangshen-DeBERTa-v3-Base-Chinese`
 6) `Langboat/mengzi-bert-base`
-7) `BAAI/bge-base-zh` (mais adequado para paradigma de recuperação/aprendizado contrastivo)
+7) `BAAI/bge-base-zh` (mais adequado para paradigma de recuperaçêo/aprendizado contrastivo)
 8) `nghuyong/ernie-3.0-base-zh`
 
 Observações:
-- Em ambientes não interativos (como sistemas de agendamento) ou ao definir `NON_INTERACTIVE=1`, o modelo especificado pelo argumento de linha de comando `--pretrained_name` será usado diretamente (padrão: `google-bert/bert-base-chinese`).
-- Após a seleção, o modelo base será baixado/armazenado em cache no diretório `model/`, com gerenciamento unificado.
+- Em ambientes nêo interativos (como sistemas de agendamento) ou ao definir `NON_INTERACTIVE=1`, o modelo especificado pelo argumento de linha de comando `--pretrained_name` será usado diretamente (padrêo: `google-bert/bert-base-chinese`).
+- Após a seleçêo, o modelo base será baixado/armazenado em cache no diretório `model/`, com gerenciamento unificado.
 
-### Predição
+### Prediçêo
 
 Individual:
 ```
@@ -94,32 +94,32 @@ python predict.py --interactive --model_root ./model --finetuned_subdir bert-chi
 
 Exemplo de saída:
 ```
-Resultado da predição: Esportes-Futebol (confiança: 0.9412)
+Resultado da prediçêo: Esportes-Futebol (confiança: 0.9412)
 ```
 
 ### Notas
 
-- Tanto o treinamento quanto a predição incluem limpeza básica de texto em chinês integrada.
+- Tanto o treinamento quanto a prediçêo incluem limpeza básica de texto em chinês integrada.
 - O conjunto de rótulos é baseado no conjunto de treinamento; o script gera e salva automaticamente o `label_map.json`.
 
 ### Estratégia de Treinamento (Resumo)
 
-- Base: `google-bert/bert-base-chinese`; dimensão da camada de classificação = número de rótulos únicos no conjunto de treinamento.
-- Taxa de aprendizado e regularização: `lr=2e-5`, `weight_decay=0.01`, podendo ser ajustado para `1e-5~3e-5` em datasets grandes.
+- Base: `google-bert/bert-base-chinese`; dimensêo da camada de classificaçêo = número de rótulos únicos no conjunto de treinamento.
+- Taxa de aprendizado e regularizaçêo: `lr=2e-5`, `weight_decay=0.01`, podendo ser ajustado para `1e-5~3e-5` em datasets grandes.
 - Comprimento da sequência e batch: `max_length=128`, `batch_size=16`; se houver truncamento excessivo, pode ser aumentado para 256 (com aumento de custo).
 - Warmup: se o ambiente suportar, usa `warmup_ratio=0.1`; caso contrário, faz fallback para `warmup_steps=0`.
-- Avaliação/Salvamento: calcula passos com base em `--eval_fraction` (padrão 0.25), `save_total_limit=5` para limitar o uso de disco.
-- Early stopping: monitora F1 ponderado (quanto maior, melhor), paciência padrão de 5, limiar de melhoria de 0.0.
-- Execução estável em GPU única: usa apenas uma GPU por padrão, podendo ser especificada via `--gpu`; o script limpa variáveis de ambiente distribuídas.
+- Avaliaçêo/Salvamento: calcula passos com base em `--eval_fraction` (padrêo 0.25), `save_total_limit=5` para limitar o uso de disco.
+- Early stopping: monitora F1 ponderado (quanto maior, melhor), paciência padrêo de 5, limiar de melhoria de 0.0.
+- Execuçêo estável em GPU única: usa apenas uma GPU por padrêo, podendo ser especificada via `--gpu`; o script limpa variáveis de ambiente distribuídas.
 
 
-### Nota do Autor (sobre classificação multi-classe em larga escala)
+### Nota do Autor (sobre classificaçêo multi-classe em larga escala)
 
-- Quando as categorias de tópicos chegam a dezenas de milhares, usar uma única camada de classificação linear após o encoder (softmax grande) geralmente é limitante: categorias de cauda longa são difíceis de aprender, esparsidade semântica, novos tópicos não podem ser adaptados incrementalmente, e o modelo precisa ser retreinado frequentemente após o deploy.
+- Quando as categorias de tópicos chegam a dezenas de milhares, usar uma única camada de classificaçêo linear após o encoder (softmax grande) geralmente é limitante: categorias de cauda longa sêo difíceis de aprender, esparsidade semântica, novos tópicos nêo podem ser adaptados incrementalmente, e o modelo precisa ser retreinado frequentemente após o deploy.
 - Abordagens de melhoria (em ordem de prioridade recomendada):
-  - Paradigma de recuperação/torre dupla (texto vs. nome/descrição do tópico com aprendizado contrastivo) + busca por vizinhos próximos + re-ranking com cabeçote leve, com suporte natural a expansão incremental de classes e atualização rápida;
-  - Classificação hierárquica (primeiro grossa, depois fina), reduzindo significativamente a dificuldade e computação de um único cabeçote;
+  - Paradigma de recuperaçêo/torre dupla (texto vs. nome/descriçêo do tópico com aprendizado contrastivo) + busca por vizinhos próximos + re-ranking com cabeçote leve, com suporte natural a expansêo incremental de classes e atualizaçêo rápida;
+  - Classificaçêo hierárquica (primeiro grossa, depois fina), reduzindo significativamente a dificuldade e computaçêo de um único cabeçote;
   - Modelagem conjunta texto-rótulo (usando descrições de rótulos), melhorando a transferibilidade para tópicos sinônimos;
   - Detalhes de treinamento: class-balanced/focal/label smoothing, sampled softmax, pré-treinamento contrastivo, etc.
-- Declaração importante: O "fine-tuning com cabeçote de classificação estático" usado neste diretório serve apenas como alternativa e referência de aprendizado. Para cenários de microtextos em inglês/multilíngue, os tópicos mudam extremamente rápido, e classificadores estáticos tradicionais dificilmente conseguem acompanhar. Nosso foco de trabalho está em direções como `TopicGPT` e outras abordagens generativas/autossupervisionadas de descoberta de tópicos e construção de sistemas dinâmicos; esta implementação visa fornecer uma baseline executável e um exemplo de engenharia.
+- Declaraçêo importante: O "fine-tuning com cabeçote de classificaçêo estático" usado neste diretório serve apenas como alternativa e referência de aprendizado. Para cenários de microtextos em inglês/multilíngue, os tópicos mudam extremamente rápido, e classificadores estáticos tradicionais dificilmente conseguem acompanhar. Nosso foco de trabalho está em direções como `TopicGPT` e outras abordagens generativas/autossupervisionadas de descoberta de tópicos e construçêo de sistemas dinâmicos; esta implementaçêo visa fornecer uma baseline executável e um exemplo de engenharia.
 

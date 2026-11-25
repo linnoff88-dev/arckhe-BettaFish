@@ -74,7 +74,7 @@ class HTMLRenderer:
         "options",
     }
     TABLE_COMPLEX_CHARS = set(
-        "@ï¼…%ï¼ˆï¼‰()ï¼Œ,ã€‚ï¼›;ï¼š:ã€ï¼Ÿ?ï¼!Â·â€¦-â€”_+<>[]{}|\\/\"'`~$^&*#"
+        "@ï¼…%ï¼ˆï¼‰()ï¼Œ,ê€‚ï¼›;ï¼š:ê€ï¼Ÿ?ï¼!Â·â€¦-â€”_+<>[]{}|\\/\"'`~$^&*#"
     )
 
     def __init__(self, config: Dict[str, Any] | None = None):
@@ -595,7 +595,7 @@ class HTMLRenderer:
 
     def _render_cover(self) -> str:
         """
-        ï¼Œâ€œVisao geral do artigoâ€ã€‚
+        ï¼Œâ€œVisao geral do artigoâ€ê€‚
 
         Retorna:
             str: HTML da secao cover.
@@ -1009,7 +1009,7 @@ class HTMLRenderer:
                 display_text = raw_text
 
                 if not chapter_heading_seen:
-                    label = f"{self._to_chinese_numeral(chap_idx)}ã€"
+                    label = f"{self._to_chinese_numeral(chap_idx)}ê€"
                     display_text = f"{label} {clean_title}".strip()
                     chapter_heading_seen = True
                     section_idx = 0
@@ -1046,10 +1046,10 @@ class HTMLRenderer:
 
     @staticmethod
     def _strip_order_prefix(text: str) -> str:
-        """â€œ1.0 â€ ou â€œã€â€ como prefixoï¼Œobtendo titulo puro"""
+        """â€œ1.0 â€ ou â€œê€â€ como prefixoï¼Œobtendo titulo puro"""
         if not text:
             return ""
-        separators = [" ", "ã€", ".", "ï¼Ž"]
+        separators = [" ", "ê€", ".", "ï¼Ž"]
         stripped = text.lstrip()
         for sep in separators:
             parts = stripped.split(sep, 1)
@@ -3345,7 +3345,7 @@ class HTMLRenderer:
             if close_brace_pos < open_brace_pos:
                 # { apos } ou sem }, significa que nao esta fechado
                 # Truncar antes do {
-                text_str = text_str[:open_brace_pos].rstrip(',ï¼Œã€ \t\n')
+                text_str = text_str[:open_brace_pos].rstrip(',ï¼Œê€ \t\n')
 
         # Padrao 4: tratamento similar para [
         open_bracket_pos = text_str.rfind('[')
@@ -3353,7 +3353,7 @@ class HTMLRenderer:
             close_bracket_pos = text_str.rfind(']')
             if close_bracket_pos < open_bracket_pos:
                 # [ apos ] ou sem ], significa que nao esta fechado
-                text_str = text_str[:open_bracket_pos].rstrip(',ï¼Œã€ \t\n')
+                text_str = text_str[:open_bracket_pos].rstrip(',ï¼Œê€ \t\n')
 
         # Padrao 5: remover fragmentos que parecem pares chave-valor JSON, como "chapterId": "S3
         # Este caso geralmente aparece apos os padroes acima
@@ -3361,7 +3361,7 @@ class HTMLRenderer:
         text_str = re.sub(r',?\s*"[^"]+"\s*:\s*[^,}\]]*$', '', text_str)
 
         # Limpar virgulas e espacos no final
-        text_str = text_str.rstrip(',ï¼Œã€ \t\n')
+        text_str = text_str.rstrip(',ï¼Œê€ \t\n')
 
         return text_str.strip()
 
@@ -5212,7 +5212,7 @@ img, canvas, svg {{ /* Funcao: limitacao de dimensoes de elementos de midia; Con
         3) Botao de exportacao (#export-btn): chama exportPdf(), usando html2canvas + jsPDF internamente,
            e exibe #export-overlay (overlay, texto de status, barra de progresso).
         4) Hidratacao de graficos: varre todos os canvas com data-config-id, analisa JSON adjacente, instancia Chart.js;
-           tabela/emblema de nuvem de palavrasï¼Œ data-chart-stateã€‚
+           tabela/emblema de nuvem de palavrasï¼Œ data-chart-stateê€‚
         5) Resize da janela: apos debounce, redesenha nuvem de palavras, garantindo responsividade.
         """
         return """

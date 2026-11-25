@@ -46,7 +46,7 @@ class BaseNode(ABC):
             input_data: Dados de entrada
 
         Returns:
-            Se a validação foi aprovada
+            Se a validaçêo foi aprovada
         """
         return True
 
@@ -76,7 +76,7 @@ class BaseNode(ABC):
 
 
 class StateMutationNode(BaseNode):
-    """Classe base de nó com funcionalidade de modificação de estado"""
+    """Classe base de nó com funcionalidade de modificaçêo de estado"""
 
     @abstractmethod
     def mutate_state(self, input_data: Any, state: State, **kwargs) -> State:

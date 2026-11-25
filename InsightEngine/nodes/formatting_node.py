@@ -1,5 +1,5 @@
 """
-Nó de formatação do relatório
+Nó de formataçêo do relatório
 Responsável por formatar os resultados finais da pesquisa em um relatório Markdown elegante
 """
 
@@ -22,7 +22,7 @@ class ReportFormattingNode(BaseNode):
 
     def __init__(self, llm_client):
         """
-        Inicializar nó de formatação do relatório
+        Inicializar nó de formataçêo do relatório
 
         Args:
             llm_client: Cliente LLM
@@ -70,7 +70,7 @@ class ReportFormattingNode(BaseNode):
 
             logger.info("Formatando relatório final")
 
-            # Chamar LLM (streaming, concatenação segura de UTF-8)
+            # Chamar LLM (streaming, concatenaçêo segura de UTF-8)
             response = self.llm_client.stream_invoke_to_string(
                 SYSTEM_PROMPT_REPORT_FORMATTING,
                 message,
@@ -83,7 +83,7 @@ class ReportFormattingNode(BaseNode):
             return processed_response
 
         except Exception as e:
-            logger.exception(f"Falha na formatação do relatório: {str(e)}")
+            logger.exception(f"Falha na formataçêo do relatório: {str(e)}")
             raise e
 
     def process_output(self, output: str) -> str:
@@ -103,9 +103,9 @@ class ReportFormattingNode(BaseNode):
 
             # Garantir que o relatório tem estrutura básica
             if not cleaned_output.strip():
-                return "# Falha na geração do relatório\n\nNão foi possível gerar conteúdo válido para o relatório."
+                return "# Falha na geraçêo do relatório\n\nNêo foi possível gerar conteúdo válido para o relatório."
 
-            # Se não houver título, adicionar um título padrão
+            # Se nêo houver título, adicionar um título padrêo
             if not cleaned_output.strip().startswith('#'):
                 cleaned_output = "# Relatório de pesquisa aprofundada\n\n" + cleaned_output
 
@@ -113,12 +113,12 @@ class ReportFormattingNode(BaseNode):
 
         except Exception as e:
             logger.exception(f"Falha ao processar saída: {str(e)}")
-            return "# Falha no processamento do relatório\n\nOcorreu um erro durante a formatação do relatório."
+            return "# Falha no processamento do relatório\n\nOcorreu um erro durante a formataçêo do relatório."
 
     def format_report_manually(self, paragraphs_data: List[Dict[str, str]],
                              report_title: str = "Relatório de pesquisa aprofundada") -> str:
         """
-        Formatação manual do relatório (método alternativo)
+        Formataçêo manual do relatório (método alternativo)
 
         Args:
             paragraphs_data: Lista de dados dos parágrafos
@@ -128,7 +128,7 @@ class ReportFormattingNode(BaseNode):
             Relatório formatado em Markdown
         """
         try:
-            logger.info("Usando método de formatação manual")
+            logger.info("Usando método de formataçêo manual")
 
             # Construir relatório
             report_lines = [
@@ -153,18 +153,18 @@ class ReportFormattingNode(BaseNode):
                         ""
                     ])
 
-            # Adicionar conclusão
+            # Adicionar conclusêo
             if len(paragraphs_data) > 1:
                 report_lines.extend([
-                    "## Conclusão",
+                    "## Conclusêo",
                     "",
-                    "Este relatório, através de pesquisa e busca aprofundadas, realizou uma análise abrangente do tema em questão. "
-                    "O conteúdo de cada aspecto acima fornece referências importantes para a compreensão deste tema.",
+                    "Este relatório, através de pesquisa e busca aprofundadas, realizou uma análise abrangente do tema em questêo. "
+                    "O conteúdo de cada aspecto acima fornece referências importantes para a compreensêo deste tema.",
                     ""
                 ])
 
             return "\n".join(report_lines)
 
         except Exception as e:
-            logger.exception(f"Falha na formatação manual: {str(e)}")
-            return "# Falha na geração do relatório\n\nNão foi possível completar a formatação do relatório."
+            logger.exception(f"Falha na formataçêo manual: {str(e)}")
+            return "# Falha na geraçêo do relatório\n\nNêo foi possível completar a formataçêo do relatório."

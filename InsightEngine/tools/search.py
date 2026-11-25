@@ -1,22 +1,22 @@
 """
-Conjunto de ferramentas de consulta ao banco de dados local de opinião pública projetado para AI Agent (MediaCrawlerDB)
+Conjunto de ferramentas de consulta ao banco de dados local de opiniêo pública projetado para AI Agent (MediaCrawlerDB)
 
-Versão: 3.0
-Última atualização: 2025-08-23
+Versêo: 3.0
+Última atualizaçêo: 2025-08-23
 
 Este script encapsula funcionalidades complexas de consulta ao banco de dados MySQL local em uma série de ferramentas independentes
 com objetivos claros e parâmetros bem definidos, projetadas especificamente para chamadas por AI Agent.
-O Agent só precisa selecionar a ferramenta adequada de acordo com a intenção da tarefa (como buscar tendências,
+O Agent só precisa selecionar a ferramenta adequada de acordo com a intençêo da tarefa (como buscar tendências,
 busca global de tópicos, análise por intervalo de tempo, obter comentários), sem necessidade de escrever SQL complexo.
 
 Atualizações principais da V3.0:
-- Cálculo inteligente de popularidade: `search_hot_content` não precisa mais do parâmetro `sort_by`, passando a usar
-  internamente um algoritmo de ponderação unificado que combina curtidas, comentários, compartilhamentos, visualizações
-  etc. para calcular a pontuação de popularidade, tornando os resultados mais inteligentes e alinhados com a popularidade geral.
+- Cálculo inteligente de popularidade: `search_hot_content` nêo precisa mais do parâmetro `sort_by`, passando a usar
+  internamente um algoritmo de ponderaçêo unificado que combina curtidas, comentários, compartilhamentos, visualizações
+  etc. para calcular a pontuaçêo de popularidade, tornando os resultados mais inteligentes e alinhados com a popularidade geral.
 - Nova ferramenta de busca por plataforma: Adicionada `search_topic_on_platform` como caso especial,
   permitindo ao Agent fazer buscas precisas de tópicos em plataformas específicas (Bilibili, Weibo etc.),
   com suporte a filtro por tempo.
-- Otimização estrutural: Ajustadas estruturas de dados e documentação de funções para acomodar as novas funcionalidades.
+- Otimizaçêo estrutural: Ajustadas estruturas de dados e documentaçêo de funções para acomodar as novas funcionalidades.
 
 Ferramentas principais:
 - search_hot_content: Buscar conteúdo com maior popularidade geral em um intervalo de tempo especificado.
@@ -36,7 +36,7 @@ from ..utils.db import fetch_all
 from datetime import datetime, timedelta, date
 from InsightEngine.utils.config import settings
 
-# --- 1. Definição de estruturas de dados ---
+# --- 1. Definiçêo de estruturas de dados ---
 
 @dataclass
 class QueryResult:
@@ -64,8 +64,8 @@ class DBResponse:
 # --- 2. Cliente principal e conjunto de ferramentas especializadas ---
 
 class MediaCrawlerDB:
-    """Cliente contendo múltiplas ferramentas especializadas de consulta ao banco de dados de opinião pública"""
-    # Definição de pesos
+    """Cliente contendo múltiplas ferramentas especializadas de consulta ao banco de dados de opiniêo pública"""
+    # Definiçêo de pesos
     W_LIKE = 1.0
     W_COMMENT = 5.0
     W_SHARE = 10.0  # Compartilhamento/repost/favorito/moeda e outras interações de alto valor
@@ -119,7 +119,7 @@ class MediaCrawlerDB:
         return columns
 
     def _extract_engagement(self, row: Dict[str, Any]) -> Dict[str, int]:
-        """Extrair e unificar indicadores de interação de uma linha de dados"""
+        """Extrair e unificar indicadores de interaçêo de uma linha de dados"""
         engagement = {}
         mapping = { 'likes': ['liked_count', 'like_count', 'voteup_count', 'comment_like_count'], 'comments': ['video_comment', 'comments_count', 'comment_count', 'total_replay_num', 'sub_comment_count'], 'shares': ['video_share_count', 'shared_count', 'share_count', 'total_forwards'], 'views': ['video_play_count', 'viewd_count'], 'favorites': ['video_favorite_count', 'collected_count'], 'coins': ['video_coin_count'], 'danmaku': ['video_danmaku'], }
         for key, potential_cols in mapping.items():
@@ -139,8 +139,8 @@ class MediaCrawlerDB:
         [Ferramenta] Buscar conteúdo em alta: Obter o conteúdo com maior popularidade geral em um período recente.
 
         Args:
-            time_period (Literal['24h', 'week', 'year']): Intervalo de tempo, padrão 'week'.
-            limit (int): Número máximo de resultados retornados, padrão 50.
+            time_period (Literal['24h', 'week', 'year']): Intervalo de tempo, padrêo 'week'.
+            limit (int): Número máximo de resultados retornados, padrêo 50.
 
         Returns:
             DBResponse: Lista de conteúdo ordenado por popularidade geral.
@@ -199,7 +199,7 @@ class MediaCrawlerDB:
 
         Args:
             topic (str): Palavra-chave do tópico a ser buscado.
-            limit_per_table (int): Número máximo de registros retornados de cada tabela relevante, padrão 100.
+            limit_per_table (int): Número máximo de registros retornados de cada tabela relevante, padrêo 100.
 
         Returns:
             DBResponse: Lista agregada contendo todos os resultados correspondentes.
@@ -244,7 +244,7 @@ class MediaCrawlerDB:
             topic (str): Palavra-chave do tópico a ser buscado.
             start_date (str): Data de início, formato 'YYYY-MM-DD'.
             end_date (str): Data de fim, formato 'YYYY-MM-DD'.
-            limit_per_table (int): Número máximo de registros retornados de cada tabela relevante, padrão 100.
+            limit_per_table (int): Número máximo de registros retornados de cada tabela relevante, padrêo 100.
 
         Returns:
             DBResponse: Lista agregada contendo os resultados encontrados no intervalo de datas especificado.
@@ -297,7 +297,7 @@ class MediaCrawlerDB:
 
         Args:
             topic (str): Palavra-chave do tópico a ser buscado.
-            limit (int): Limite superior total de comentários retornados, padrão 500.
+            limit (int): Limite superior total de comentários retornados, padrêo 500.
 
         Returns:
             DBResponse: Lista contendo os comentários correspondentes.
@@ -342,9 +342,9 @@ class MediaCrawlerDB:
         Args:
             platform (Literal['bilibili', ...]): Plataforma a ser buscada, deve ser uma das sete plataformas suportadas.
             topic (str): Palavra-chave do tópico a ser buscado.
-            start_date (Optional[str]): Data de início, formato 'YYYY-MM-DD'. Padrão None.
-            end_date (Optional[str]): Data de fim, formato 'YYYY-MM-DD'. Padrão None.
-            limit (int): Número máximo de resultados retornados, padrão 20.
+            start_date (Optional[str]): Data de início, formato 'YYYY-MM-DD'. Padrêo None.
+            end_date (Optional[str]): Data de fim, formato 'YYYY-MM-DD'. Padrêo None.
+            limit (int): Número máximo de resultados retornados, padrêo 20.
 
         Returns:
             DBResponse: Lista contendo os resultados encontrados na plataforma.
@@ -355,7 +355,7 @@ class MediaCrawlerDB:
         all_configs = { 'bilibili': [{'table': 'bilibili_video', 'fields': ['title', 'desc', 'source_keyword'], 'type': 'video', 'time_col': 'create_time', 'time_type': 'sec'}, {'table': 'bilibili_video_comment', 'fields': ['content'], 'type': 'comment'}], 'douyin': [{'table': 'douyin_aweme', 'fields': ['title', 'desc', 'source_keyword'], 'type': 'video', 'time_col': 'create_time', 'time_type': 'ms'}, {'table': 'douyin_aweme_comment', 'fields': ['content'], 'type': 'comment'}], 'kuaishou': [{'table': 'kuaishou_video', 'fields': ['title', 'desc', 'source_keyword'], 'type': 'video', 'time_col': 'create_time', 'time_type': 'ms'}, {'table': 'kuaishou_video_comment', 'fields': ['content'], 'type': 'comment'}], 'weibo': [{'table': 'weibo_note', 'fields': ['content', 'source_keyword'], 'type': 'note', 'time_col': 'create_date_time', 'time_type': 'str'}, {'table': 'weibo_note_comment', 'fields': ['content'], 'type': 'comment'}], 'xhs': [{'table': 'xhs_note', 'fields': ['title', 'desc', 'tag_list', 'source_keyword'], 'type': 'note', 'time_col': 'time', 'time_type': 'ms'}, {'table': 'xhs_note_comment', 'fields': ['content'], 'type': 'comment'}], 'zhihu': [{'table': 'zhihu_content', 'fields': ['title', 'desc', 'content_text', 'source_keyword'], 'type': 'content', 'time_col': 'created_time', 'time_type': 'sec_str'}, {'table': 'zhihu_comment', 'fields': ['content'], 'type': 'comment'}], 'tieba': [{'table': 'tieba_note', 'fields': ['title', 'desc', 'source_keyword'], 'type': 'note', 'time_col': 'publish_time', 'time_type': 'str'}, {'table': 'tieba_comment', 'fields': ['content'], 'type': 'comment'}] }
 
         if platform not in all_configs:
-            return DBResponse("search_topic_on_platform", params_for_log, error_message=f"Plataforma não suportada: {platform}")
+            return DBResponse("search_topic_on_platform", params_for_log, error_message=f"Plataforma nêo suportada: {platform}")
 
         search_term, all_results = f"%{topic}%", []
         platform_configs = all_configs[platform]
@@ -406,7 +406,7 @@ class MediaCrawlerDB:
 
         Args:
             topic (str): Palavra-chave a ser buscada no título das notícias.
-            limit (int): Número máximo de resultados retornados, padrão 50.
+            limit (int): Número máximo de resultados retornados, padrêo 50.
 
         Returns:
             DBResponse: Lista contendo as notícias correspondentes.
@@ -443,7 +443,7 @@ class MediaCrawlerDB:
 
 # --- 3. Testes e exemplos de uso ---
 def print_response_summary(response: DBResponse):
-    """Função simplificada de impressão para exibir resultados de teste"""
+    """Funçêo simplificada de impressêo para exibir resultados de teste"""
     if response.error_message:
         logger.info(f"Ferramenta '{response.tool_name}' executou com erro: {response.error_message}")
         return
@@ -468,7 +468,7 @@ def print_response_summary(response: DBResponse):
                 f"   Autor: {author_str} | Data: {publish_time_str}"
                 f"{hotness_str} | Palavra-chave de origem: '{res.source_keyword or 'N/A'}'\n"
                 f"   Link: {res.url or 'N/A'}\n"
-                f"   Dados de interação: {{{engagement_str}}}"
+                f"   Dados de interaçêo: {{{engagement_str}}}"
             )
     else:
         output_lines.append("Nenhum conteúdo relacionado no momento.")
@@ -481,7 +481,7 @@ if __name__ == "__main__":
         db_agent_tools = MediaCrawlerDB()
         logger.info("Ferramentas de banco de dados inicializadas com sucesso, iniciando cenários de teste...\n")
 
-        # Cenário 1: (Novo) Buscar conteúdo com maior popularidade geral na última semana (não precisa mais de sort_by)
+        # Cenário 1: (Novo) Buscar conteúdo com maior popularidade geral na última semana (nêo precisa mais de sort_by)
         response1 = db_agent_tools.search_hot_content(time_period='week', limit=5)
         print_response_summary(response1)
 
@@ -493,7 +493,7 @@ if __name__ == "__main__":
         response3 = db_agent_tools.search_topic_globally(topic="罗永浩", limit_per_table=2)
         print_response_summary(response3)
 
-        # Cenário 4: (Novo) Busca precisa de "dissertação" no Bilibili
+        # Cenário 4: (Novo) Busca precisa de "dissertaçêo" no Bilibili
         response4 = db_agent_tools.search_topic_on_platform(platform='bilibili', topic="论文", limit=5)
         print_response_summary(response4)
 
@@ -502,7 +502,7 @@ if __name__ == "__main__":
         print_response_summary(response5)
 
     except ValueError as e:
-        logger.exception(f"Falha na inicialização: {e}")
-        logger.exception("Verifique se as variáveis de ambiente do banco de dados estão configuradas corretamente, ou forneça as informações de conexão diretamente no código.")
+        logger.exception(f"Falha na inicializaçêo: {e}")
+        logger.exception("Verifique se as variáveis de ambiente do banco de dados estêo configuradas corretamente, ou forneça as informações de conexêo diretamente no código.")
     except Exception as e:
         logger.exception(f"Erro desconhecido durante os testes: {e}")

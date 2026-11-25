@@ -1,12 +1,12 @@
 """
 Conjunto de ferramentas de busca multimodal projetado especialmente para AI Agent
 
-Versão: 1.2
-Última atualização: 2026-03-20
+Versêo: 1.2
+Última atualizaçêo: 2026-03-20
 
 Este script fornece múltiplas implementações de busca (Tavily, Bocha, Anspire) com uma interface
 unificada para chamadas de AI Agent.
-O Agent precisa apenas selecionar a ferramenta adequada com base na intenção da tarefa
+O Agent precisa apenas selecionar a ferramenta adequada com base na intençêo da tarefa
 (como busca geral, consulta de dados estruturados ou notícias com prazo de validade),
 sem precisar entender combinações complexas de parâmetros.
 
@@ -30,7 +30,7 @@ from config import settings
 try:
     import requests
 except ImportError:
-    raise ImportError("A biblioteca requests não está instalada. Execute `pip install requests` para instalá-la.")
+    raise ImportError("A biblioteca requests nêo está instalada. Execute `pip install requests` para instalá-la.")
 
 # Adicionar diretório utils ao caminho do Python
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -47,7 +47,7 @@ try:
 except ImportError:
     TavilyClient = None
 
-# --- 1. Definição de estruturas de dados ---
+# --- 1. Definiçêo de estruturas de dados ---
 from dataclasses import dataclass, field
 
 @dataclass
@@ -80,7 +80,7 @@ class ModalCardResult:
 
 @dataclass
 class BochaResponse:
-    """Encapsula o resultado completo da API Bocha, para transmissão entre ferramentas"""
+    """Encapsula o resultado completo da API Bocha, para transmissêo entre ferramentas"""
     query: str
     conversation_id: Optional[str] = None
     answer: Optional[str] = None  # Resposta resumida gerada por IA
@@ -91,7 +91,7 @@ class BochaResponse:
 
 @dataclass
 class AnspireResponse:
-    """Encapsula o resultado completo da API Anspire, para transmissão entre ferramentas"""
+    """Encapsula o resultado completo da API Anspire, para transmissêo entre ferramentas"""
     query: str
     conversation_id: Optional[str] = None
     score: Optional[float] = None
@@ -112,12 +112,12 @@ class BochaMultimodalSearch:
         """
         Inicializar cliente.
         Args:
-            api_key: Chave da API Bocha; se não fornecida, será lida da variável de ambiente BOCHA_API_KEY.
+            api_key: Chave da API Bocha; se nêo fornecida, será lida da variável de ambiente BOCHA_API_KEY.
         """
         if api_key is None:
             api_key = settings.BOCHA_WEB_SEARCH_API_KEY
             if not api_key:
-                raise ValueError("Chave da API Bocha não encontrada! Configure a variável de ambiente BOCHA_API_KEY ou forneça na inicialização")
+                raise ValueError("Chave da API Bocha nêo encontrada! Configure a variável de ambiente BOCHA_API_KEY ou forneça na inicializaçêo")
 
         self._headers = {
             'Authorization': f'Bearer {api_key}',
@@ -144,7 +144,7 @@ class BochaMultimodalSearch:
             try:
                 content_data = json.loads(content_str)
             except json.JSONDecodeError:
-                # Se o conteúdo não for uma string JSON válida (por exemplo, texto puro do answer), usar diretamente
+                # Se o conteúdo nêo for uma string JSON válida (por exemplo, texto puro do answer), usar diretamente
                 content_data = content_str
 
             if msg_type == 'answer' and content_type == 'text':
@@ -173,7 +173,7 @@ class BochaMultimodalSearch:
                         width=content_data.get('width'),
                         height=content_data.get('height')
                     ))
-                # Todos os outros content_type são tratados como cards modais
+                # Todos os outros content_type sêo tratados como cards modais
                 else:
                     final_response.modal_cards.append(ModalCardResult(
                         card_type=content_type,
@@ -188,14 +188,14 @@ class BochaMultimodalSearch:
         """Executor de busca genérico interno, todos as ferramentas chamam este método no final"""
         query = kwargs.get("query", "Unknown Query")
         payload = {
-            "stream": False,  # Ferramentas de Agent geralmente usam modo não-streaming para obter resultados completos
+            "stream": False,  # Ferramentas de Agent geralmente usam modo nêo-streaming para obter resultados completos
         }
         payload.update(kwargs)
 
         try:
 
             response = requests.post(self.BOCHA_BASE_URL, headers=self._headers, json=payload, timeout=30)
-            response.raise_for_status()  # Se o código HTTP for 4xx ou 5xx, lança exceção
+            response.raise_for_status()  # Se o código HTTP for 4xx ou 5xx, lança exceçêo
 
             response_dict = response.json()
             if response_dict.get("code") != 200:
@@ -215,7 +215,7 @@ class BochaMultimodalSearch:
 
     def comprehensive_search(self, query: str, max_results: int = 10) -> BochaResponse:
         """
-        [Ferramenta] Busca abrangente: Executa uma busca padrão e completa incluindo todos os tipos de informação.
+        [Ferramenta] Busca abrangente: Executa uma busca padrêo e completa incluindo todos os tipos de informaçêo.
         Retorna páginas web, imagens, resumo de IA, sugestões de perguntas e possíveis cards modais. Esta é a ferramenta de busca genérica mais utilizada.
         O Agent pode fornecer a consulta de busca (query) e opcionalmente o número máximo de resultados (max_results).
         """
@@ -241,14 +241,14 @@ class BochaMultimodalSearch:
     def search_for_structured_data(self, query: str) -> BochaResponse:
         """
         [Ferramenta] Consulta de dados estruturados: Especializada em consultas que podem acionar "cards modais".
-        Quando a intenção do Agent é consultar informações estruturadas como clima, ações, câmbio, definições enciclopédicas, passagens de trem, parâmetros de carros, esta ferramenta deve ser priorizada.
+        Quando a intençêo do Agent é consultar informações estruturadas como clima, ações, câmbio, definições enciclopédicas, passagens de trem, parâmetros de carros, esta ferramenta deve ser priorizada.
         Ela retorna todas as informações, mas o Agent deve focar na parte `modal_cards` dos resultados.
         """
         logger.info(f"--- FERRAMENTA: Consulta de dados estruturados (query: {query}) ---")
-        # Na implementação, é igual ao comprehensive_search, mas guia a intenção do Agent através do nome e documentação
+        # Na implementaçêo, é igual ao comprehensive_search, mas guia a intençêo do Agent através do nome e documentaçêo
         return self._search_internal(
             query=query,
-            count=5, # Consultas estruturadas geralmente não precisam de muitos resultados de páginas web
+            count=5, # Consultas estruturadas geralmente nêo precisam de muitos resultados de páginas web
             answer=True
         )
 
@@ -263,7 +263,7 @@ class BochaMultimodalSearch:
     def search_last_week(self, query: str) -> BochaResponse:
         """
         [Ferramenta] Busca de informações da semana: Obtém as principais matérias sobre determinado tema da última semana.
-        Adequada para realizar resumos semanais de opinião pública ou retrospectivas.
+        Adequada para realizar resumos semanais de opiniêo pública ou retrospectivas.
         """
         logger.info(f"--- FERRAMENTA: Busca de informações da semana (query: {query}) ---")
         return self._search_internal(query=query, freshness='oneWeek', answer=True)
@@ -278,12 +278,12 @@ class AnspireAISearch:
         """
         Inicializar cliente.
         Args:
-            api_key: Chave da API Anspire; se não fornecida, será lida da variável de ambiente ANSPIRE_API_KEY.
+            api_key: Chave da API Anspire; se nêo fornecida, será lida da variável de ambiente ANSPIRE_API_KEY.
         """
         if api_key is None:
             api_key = settings.ANSPIRE_API_KEY
             if not api_key:
-                raise ValueError("Chave da API Anspire não encontrada! Configure a variável de ambiente ANSPIRE_API_KEY ou forneça na inicialização")
+                raise ValueError("Chave da API Anspire nêo encontrada! Configure a variável de ambiente ANSPIRE_API_KEY ou forneça na inicializaçêo")
 
         self._headers = {
             'Authorization': f'Bearer {api_key}',
@@ -322,7 +322,7 @@ class AnspireAISearch:
 
         try:
             response = requests.get(self.ANSPIRE_BASE_URL, headers=self._headers, params=payload, timeout=30)
-            response.raise_for_status()  # Se o código HTTP for 4xx ou 5xx, lança exceção
+            response.raise_for_status()  # Se o código HTTP for 4xx ou 5xx, lança exceçêo
 
             response_dict = response.json()
             return self._parse_search_response(response_dict, query)
@@ -336,7 +336,7 @@ class AnspireAISearch:
     def comprehensive_search(self, query: str, max_results: int = 10) -> AnspireResponse:
         """
         [Ferramenta] Busca abrangente: Obtém informações completas sobre determinado tema, incluindo páginas web.
-        Adequada para cenários que necessitam de múltiplas fontes de informação.
+        Adequada para cenários que necessitam de múltiplas fontes de informaçêo.
         """
         logger.info(f"--- FERRAMENTA: Busca abrangente (query: {query}) ---")
         return self._search_internal(
@@ -360,7 +360,7 @@ class AnspireAISearch:
     def search_last_week(self, query: str, max_results: int = 10) -> AnspireResponse:
         """
         [Ferramenta] Busca de informações da semana: Obtém as principais matérias sobre determinado tema da última semana.
-        Adequada para realizar resumos semanais de opinião pública ou retrospectivas.
+        Adequada para realizar resumos semanais de opiniêo pública ou retrospectivas.
         """
         logger.info(f"--- FERRAMENTA: Busca de informações da semana (query: {query}) ---")
         to_time = datetime.datetime.now()
@@ -382,15 +382,15 @@ class TavilyMultimodalSearch:
         """
         Inicializar cliente Tavily.
         Args:
-            api_key: Chave da API Tavily; se não fornecida, será lida de settings.TAVILY_API_KEY.
+            api_key: Chave da API Tavily; se nêo fornecida, será lida de settings.TAVILY_API_KEY.
         """
         if TavilyClient is None:
-            raise ImportError("A biblioteca tavily-python não está instalada. Execute `pip install tavily-python` para instalá-la.")
+            raise ImportError("A biblioteca tavily-python nêo está instalada. Execute `pip install tavily-python` para instalá-la.")
 
         if api_key is None:
             api_key = settings.TAVILY_API_KEY
             if not api_key:
-                raise ValueError("Chave da API Tavily não encontrada! Configure a variável de ambiente TAVILY_API_KEY ou forneça na inicialização")
+                raise ValueError("Chave da API Tavily nêo encontrada! Configure a variável de ambiente TAVILY_API_KEY ou forneça na inicializaçêo")
 
         self._client = TavilyClient(api_key=api_key)
 
@@ -453,7 +453,7 @@ class TavilyMultimodalSearch:
 
     def comprehensive_search(self, query: str, max_results: int = 10) -> BochaResponse:
         """
-        [Ferramenta] Busca abrangente: Executa uma busca padrão e completa incluindo todos os tipos de informação.
+        [Ferramenta] Busca abrangente: Executa uma busca padrêo e completa incluindo todos os tipos de informaçêo.
         Retorna páginas web, imagens e resumo de IA. Esta é a ferramenta de busca genérica mais utilizada.
         """
         logger.info(f"--- FERRAMENTA (Tavily): Busca abrangente (query: {query}) ---")
@@ -496,7 +496,7 @@ class TavilyMultimodalSearch:
 
 # --- 3. Testes e exemplos de uso ---
 def load_agent_from_config():
-    """Selecionar e carregar Agent de busca conforme configuração.
+    """Selecionar e carregar Agent de busca conforme configuraçêo.
     Prioridade: Tavily > Bocha > Anspire."""
     if settings.TAVILY_API_KEY:
         logger.info("Carregando Agent TavilyMultimodalSearch")
@@ -511,12 +511,12 @@ def load_agent_from_config():
         raise ValueError("Nenhum Agent de busca válido configurado")
 
 def print_response_summary(response):
-    """Função de impressão simplificada para exibir resultados de teste"""
+    """Funçêo de impressêo simplificada para exibir resultados de teste"""
     if not response or not response.query:
-        logger.error("Não foi possível obter resposta válida.")
+        logger.error("Nêo foi possível obter resposta válida.")
         return
 
-    logger.info(f"\nConsulta: '{response.query}' | ID da sessão: {response.conversation_id}")
+    logger.info(f"\nConsulta: '{response.query}' | ID da sessêo: {response.conversation_id}")
     if hasattr(response, 'answer') and response.answer:
         logger.info(f"Resumo de IA: {response.answer[:150]}...")
 
@@ -643,7 +643,7 @@ AI摘要: 量子计算商业化正在逐步推进。
 ------------------------------------------------------------'''
 
     except ValueError as e:
-        logger.exception(f"Falha na inicialização: {e}")
+        logger.exception(f"Falha na inicializaçêo: {e}")
         logger.error("Certifique-se de que a variável de ambiente BOCHA_API_KEY esteja configurada corretamente.")
     except Exception as e:
         logger.exception(f"Erro desconhecido durante os testes: {e}")

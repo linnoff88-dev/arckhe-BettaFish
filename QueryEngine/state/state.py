@@ -1,6 +1,6 @@
 """
 Gerenciamento de estado do Deep Search Agent
-Define todas as estruturas de dados de estado e métodos de operação
+Define todas as estruturas de dados de estado e métodos de operaçêo
 """
 
 from dataclasses import dataclass, field
@@ -16,7 +16,7 @@ class Search:
     url: str = ""                      # Link do resultado de busca
     title: str = ""                    # Título do resultado de busca
     content: str = ""                  # Conteúdo retornado pela busca
-    score: Optional[float] = None      # Pontuação de relevância
+    score: Optional[float] = None      # Pontuaçêo de relevância
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
     def to_dict(self) -> Dict[str, Any]:
@@ -48,7 +48,7 @@ class Research:
     """Estado do processo de pesquisa do parágrafo"""
     search_history: List[Search] = field(default_factory=list)     # Lista de registros de busca
     latest_summary: str = ""                                       # Resumo mais recente do parágrafo atual
-    reflection_iteration: int = 0                                  # Número de iterações de reflexão
+    reflection_iteration: int = 0                                  # Número de iterações de reflexêo
     is_completed: bool = False                                     # Se a pesquisa foi concluída
 
     def add_search(self, search: Search):
@@ -182,7 +182,7 @@ class State:
         return len(self.paragraphs)
 
     def is_all_paragraphs_completed(self) -> bool:
-        """Verificar se todos os parágrafos estão concluídos"""
+        """Verificar se todos os parágrafos estêo concluídos"""
         return all(p.is_completed() for p in self.paragraphs) if self.paragraphs else False
 
     def mark_completed(self):

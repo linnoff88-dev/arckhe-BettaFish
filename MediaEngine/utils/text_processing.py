@@ -55,7 +55,7 @@ def remove_reasoning_from_output(text: str) -> str:
     Returns:
         Texto limpo
     """
-    # Encontrar posição de início do JSON
+    # Encontrar posiçêo de início do JSON
     json_start = -1
 
     # Tentar encontrar o primeiro { ou [
@@ -65,14 +65,14 @@ def remove_reasoning_from_output(text: str) -> str:
             break
 
     if json_start != -1:
-        # Extrair a partir da posição de início do JSON
+        # Extrair a partir da posiçêo de início do JSON
         return text[json_start:].strip()
 
-    # Se não encontrar marcação JSON, tentar outros métodos
+    # Se nêo encontrar marcaçêo JSON, tentar outros métodos
     # Remover identificadores comuns de raciocínio
     patterns = [
         r'(?:reasoning|raciocínio|pensamento|análise)[:：]\s*.*?(?=\{|\[)',  # Remover parte de raciocínio
-        r'(?:explanation|explicação|descrição)[:：]\s*.*?(?=\{|\[)',   # Remover parte de explicação
+        r'(?:explanation|explicaçêo|descriçêo)[:：]\s*.*?(?=\{|\[)',   # Remover parte de explicaçêo
         r'^.*?(?=\{|\[)',  # Remover todo texto antes do JSON
     ]
 
@@ -141,7 +141,7 @@ def fix_incomplete_json(text: str) -> str:
         text: Texto original
 
     Returns:
-        Texto JSON reparado; se não puder reparar, retorna string vazia
+        Texto JSON reparado; se nêo puder reparar, retorna string vazia
     """
     # Remover vírgulas e espaços extras
     text = re.sub(r',\s*}', '}', text)
@@ -174,13 +174,13 @@ def fix_incomplete_json(text: str) -> str:
             # Objeto único, envolver em array
             text = '[' + text + ']'
 
-    # Verificar se os colchetes estão balanceados
+    # Verificar se os colchetes estêo balanceados
     open_braces = text.count('{')
     close_braces = text.count('}')
     open_brackets = text.count('[')
     close_brackets = text.count(']')
 
-    # Reparar colchetes não balanceados
+    # Reparar colchetes nêo balanceados
     if open_braces > close_braces:
         text += '}' * (open_braces - close_braces)
     if open_brackets > close_brackets:
@@ -256,7 +256,7 @@ def validate_json_schema(data: Dict[str, Any], required_fields: List[str]) -> bo
         required_fields: Lista de campos obrigatórios
 
     Returns:
-        Se a validação foi aprovada
+        Se a validaçêo foi aprovada
     """
     return all(field in data for field in required_fields)
 
@@ -279,7 +279,7 @@ def truncate_content(content: str, max_length: int = 20000) -> str:
     truncated = content[:max_length]
     last_space = truncated.rfind(' ')
 
-    if last_space > max_length * 0.8:  # Se a posição do último espaço for razoável
+    if last_space > max_length * 0.8:  # Se a posiçêo do último espaço for razoável
         return truncated[:last_space] + "..."
     else:
         return truncated + "..."

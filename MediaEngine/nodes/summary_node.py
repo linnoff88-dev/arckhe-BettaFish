@@ -1,5 +1,5 @@
 """
-Implementação do nó de resumo
+Implementaçêo do nó de resumo
 Responsável por gerar e atualizar conteúdo de parágrafos com base nos resultados de busca
 """
 
@@ -28,7 +28,7 @@ try:
     FORUM_READER_AVAILABLE = True
 except ImportError:
     FORUM_READER_AVAILABLE = False
-    logger.warning("Não foi possível importar o módulo forum_reader, a funcionalidade de leitura de falas do HOST será ignorada")
+    logger.warning("Nêo foi possível importar o módulo forum_reader, a funcionalidade de leitura de falas do HOST será ignorada")
 
 
 class FirstSummaryNode(StateMutationNode):
@@ -99,7 +99,7 @@ class FirstSummaryNode(StateMutationNode):
 
             logger.info("Gerando primeiro resumo do parágrafo")
 
-            # Chamar LLM para gerar resumo (streaming, concatenação segura UTF-8)
+            # Chamar LLM para gerar resumo (streaming, concatenaçêo segura UTF-8)
             response = self.llm_client.stream_invoke_to_string(
                 SYSTEM_PROMPT_FIRST_SUMMARY,
                 message,
@@ -130,7 +130,7 @@ class FirstSummaryNode(StateMutationNode):
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
 
-            # Registrar saída limpa para depuração
+            # Registrar saída limpa para depuraçêo
             logger.info(f"Saída limpa: {cleaned_output}")
 
             # Analisar JSON
@@ -147,11 +147,11 @@ class FirstSummaryNode(StateMutationNode):
                         logger.info("Reparo do JSON bem-sucedido")
                     except JSONDecodeError:
                         logger.exception("Falha no reparo do JSON, usando texto limpo diretamente")
-                        # Se não estiver em formato JSON, retornar texto limpo diretamente
+                        # Se nêo estiver em formato JSON, retornar texto limpo diretamente
                         return cleaned_output
                 else:
                     logger.exception("Impossível reparar JSON, usando texto limpo diretamente")
-                    # Se não estiver em formato JSON, retornar texto limpo diretamente
+                    # Se nêo estiver em formato JSON, retornar texto limpo diretamente
                     return cleaned_output
 
             # Extrair conteúdo do parágrafo
@@ -160,12 +160,12 @@ class FirstSummaryNode(StateMutationNode):
                 if paragraph_content:
                     return paragraph_content
 
-            # Se a extração falhar, retornar texto limpo original
+            # Se a extraçêo falhar, retornar texto limpo original
             return cleaned_output
 
         except Exception as e:
             logger.exception(f"Falha ao processar saída: {str(e)}")
-            return "Falha na geração do resumo do parágrafo"
+            return "Falha na geraçêo do resumo do parágrafo"
 
     def mutate_state(self, input_data: Any, state: State, paragraph_index: int, **kwargs) -> State:
         """
@@ -195,16 +195,16 @@ class FirstSummaryNode(StateMutationNode):
             return state
 
         except Exception as e:
-            logger.exception(f"Falha na atualização do estado: {str(e)}")
+            logger.exception(f"Falha na atualizaçêo do estado: {str(e)}")
             raise e
 
 
 class ReflectionSummaryNode(StateMutationNode):
-    """Nó que atualiza o resumo do parágrafo com base nos resultados de busca da reflexão"""
+    """Nó que atualiza o resumo do parágrafo com base nos resultados de busca da reflexêo"""
 
     def __init__(self, llm_client):
         """
-        Inicializar nó de resumo de reflexão
+        Inicializar nó de resumo de reflexêo
 
         Args:
             llm_client: Cliente LLM
@@ -230,7 +230,7 @@ class ReflectionSummaryNode(StateMutationNode):
         Chamar LLM para atualizar conteúdo do parágrafo
 
         Args:
-            input_data: Dados contendo informações completas de reflexão
+            input_data: Dados contendo informações completas de reflexêo
             **kwargs: Parâmetros adicionais
 
         Returns:
@@ -265,9 +265,9 @@ class ReflectionSummaryNode(StateMutationNode):
                 formatted_host = format_host_speech_for_prompt(data['host_speech'])
                 message = formatted_host + "\n" + message
 
-            logger.info("Gerando resumo de reflexão")
+            logger.info("Gerando resumo de reflexêo")
 
-            # Chamar LLM para gerar resumo (streaming, concatenação segura UTF-8)
+            # Chamar LLM para gerar resumo (streaming, concatenaçêo segura UTF-8)
             response = self.llm_client.stream_invoke_to_string(
                 SYSTEM_PROMPT_REFLECTION_SUMMARY,
                 message,
@@ -276,11 +276,11 @@ class ReflectionSummaryNode(StateMutationNode):
             # Processar resposta
             processed_response = self.process_output(response)
 
-            logger.info("Resumo de reflexão gerado com sucesso")
+            logger.info("Resumo de reflexêo gerado com sucesso")
             return processed_response
 
         except Exception as e:
-            logger.exception(f"Falha ao gerar resumo de reflexão: {str(e)}")
+            logger.exception(f"Falha ao gerar resumo de reflexêo: {str(e)}")
             raise e
 
     def process_output(self, output: str) -> str:
@@ -298,7 +298,7 @@ class ReflectionSummaryNode(StateMutationNode):
             cleaned_output = remove_reasoning_from_output(output)
             cleaned_output = clean_json_tags(cleaned_output)
 
-            # Registrar saída limpa para depuração
+            # Registrar saída limpa para depuraçêo
             logger.info(f"Saída limpa: {cleaned_output}")
 
             # Analisar JSON
@@ -315,11 +315,11 @@ class ReflectionSummaryNode(StateMutationNode):
                         logger.info("Reparo do JSON bem-sucedido")
                     except JSONDecodeError:
                         logger.error("Falha no reparo do JSON, usando texto limpo diretamente")
-                        # Se não estiver em formato JSON, retornar texto limpo diretamente
+                        # Se nêo estiver em formato JSON, retornar texto limpo diretamente
                         return cleaned_output
                 else:
                     logger.error("Impossível reparar JSON, usando texto limpo diretamente")
-                    # Se não estiver em formato JSON, retornar texto limpo diretamente
+                    # Se nêo estiver em formato JSON, retornar texto limpo diretamente
                     return cleaned_output
 
             # Extrair conteúdo atualizado do parágrafo
@@ -328,12 +328,12 @@ class ReflectionSummaryNode(StateMutationNode):
                 if updated_content:
                     return updated_content
 
-            # Se a extração falhar, retornar texto limpo original
+            # Se a extraçêo falhar, retornar texto limpo original
             return cleaned_output
 
         except Exception as e:
             logger.exception(f"Falha ao processar saída: {str(e)}")
-            return "Falha na geração do resumo de reflexão"
+            return "Falha na geraçêo do resumo de reflexêo"
 
     def mutate_state(self, input_data: Any, state: State, paragraph_index: int, **kwargs) -> State:
         """
@@ -356,7 +356,7 @@ class ReflectionSummaryNode(StateMutationNode):
             if 0 <= paragraph_index < len(state.paragraphs):
                 state.paragraphs[paragraph_index].research.latest_summary = updated_summary
                 state.paragraphs[paragraph_index].research.increment_reflection()
-                logger.info(f"Resumo de reflexão do parágrafo {paragraph_index} atualizado")
+                logger.info(f"Resumo de reflexêo do parágrafo {paragraph_index} atualizado")
             else:
                 raise ValueError(f"Índice do parágrafo {paragraph_index} fora do intervalo")
 
@@ -364,5 +364,5 @@ class ReflectionSummaryNode(StateMutationNode):
             return state
 
         except Exception as e:
-            logger.exception(f"Falha na atualização do estado: {str(e)}")
+            logger.exception(f"Falha na atualizaçêo do estado: {str(e)}")
             raise e

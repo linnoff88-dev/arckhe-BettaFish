@@ -1,6 +1,6 @@
 """
 Framework base para crawlers de plataformas ocidentais.
-Cada crawler implementa esta interface para integração com o BettaFish.
+Cada crawler implementa esta interface para integraçêo com o BettaFish.
 """
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional
@@ -59,7 +59,7 @@ class WesternPlatformCrawler(ABC):
         pass
 
     def is_configured(self) -> bool:
-        """Verificar se as credenciais estão configuradas"""
+        """Verificar se as credenciais estêo configuradas"""
         return False
 
     def get_status(self) -> Dict[str, Any]:

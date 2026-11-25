@@ -18,7 +18,7 @@ try:
     from .llm_host import generate_host_speech
     HOST_AVAILABLE = True
 except ImportError:
-    logger.exception("ForumEngine: Módulo do moderador do fórum não encontrado, executando em modo somente monitoramento")
+    logger.exception("ForumEngine: Módulo do moderador do fórum nêo encontrado, executando em modo somente monitoramento")
     HOST_AVAILABLE = False
 
 class LogMonitor:
@@ -39,7 +39,7 @@ class LogMonitor:
         # Estado do monitoramento
         self.is_monitoring = False
         self.monitor_thread = None
-        self.file_positions = {}  # Registrar posição de leitura de cada arquivo
+        self.file_positions = {}  # Registrar posiçêo de leitura de cada arquivo
         self.file_line_counts = {}  # Registrar número de linhas de cada arquivo
         self.is_searching = False  # Se está em busca
         self.search_inactive_count = 0  # Contador de inatividade de busca
@@ -50,11 +50,11 @@ class LogMonitor:
         self.host_speech_threshold = 5  # A cada 5 discursos de agent, disparar um discurso do moderador
         self.is_host_generating = False  # Se o moderador está gerando discurso
 
-        # Padrões de identificação do nó alvo
+        # Padrões de identificaçêo do nó alvo
         # 1. Nome da classe (formato antigo pode conter)
         # 2. Caminho completo do módulo (formato real do log, incluindo prefixo do engine)
         # 3. Caminho parcial do módulo (compatibilidade)
-        # 4. Texto de identificação chave
+        # 4. Texto de identificaçêo chave
         self.target_node_patterns = [
             'FirstSummaryNode',  # Nome da classe
             'ReflectionSummaryNode',  # Nome da classe
@@ -62,8 +62,8 @@ class LogMonitor:
             'MediaEngine.nodes.summary_node',  # Caminho completo do MediaEngine
             'QueryEngine.nodes.summary_node',  # Caminho completo do QueryEngine
             'nodes.summary_node',  # Caminho do módulo (compatibilidade, para correspondência parcial)
-            '正在生成首次段落总结',  # Identificação do FirstSummaryNode
-            '正在生成反思总结',  # Identificação do ReflectionSummaryNode
+            '正在生成首次段落总结',  # Identificaçêo do FirstSummaryNode
+            '正在生成反思总结',  # Identificaçêo do ReflectionSummaryNode
         ]
 
         # Estado de captura de conteúdo multilinha
@@ -83,7 +83,7 @@ class LogMonitor:
 
             # Criar novo arquivo forum.log e escrever marcador de início
             start_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            # Usar função write_to_forum_log para escrever marcador de início, garantindo formato consistente
+            # Usar funçêo write_to_forum_log para escrever marcador de início, garantindo formato consistente
             with open(self.forum_log_file, 'w', encoding='utf-8') as f:
                 pass  # Primeiro criar arquivo vazio
             self.write_to_forum_log(f"=== ForumEngine monitoramento iniciado - {start_time} ===", "SYSTEM")
@@ -126,10 +126,10 @@ class LogMonitor:
         Suporta formato loguru: YYYY-MM-DD HH:mm:ss.SSS | LEVEL | ...
 
         Returns:
-            'INFO', 'ERROR', 'WARNING', 'DEBUG' ou None (não reconhecido)
+            'INFO', 'ERROR', 'WARNING', 'DEBUG' ou None (nêo reconhecido)
         """
         # Verificar formato loguru: YYYY-MM-DD HH:mm:ss.SSS | LEVEL | ...
-        # Padrão de correspondência: | LEVEL | ou | LEVEL     |
+        # Padrêo de correspondência: | LEVEL | ou | LEVEL     |
         match = re.search(r'\|\s*(INFO|ERROR|WARNING|DEBUG|TRACE|CRITICAL)\s*\|', line)
         if match:
             return match.group(1)
@@ -138,22 +138,22 @@ class LogMonitor:
     def is_target_log_line(self, line: str) -> bool:
         """Verificar se é uma linha de log alvo (SummaryNode)
 
-        Suporta múltiplos métodos de identificação:
+        Suporta múltiplos métodos de identificaçêo:
         1. Nome da classe: FirstSummaryNode, ReflectionSummaryNode
         2. Caminho completo do módulo: InsightEngine.nodes.summary_node, MediaEngine.nodes.summary_node, QueryEngine.nodes.summary_node
         3. Caminho parcial do módulo: nodes.summary_node (compatibilidade)
-        4. Texto de identificação chave: 正在生成首次段落总结, 正在生成反思总结
+        4. Texto de identificaçêo chave: 正在生成首次段落总结, 正在生成反思总结
 
-        Condições de exclusão:
-        - Logs de nível ERROR (logs de erro não devem ser identificados como nós alvo)
-        - Logs contendo palavras-chave de erro (falha na análise JSON, falha na correção JSON etc.)
+        Condições de exclusêo:
+        - Logs de nível ERROR (logs de erro nêo devem ser identificados como nós alvo)
+        - Logs contendo palavras-chave de erro (falha na análise JSON, falha na correçêo JSON etc.)
         """
         # Excluir logs de nível ERROR
         log_level = self.get_log_level(line)
         if log_level == 'ERROR':
             return False
 
-        # Compatibilidade com verificação antiga
+        # Compatibilidade com verificaçêo antiga
         if "| ERROR" in line or "| ERROR    |" in line:
             return False
 
@@ -163,7 +163,7 @@ class LogMonitor:
             if keyword in line:
                 return False
 
-        # Verificar se contém padrão de nó alvo
+        # Verificar se contém padrêo de nó alvo
         for pattern in self.target_node_patterns:
             if pattern in line:
                 return True
@@ -214,12 +214,12 @@ class LogMonitor:
     def is_json_end_line(self, line: str) -> bool:
         """Determinar se é uma linha de fim de JSON
 
-        Apenas determina linhas de marcador de fim puro, sem qualquer informação de formato de log (timestamp etc.).
+        Apenas determina linhas de marcador de fim puro, sem qualquer informaçêo de formato de log (timestamp etc.).
         Se a linha contém timestamp, deve ser limpa antes de determinar, mas aqui retorna False indicando que precisa de processamento adicional.
         """
         stripped = line.strip()
 
-        # Se a linha contém timestamp (formato antigo ou novo), significa que não é uma linha de fim pura
+        # Se a linha contém timestamp (formato antigo ou novo), significa que nêo é uma linha de fim pura
         # Formato antigo: [HH:MM:SS]
         if re.match(r'^\[\d{2}:\d{2}:\d{2}\]', stripped):
             return False
@@ -235,7 +235,7 @@ class LogMonitor:
     def extract_json_content(self, json_lines: List[str]) -> Optional[str]:
         """Extrair e analisar conteúdo JSON de múltiplas linhas"""
         try:
-            # Encontrar posição de início do JSON
+            # Encontrar posiçêo de início do JSON
             json_start_idx = -1
             for i, line in enumerate(json_lines):
                 if "清理后的输出: {" in line:
@@ -296,7 +296,7 @@ class LogMonitor:
                 return None
 
         except Exception as e:
-            # Outras exceções também não imprimem mensagens de erro, retornar None diretamente
+            # Outras exceções também nêo imprimem mensagens de erro, retornar None diretamente
             return None
 
     def format_json_content(self, json_obj: dict) -> str:
@@ -314,7 +314,7 @@ class LogMonitor:
             if content:
                 return content
 
-            # Se os campos esperados não foram encontrados, retornar representação em string de todo o JSON
+            # Se os campos esperados nêo foram encontrados, retornar representaçêo em string de todo o JSON
             return f"Saída após limpeza: {json.dumps(json_obj, ensure_ascii=False, indent=2)}"
 
         except Exception as e:
@@ -339,7 +339,7 @@ class LogMonitor:
         if not content:
             return line.strip()
 
-        # Remover todas as tags entre colchetes (incluindo nomes de nó e nomes de aplicação)
+        # Remover todas as tags entre colchetes (incluindo nomes de nó e nomes de aplicaçêo)
         content = re.sub(r'^\[.*?\]\s*', '', content)
 
         # Continuar removendo possíveis tags consecutivas
@@ -358,7 +358,7 @@ class LogMonitor:
                 content = content[len(prefix):]
                 break
 
-        # Remover possível tag de nome da aplicação (não entre colchetes)
+        # Remover possível tag de nome da aplicaçêo (nêo entre colchetes)
         app_names = ['INSIGHT', 'MEDIA', 'QUERY']
         for app_name in app_names:
             # Remover APP_NAME isolado (no início da linha)
@@ -411,7 +411,7 @@ class LogMonitor:
                     new_content = f.read()
                     new_lines = new_content.split('\n')
 
-                    # Atualizar posição
+                    # Atualizar posiçêo
                     self.file_positions[app_name] = f.tell()
 
                     # Filtrar linhas vazias
@@ -449,7 +449,7 @@ class LogMonitor:
                 if self.capturing_json[app_name]:
                     self.capturing_json[app_name] = False
                     self.json_buffer[app_name] = []
-                # Pular linha atual, não processar
+                # Pular linha atual, nêo processar
                 continue
             elif log_level == 'INFO':
                 # Encontrou INFO, sair do estado de bloco ERROR
@@ -462,7 +462,7 @@ class LogMonitor:
                 if self.capturing_json[app_name]:
                     self.capturing_json[app_name] = False
                     self.json_buffer[app_name] = []
-                # Pular linha atual, não processar
+                # Pular linha atual, nêo processar
                 continue
 
             # Verificar se é linha de nó alvo e marcador de início JSON
@@ -470,7 +470,7 @@ class LogMonitor:
             is_json_start = self.is_json_start_line(line)
 
             # Apenas a saída JSON do nó alvo (SummaryNode) deve ser capturada
-            # Filtrar saída de outros nós como SearchNode (eles não são nós alvo, mesmo tendo JSON não serão capturados)
+            # Filtrar saída de outros nós como SearchNode (eles nêo sêo nós alvo, mesmo tendo JSON nêo serêo capturados)
             if is_target and is_json_start:
                 # Iniciar captura JSON (deve ser nó alvo e conter "清理后的输出: {")
                 self.capturing_json[app_name] = True
@@ -522,12 +522,12 @@ class LogMonitor:
         return captured_contents
 
     def _trigger_host_speech(self):
-        """Disparar discurso do moderador (execução síncrona)"""
+        """Disparar discurso do moderador (execuçêo síncrona)"""
         if not HOST_AVAILABLE or self.is_host_generating:
             return
 
         try:
-            # Definir flag de geração
+            # Definir flag de geraçêo
             self.is_host_generating = True
 
             # Obter 5 discursos do buffer
@@ -549,9 +549,9 @@ class LogMonitor:
                 # Limpar os 5 discursos processados
                 self.agent_speeches_buffer = self.agent_speeches_buffer[5:]
             else:
-                logger.error("ForumEngine: Falha na geração do discurso do moderador")
+                logger.error("ForumEngine: Falha na geraçêo do discurso do moderador")
 
-            # Resetar flag de geração
+            # Resetar flag de geraçêo
             self.is_host_generating = False
 
         except Exception as e:
@@ -614,14 +614,14 @@ class LogMonitor:
                         # Primeiro verificar se precisa disparar busca (disparar apenas uma vez)
                         if not self.is_searching:
                             for line in new_lines:
-                                # Verificar se contém padrão de nó alvo (suporta múltiplos formatos)
+                                # Verificar se contém padrêo de nó alvo (suporta múltiplos formatos)
                                 if line.strip() and self.is_target_log_line(line):
                                     # Confirmar ainda mais se é nó de resumo inicial (FirstSummaryNode ou contém "正在生成首次段落总结")
                                     if 'FirstSummaryNode' in line or '正在生成首次段落总结' in line:
-                                        logger.info(f"ForumEngine: Detectado primeira publicação de conteúdo no fórum em {app_name}")
+                                        logger.info(f"ForumEngine: Detectado primeira publicaçêo de conteúdo no fórum em {app_name}")
                                         self.is_searching = True
                                         self.search_inactive_count = 0
-                                        # Limpar forum.log para iniciar nova sessão
+                                        # Limpar forum.log para iniciar nova sessêo
                                         self.clear_forum_log()
                                         break  # Encontrar um já é suficiente, sair do loop
 
@@ -649,8 +649,8 @@ class LogMonitor:
 
                     elif current_lines < previous_lines:
                         any_shrink = True
-                        # logger.info(f"ForumEngine: Detectada redução no log de {app_name}, resetando linha de base")
-                        # Resetar posição do arquivo para o fim do novo arquivo
+                        # logger.info(f"ForumEngine: Detectada reduçêo no log de {app_name}, resetando linha de base")
+                        # Resetar posiçêo do arquivo para o fim do novo arquivo
                         self.file_positions[app_name] = self.get_file_size(log_file)
                         # Resetar estado de captura JSON
                         self.capturing_json[app_name] = False
@@ -660,11 +660,11 @@ class LogMonitor:
                     # Atualizar registro de contagem de linhas
                     self.file_line_counts[app_name] = current_lines
 
-                # Verificar se deve encerrar a sessão de busca atual
+                # Verificar se deve encerrar a sessêo de busca atual
                 if self.is_searching:
                     if any_shrink:
-                        # Log diminuiu, encerrar sessão de busca atual, resetar para estado de espera
-                        # logger.info("ForumEngine: Log diminuiu, encerrando sessão de busca atual, voltando ao estado de espera")
+                        # Log diminuiu, encerrar sessêo de busca atual, resetar para estado de espera
+                        # logger.info("ForumEngine: Log diminuiu, encerrando sessêo de busca atual, voltando ao estado de espera")
                         self.is_searching = False
                         self.search_inactive_count = 0
                         # Resetar estado relacionado ao moderador
@@ -704,7 +704,7 @@ class LogMonitor:
     def start_monitoring(self):
         """Iniciar monitoramento inteligente"""
         if self.is_monitoring:
-            logger.info("ForumEngine: Fórum já está em execução")
+            logger.info("ForumEngine: Fórum já está em execuçêo")
             return False
 
         try:
@@ -724,7 +724,7 @@ class LogMonitor:
     def stop_monitoring(self):
         """Parar monitoramento"""
         if not self.is_monitoring:
-            logger.info("ForumEngine: Fórum não está em execução")
+            logger.info("ForumEngine: Fórum nêo está em execuçêo")
             return
 
         try:
@@ -756,7 +756,7 @@ class LogMonitor:
             return []
 
     def fix_json_string(self, json_text: str) -> str:
-        """Corrigir problemas comuns em strings JSON, especialmente aspas duplas não escapadas"""
+        """Corrigir problemas comuns em strings JSON, especialmente aspas duplas nêo escapadas"""
         try:
             # Tentar analisar diretamente, se bem-sucedido retornar texto original
             json.loads(json_text)
@@ -764,8 +764,8 @@ class LogMonitor:
         except json.JSONDecodeError:
             pass
 
-        # Corrigir problema de aspas duplas não escapadas
-        # Este é um método de correção mais inteligente, tratando especificamente aspas duplas dentro de valores de string
+        # Corrigir problema de aspas duplas nêo escapadas
+        # Este é um método de correçêo mais inteligente, tratando especificamente aspas duplas dentro de valores de string
 
         try:
             # Usar método de máquina de estados para corrigir JSON
@@ -809,7 +809,7 @@ class LogMonitor:
                                 in_string = False
                                 fixed_text += char
                             else:
-                                # Estas são aspas dentro da string, precisam ser escapadas
+                                # Estas sêo aspas dentro da string, precisam ser escapadas
                                 fixed_text += '\\"'
                         else:
                             # Fim do arquivo, sair do estado de string
@@ -830,7 +830,7 @@ class LogMonitor:
                 json.loads(fixed_text)
                 return fixed_text
             except json.JSONDecodeError:
-                # Correção falhou, retornar None
+                # Correçêo falhou, retornar None
                 return None
 
         except Exception:

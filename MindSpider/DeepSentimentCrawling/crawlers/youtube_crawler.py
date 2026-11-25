@@ -13,14 +13,14 @@ class YouTubeCrawler(WesternPlatformCrawler):
 
     def __init__(self):
         # TODO: Implementar com google-api-python-client
-        logger.info("YouTubeCrawler inicializado (stub - aguardando implementação)")
+        logger.info("YouTubeCrawler inicializado (stub - aguardando implementaçêo)")
 
     def search(self, keywords: List[str], max_results: int = 100) -> List[CrawledContent]:
-        logger.warning("YouTubeCrawler.search() ainda não implementado")
+        logger.warning("YouTubeCrawler.search() ainda nêo implementado")
         return []
 
     def get_comments(self, content_id: str, max_comments: int = 100) -> List[CrawledComment]:
-        logger.warning("YouTubeCrawler.get_comments() ainda não implementado")
+        logger.warning("YouTubeCrawler.get_comments() ainda nêo implementado")
         return []
 
     def is_configured(self) -> bool:

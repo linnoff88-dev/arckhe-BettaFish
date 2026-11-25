@@ -91,7 +91,7 @@ class WeiboMultilingualSentimentAnalyzer:
         self.is_disabled = False
         self.disable_reason: Optional[str] = None
 
-        # Mapeamento de rótulos de sentimento (classificação em 5 níveis)
+        # Mapeamento de rótulos de sentimento (classificaçêo em 5 níveis)
         self.sentiment_map = {
             0: "muito negativo",
             1: "negativo",
@@ -101,7 +101,7 @@ class WeiboMultilingualSentimentAnalyzer:
         }
 
         if not SENTIMENT_ANALYSIS_ENABLED:
-            self.disable("Análise de sentimentos desabilitada na configuração.")
+            self.disable("Análise de sentimentos desabilitada na configuraçêo.")
         elif not (TORCH_AVAILABLE and TRANSFORMERS_AVAILABLE):
             missing = _describe_missing_dependencies() or "dependência desconhecida"
             self.disable(f"Dependências ausentes: {missing}, análise de sentimentos desabilitada.")
@@ -129,7 +129,7 @@ class WeiboMultilingualSentimentAnalyzer:
     def enable(self) -> bool:
         """Attempt to enable sentiment analysis; returns True if enabled."""
         if not SENTIMENT_ANALYSIS_ENABLED:
-            self.disable("Análise de sentimentos desabilitada na configuração.")
+            self.disable("Análise de sentimentos desabilitada na configuraçêo.")
             return False
         if not (TORCH_AVAILABLE and TRANSFORMERS_AVAILABLE):
             missing = _describe_missing_dependencies() or "dependência desconhecida"
@@ -160,7 +160,7 @@ class WeiboMultilingualSentimentAnalyzer:
         Inicializar o modelo e o tokenizador
 
         Returns:
-            Se a inicialização foi bem-sucedida
+            Se a inicializaçêo foi bem-sucedida
         """
         if self.is_disabled:
             reason = self.disable_reason or "Análise de sentimentos desabilitada"
@@ -170,11 +170,11 @@ class WeiboMultilingualSentimentAnalyzer:
         if not (TORCH_AVAILABLE and TRANSFORMERS_AVAILABLE):
             missing = _describe_missing_dependencies() or "dependência desconhecida"
             self.disable(f"Dependências ausentes: {missing}, análise de sentimentos desabilitada.", drop_state=True)
-            print(f"Dependências ausentes: {missing}, não é possível carregar o modelo de análise de sentimentos.")
+            print(f"Dependências ausentes: {missing}, nêo é possível carregar o modelo de análise de sentimentos.")
             return False
 
         if self.is_initialized:
-            print("Modelo já inicializado, não é necessário recarregar")
+            print("Modelo já inicializado, nêo é necessário recarregar")
             return True
 
         try:
@@ -210,7 +210,7 @@ class WeiboMultilingualSentimentAnalyzer:
             # Configurar dispositivo
             device = self._select_device()
             if device is None:
-                raise RuntimeError("Nenhum dispositivo de computação disponível detectado")
+                raise RuntimeError("Nenhum dispositivo de computaçêo disponível detectado")
 
             self.device = device
             self.model.to(self.device)
@@ -235,7 +235,7 @@ class WeiboMultilingualSentimentAnalyzer:
         except Exception as e:
             error_message = f"Falha ao carregar modelo: {e}"
             print(error_message)
-            print("Verifique a conexão de rede ou os arquivos do modelo")
+            print("Verifique a conexêo de rede ou os arquivos do modelo")
             self.disable(error_message, drop_state=True)
             return False
 
@@ -271,7 +271,7 @@ class WeiboMultilingualSentimentAnalyzer:
         if self.is_disabled:
             return SentimentResult(
                 text=text,
-                sentiment_label="Análise de sentimentos não executada",
+                sentiment_label="Análise de sentimentos nêo executada",
                 confidence=0.0,
                 probability_distribution={},
                 success=False,
@@ -282,11 +282,11 @@ class WeiboMultilingualSentimentAnalyzer:
         if not self.is_initialized:
             return SentimentResult(
                 text=text,
-                sentiment_label="Não inicializado",
+                sentiment_label="Nêo inicializado",
                 confidence=0.0,
                 probability_distribution={},
                 success=False,
-                error_message="Modelo não inicializado, chame initialize() primeiro",
+                error_message="Modelo nêo inicializado, chame initialize() primeiro",
                 analysis_performed=False,
             )
 
@@ -305,7 +305,7 @@ class WeiboMultilingualSentimentAnalyzer:
                     analysis_performed=False,
                 )
             assert self.tokenizer is not None
-            # Tokenização e codificação
+            # Tokenizaçêo e codificaçêo
             inputs = self.tokenizer(
                 processed_text,
                 max_length=512,
@@ -317,7 +317,7 @@ class WeiboMultilingualSentimentAnalyzer:
             # Transferir para dispositivo
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
-            # Predição
+            # Prediçêo
             assert torch is not None
             assert self.model is not None
             with torch.no_grad():
@@ -330,7 +330,7 @@ class WeiboMultilingualSentimentAnalyzer:
             confidence = probabilities[0][prediction].item()
             label = self.sentiment_map[prediction]
 
-            # Construir dicionário de distribuição de probabilidades
+            # Construir dicionário de distribuiçêo de probabilidades
             prob_dist = {}
             for label_name, prob in zip(self.sentiment_map.values(), probabilities[0]):
                 prob_dist[label_name] = prob.item()
@@ -350,7 +350,7 @@ class WeiboMultilingualSentimentAnalyzer:
                 confidence=0.0,
                 probability_distribution={},
                 success=False,
-                error_message=f"Erro durante a predição: {str(e)}",
+                error_message=f"Erro durante a prediçêo: {str(e)}",
                 analysis_performed=False,
             )
 
@@ -381,7 +381,7 @@ class WeiboMultilingualSentimentAnalyzer:
             passthrough_results = [
                 SentimentResult(
                     text=text,
-                    sentiment_label="Análise de sentimentos não executada",
+                    sentiment_label="Análise de sentimentos nêo executada",
                     confidence=0.0,
                     probability_distribution={},
                     success=False,
@@ -436,7 +436,7 @@ class WeiboMultilingualSentimentAnalyzer:
         results: Optional[List[SentimentResult]] = None,
     ) -> Dict[str, Any]:
         """
-        Construir resultado de passagem direta quando a análise de sentimentos não está disponível
+        Construir resultado de passagem direta quando a análise de sentimentos nêo está disponível
         """
         total_items = len(texts) if texts is not None else len(original_data)
         response: Dict[str, Any] = {
@@ -448,7 +448,7 @@ class WeiboMultilingualSentimentAnalyzer:
                 "average_confidence": 0.0,
                 "sentiment_distribution": {},
                 "high_confidence_results": [],
-                "summary": f"Análise de sentimentos não executada: {reason}",
+                "summary": f"Análise de sentimentos nêo executada: {reason}",
                 "original_texts": original_data,
             }
         }
@@ -476,7 +476,7 @@ class WeiboMultilingualSentimentAnalyzer:
 
         Args:
             query_results: Lista de resultados de consulta, cada elemento contém conteúdo textual
-            text_field: Nome do campo de conteúdo textual, padrão "content"
+            text_field: Nome do campo de conteúdo textual, padrêo "content"
             min_confidence: Limiar mínimo de confiança
 
         Returns:
@@ -545,13 +545,13 @@ class WeiboMultilingualSentimentAnalyzer:
                 results=batch_result.results,
             )
 
-        # Estatísticas de distribuição de sentimentos
+        # Estatísticas de distribuiçêo de sentimentos
         sentiment_distribution = {}
         high_confidence_results = []
 
         for result, original_item in zip(batch_result.results, original_data):
             if result.success:
-                # Contabilizar distribuição de sentimentos
+                # Contabilizar distribuiçêo de sentimentos
                 sentiment = result.sentiment_label
                 if sentiment not in sentiment_distribution:
                     sentiment_distribution[sentiment] = 0
@@ -605,7 +605,7 @@ class WeiboMultilingualSentimentAnalyzer:
                 "árabe",
                 "japonês",
                 "coreano",
-                "alemão",
+                "alemêo",
                 "francês",
                 "italiano",
                 "português",
@@ -624,11 +624,11 @@ class WeiboMultilingualSentimentAnalyzer:
             ],
             "sentiment_levels": list(self.sentiment_map.values()),
             "is_initialized": self.is_initialized,
-            "device": str(self.device) if self.device else "não configurado",
+            "device": str(self.device) if self.device else "nêo configurado",
         }
 
 
-# Criar instância global (inicialização tardia)
+# Criar instância global (inicializaçêo tardia)
 multilingual_sentiment_analyzer = WeiboMultilingualSentimentAnalyzer()
 
 
@@ -648,11 +648,11 @@ def analyze_sentiment(
     text_or_texts: Union[str, List[str]], initialize_if_needed: bool = True
 ) -> Union[SentimentResult, BatchSentimentResult]:
     """
-    Função utilitária de análise de sentimentos
+    Funçêo utilitária de análise de sentimentos
 
     Args:
         text_or_texts: Texto único ou lista de textos
-        initialize_if_needed: Se deve inicializar automaticamente caso o modelo não esteja inicializado
+        initialize_if_needed: Se deve inicializar automaticamente caso o modelo nêo esteja inicializado
 
     Returns:
         SentimentResult ou BatchSentimentResult
@@ -700,4 +700,4 @@ if __name__ == "__main__":
                 f"'{result.text[:30]}...' -> {result.sentiment_label} ({result.confidence:.4f})"
             )
     else:
-        print("Falha na inicialização do modelo, não é possível realizar testes")
+        print("Falha na inicializaçêo do modelo, nêo é possível realizar testes")
